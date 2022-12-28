@@ -5,9 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:composition template="templates/mainPage.xhtml">
-    <ui:define name="content">
-       <h:outputText value="#{userBean.message}"/>
-    </ui:define>
-</ui:composition>
+<f:view>
+    <h:outputLabel value="Hello, world"/>
+</f:view>
 </html>
