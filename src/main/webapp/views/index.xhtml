@@ -7,7 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
-       <h:outputText value="#{userBean.message}"/>
+       <h:outputText value="#{userConnectionBean.message}"/>
+       <h:outputText value="#{userConnectionBean.password}"/>
     </ui:define>
 </ui:composition>
 </html>
