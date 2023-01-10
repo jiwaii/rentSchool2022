@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Categories", schema = "rentSchool2022", catalog = "")
-public class CategoriesEntity {
+public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_category", nullable = false)
@@ -15,7 +14,7 @@ public class CategoriesEntity {
     @Column(name = "categoryName", nullable = false, length = 100)
     private String categoryName;
     @OneToMany(mappedBy = "categoriesByIdCategory")
-    private Collection<ArticlesEntity> articlesByIdCategory;
+    private Collection<Articles> articlesByIdCategory;
 
     public int getIdCategory() {
         return idCategory;
@@ -37,7 +36,7 @@ public class CategoriesEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoriesEntity that = (CategoriesEntity) o;
+        Categories that = (Categories) o;
         return idCategory == that.idCategory && Objects.equals(categoryName, that.categoryName);
     }
 
@@ -46,11 +45,11 @@ public class CategoriesEntity {
         return Objects.hash(idCategory, categoryName);
     }
 
-    public Collection<ArticlesEntity> getArticlesByIdCategory() {
+    public Collection<Articles> getArticlesByIdCategory() {
         return articlesByIdCategory;
     }
 
-    public void setArticlesByIdCategory(Collection<ArticlesEntity> articlesByIdCategory) {
+    public void setArticlesByIdCategory(Collection<Articles> articlesByIdCategory) {
         this.articlesByIdCategory = articlesByIdCategory;
     }
 }

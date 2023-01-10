@@ -1,5 +1,6 @@
 package be.jyl.tools;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -9,6 +10,9 @@ public class EMF {
 
     public static EntityManagerFactory getEmfInstance() {
         return emfInstance;
+    }
+    public static EntityManager getEM(){
+        return getEmfInstance().createEntityManager();
     }
     public static void setEmfInstance(EntityManagerFactory emfInstance) {
         EMF.emfInstance = emfInstance;

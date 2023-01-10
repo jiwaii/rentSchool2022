@@ -4,20 +4,24 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Roles_Permissions", schema = "rentSchool2022", catalog = "")
-public class RolesPermissionsEntity {
+@Table(name = "Roles_Permissions", schema = "rentSchool2022")
+public class RolesPermissions {
     @Basic
     @Column(name = "id_permission", nullable = false)
     private int idPermission;
     @Basic
     @Column(name = "id_role", nullable = false)
     private int idRole;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_Roles_Permissions", nullable = false)
+    private int idRolesPermissions;
     @ManyToOne
     @JoinColumn(name = "id_permission", referencedColumnName = "id_permission", nullable = false)
-    private PermissionsEntity permissionsByIdPermission;
+    private Permissions permissionsByIdPermission;
     @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id_role", nullable = false)
-    private RolesEntity rolesByIdRole;
+    private Roles rolesByIdRole;
 
     public int getIdPermission() {
         return idPermission;
@@ -35,32 +39,40 @@ public class RolesPermissionsEntity {
         this.idRole = idRole;
     }
 
+    public int getIdRolesPermissions() {
+        return idRolesPermissions;
+    }
+
+    public void setIdRolesPermissions(int idRolesPermissions) {
+        this.idRolesPermissions = idRolesPermissions;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RolesPermissionsEntity that = (RolesPermissionsEntity) o;
-        return idPermission == that.idPermission && idRole == that.idRole;
+        RolesPermissions that = (RolesPermissions) o;
+        return idPermission == that.idPermission && idRole == that.idRole && idRolesPermissions == that.idRolesPermissions;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPermission, idRole);
+        return Objects.hash(idPermission, idRole, idRolesPermissions);
     }
 
-    public PermissionsEntity getPermissionsByIdPermission() {
+    public Permissions getPermissionsByIdPermission() {
         return permissionsByIdPermission;
     }
 
-    public void setPermissionsByIdPermission(PermissionsEntity permissionsByIdPermission) {
+    public void setPermissionsByIdPermission(Permissions permissionsByIdPermission) {
         this.permissionsByIdPermission = permissionsByIdPermission;
     }
 
-    public RolesEntity getRolesByIdRole() {
+    public Roles getRolesByIdRole() {
         return rolesByIdRole;
     }
 
-    public void setRolesByIdRole(RolesEntity rolesByIdRole) {
+    public void setRolesByIdRole(Roles rolesByIdRole) {
         this.rolesByIdRole = rolesByIdRole;
     }
 }

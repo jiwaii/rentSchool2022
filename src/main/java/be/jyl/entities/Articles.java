@@ -1,12 +1,13 @@
 package be.jyl.entities;
 
+import be.jyl.enums.State;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Articles", schema = "rentSchool2022", catalog = "")
-public class ArticlesEntity {
+public class Articles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_article", nullable = false)
@@ -25,12 +26,12 @@ public class ArticlesEntity {
     private String barcode;
     @Basic
     @Column(name = "state", nullable = false)
-    private Object state;
+    private State state;
     @ManyToOne
     @JoinColumn(name = "id_category", referencedColumnName = "id_category", nullable = false)
-    private CategoriesEntity categoriesByIdCategory;
+    private Categories categoriesByIdCategory;
     @OneToMany(mappedBy = "articlesByIdArticle")
-    private Collection<ArticlesRentalsEntity> articlesRentalsByIdArticle;
+    private Collection<ArticlesRentals> articlesRentalsByIdArticle;
 
     public int getIdArticle() {
         return idArticle;
@@ -76,7 +77,7 @@ public class ArticlesEntity {
         return state;
     }
 
-    public void setState(Object state) {
+    public void setState(State state) {
         this.state = state;
     }
 
@@ -84,8 +85,8 @@ public class ArticlesEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ArticlesEntity that = (ArticlesEntity) o;
-        return idArticle == that.idArticle && idCategory == that.idCategory && Objects.equals(articleName, that.articleName) && Objects.equals(refSn, that.refSn) && Objects.equals(barcode, that.barcode) && Objects.equals(state, that.state);
+        Articles articles = (Articles) o;
+        return idArticle == articles.idArticle && idCategory == articles.idCategory && Objects.equals(articleName, articles.articleName) && Objects.equals(refSn, articles.refSn) && Objects.equals(barcode, articles.barcode) && Objects.equals(state, articles.state);
     }
 
     @Override
@@ -93,19 +94,19 @@ public class ArticlesEntity {
         return Objects.hash(idArticle, idCategory, articleName, refSn, barcode, state);
     }
 
-    public CategoriesEntity getCategoriesByIdCategory() {
+    public Categories getCategoriesByIdCategory() {
         return categoriesByIdCategory;
     }
 
-    public void setCategoriesByIdCategory(CategoriesEntity categoriesByIdCategory) {
+    public void setCategoriesByIdCategory(Categories categoriesByIdCategory) {
         this.categoriesByIdCategory = categoriesByIdCategory;
     }
 
-    public Collection<ArticlesRentalsEntity> getArticlesRentalsByIdArticle() {
+    public Collection<ArticlesRentals> getArticlesRentalsByIdArticle() {
         return articlesRentalsByIdArticle;
     }
 
-    public void setArticlesRentalsByIdArticle(Collection<ArticlesRentalsEntity> articlesRentalsByIdArticle) {
+    public void setArticlesRentalsByIdArticle(Collection<ArticlesRentals> articlesRentalsByIdArticle) {
         this.articlesRentalsByIdArticle = articlesRentalsByIdArticle;
     }
 }

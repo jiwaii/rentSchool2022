@@ -1,24 +1,20 @@
 package be.jyl.entities;
 
+import be.jyl.enums.ResponsibleType;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Users", schema = "rentSchool2022")
-@NamedQueries({
-        @NamedQuery(name = "Users.findAll", query = "SELECT u FROM UsersEntity u ORDER BY u.idUser desc "),
-        @NamedQuery(name = "Users.getUser", query = "SELECT u FROM UsersEntity u WHERE :user = u")
-
-})
-public class UsersEntity {
+public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_user", nullable = false)
     private int idUser;
     @Basic
     @Column(name = "id_role", nullable = true)
-    private int idRole;
+    private Integer idRole;
     @Basic
     @Column(name = "address", nullable = false, length = 100)
     private String address;
@@ -27,7 +23,7 @@ public class UsersEntity {
     private String email;
     @Basic
     @Column(name = "responsibleType", nullable = false)
-    private Object responsibleType;
+    private ResponsibleType responsibleType;
     @Basic
     @Column(name = "firstname", nullable = false, length = 100)
     private String firstname;
@@ -42,20 +38,20 @@ public class UsersEntity {
     private int idCity;
     @Basic
     @Column(name = "id_account", nullable = true)
-    private int idAccount;
+    private Integer idAccount;
     @OneToMany(mappedBy = "usersByIdUser")
-    private Collection<RemindersEntity> remindersByIdUser;
+    private Collection<Reminders> remindersByIdUser;
     @ManyToOne
     @JoinColumn(name = "id_role", referencedColumnName = "id_role")
-    private RolesEntity rolesByIdRole;
+    private Roles rolesByIdRole;
     @ManyToOne
     @JoinColumn(name = "id_city", referencedColumnName = "id_city", nullable = false)
-    private CitiesEntity citiesByIdCity;
+    private Cities citiesByIdCity;
     @ManyToOne
     @JoinColumn(name = "id_account", referencedColumnName = "id_account")
-    private AccountsEntity accountsByIdAccount;
+    private Accounts accountsByIdAccount;
     @OneToMany(mappedBy = "usersByIdUser")
-    private Collection<UsersRentalsEntity> usersRentalsByIdUser;
+    private Collection<UsersRentals> usersRentalsByIdUser;
 
     public int getIdUser() {
         return idUser;
@@ -65,13 +61,14 @@ public class UsersEntity {
         this.idUser = idUser;
     }
 
-    public int getIdRole() {
+    public Integer getIdRole() {
         return idRole;
     }
 
-    public void setIdRole(int idRole) {
+    public void setIdRole(Integer idRole) {
         this.idRole = idRole;
     }
+
     public String getAddress() {
         return address;
     }
@@ -92,7 +89,7 @@ public class UsersEntity {
         return responsibleType;
     }
 
-    public void setResponsibleType(Object responsibleType) {
+    public void setResponsibleType(ResponsibleType responsibleType) {
         this.responsibleType = responsibleType;
     }
 
@@ -128,11 +125,11 @@ public class UsersEntity {
         this.idCity = idCity;
     }
 
-    public int getIdAccount() {
+    public Integer getIdAccount() {
         return idAccount;
     }
 
-    public void setIdAccount(int idAccount) {
+    public void setIdAccount(Integer idAccount) {
         this.idAccount = idAccount;
     }
 
@@ -140,8 +137,8 @@ public class UsersEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UsersEntity that = (UsersEntity) o;
-        return idUser == that.idUser && idCity == that.idCity && Objects.equals(idRole, that.idRole) && Objects.equals(address, that.address) && Objects.equals(email, that.email) && Objects.equals(responsibleType, that.responsibleType) && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && Objects.equals(barcode, that.barcode) && Objects.equals(idAccount, that.idAccount);
+        Users users = (Users) o;
+        return idUser == users.idUser && idCity == users.idCity && Objects.equals(idRole, users.idRole) && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode) && Objects.equals(idAccount, users.idAccount);
     }
 
     @Override
@@ -149,43 +146,43 @@ public class UsersEntity {
         return Objects.hash(idUser, idRole, address, email, responsibleType, firstname, lastname, barcode, idCity, idAccount);
     }
 
-    public Collection<RemindersEntity> getRemindersByIdUser() {
+    public Collection<Reminders> getRemindersByIdUser() {
         return remindersByIdUser;
     }
 
-    public void setRemindersByIdUser(Collection<RemindersEntity> remindersByIdUser) {
+    public void setRemindersByIdUser(Collection<Reminders> remindersByIdUser) {
         this.remindersByIdUser = remindersByIdUser;
     }
 
-    public RolesEntity getRolesByIdRole() {
+    public Roles getRolesByIdRole() {
         return rolesByIdRole;
     }
 
-    public void setRolesByIdRole(RolesEntity rolesByIdRole) {
+    public void setRolesByIdRole(Roles rolesByIdRole) {
         this.rolesByIdRole = rolesByIdRole;
     }
 
-    public CitiesEntity getCitiesByIdCity() {
+    public Cities getCitiesByIdCity() {
         return citiesByIdCity;
     }
 
-    public void setCitiesByIdCity(CitiesEntity citiesByIdCity) {
+    public void setCitiesByIdCity(Cities citiesByIdCity) {
         this.citiesByIdCity = citiesByIdCity;
     }
 
-    public AccountsEntity getAccountsByIdAccount() {
+    public Accounts getAccountsByIdAccount() {
         return accountsByIdAccount;
     }
 
-    public void setAccountsByIdAccount(AccountsEntity accountsByIdAccount) {
+    public void setAccountsByIdAccount(Accounts accountsByIdAccount) {
         this.accountsByIdAccount = accountsByIdAccount;
     }
 
-    public Collection<UsersRentalsEntity> getUsersRentalsByIdUser() {
+    public Collection<UsersRentals> getUsersRentalsByIdUser() {
         return usersRentalsByIdUser;
     }
 
-    public void setUsersRentalsByIdUser(Collection<UsersRentalsEntity> usersRentalsByIdUser) {
+    public void setUsersRentalsByIdUser(Collection<UsersRentals> usersRentalsByIdUser) {
         this.usersRentalsByIdUser = usersRentalsByIdUser;
     }
 }

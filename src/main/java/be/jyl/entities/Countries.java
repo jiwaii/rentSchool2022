@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Countries", schema = "rentSchool2022", catalog = "")
-public class CountriesEntity {
+public class Countries {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_country", nullable = false)
@@ -18,7 +17,7 @@ public class CountriesEntity {
     @Column(name = "codeAlpha2", nullable = false, length = 2)
     private String codeAlpha2;
     @OneToMany(mappedBy = "countriesByIdCountry")
-    private Collection<CitiesEntity> citiesByIdCountry;
+    private Collection<Cities> citiesByIdCountry;
 
     public int getIdCountry() {
         return idCountry;
@@ -48,8 +47,8 @@ public class CountriesEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CountriesEntity that = (CountriesEntity) o;
-        return idCountry == that.idCountry && Objects.equals(countryName, that.countryName) && Objects.equals(codeAlpha2, that.codeAlpha2);
+        Countries countries = (Countries) o;
+        return idCountry == countries.idCountry && Objects.equals(countryName, countries.countryName) && Objects.equals(codeAlpha2, countries.codeAlpha2);
     }
 
     @Override
@@ -57,11 +56,11 @@ public class CountriesEntity {
         return Objects.hash(idCountry, countryName, codeAlpha2);
     }
 
-    public Collection<CitiesEntity> getCitiesByIdCountry() {
+    public Collection<Cities> getCitiesByIdCountry() {
         return citiesByIdCountry;
     }
 
-    public void setCitiesByIdCountry(Collection<CitiesEntity> citiesByIdCountry) {
+    public void setCitiesByIdCountry(Collection<Cities> citiesByIdCountry) {
         this.citiesByIdCountry = citiesByIdCountry;
     }
 }

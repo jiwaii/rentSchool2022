@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Cities", schema = "rentSchool2022", catalog = "")
-public class CitiesEntity {
+public class Cities {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_city", nullable = false)
@@ -22,9 +21,9 @@ public class CitiesEntity {
     private int idCountry;
     @ManyToOne
     @JoinColumn(name = "id_country", referencedColumnName = "id_country", nullable = false)
-    private CountriesEntity countriesByIdCountry;
+    private Countries countriesByIdCountry;
     @OneToMany(mappedBy = "citiesByIdCity")
-    private Collection<UsersEntity> usersByIdCity;
+    private Collection<Users> usersByIdCity;
 
     public int getIdCity() {
         return idCity;
@@ -62,8 +61,8 @@ public class CitiesEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CitiesEntity that = (CitiesEntity) o;
-        return idCity == that.idCity && postalCode == that.postalCode && idCountry == that.idCountry && Objects.equals(cityName, that.cityName);
+        Cities cities = (Cities) o;
+        return idCity == cities.idCity && postalCode == cities.postalCode && idCountry == cities.idCountry && Objects.equals(cityName, cities.cityName);
     }
 
     @Override
@@ -71,19 +70,19 @@ public class CitiesEntity {
         return Objects.hash(idCity, cityName, postalCode, idCountry);
     }
 
-    public CountriesEntity getCountriesByIdCountry() {
+    public Countries getCountriesByIdCountry() {
         return countriesByIdCountry;
     }
 
-    public void setCountriesByIdCountry(CountriesEntity countriesByIdCountry) {
+    public void setCountriesByIdCountry(Countries countriesByIdCountry) {
         this.countriesByIdCountry = countriesByIdCountry;
     }
 
-    public Collection<UsersEntity> getUsersByIdCity() {
+    public Collection<Users> getUsersByIdCity() {
         return usersByIdCity;
     }
 
-    public void setUsersByIdCity(Collection<UsersEntity> usersByIdCity) {
+    public void setUsersByIdCity(Collection<Users> usersByIdCity) {
         this.usersByIdCity = usersByIdCity;
     }
 }

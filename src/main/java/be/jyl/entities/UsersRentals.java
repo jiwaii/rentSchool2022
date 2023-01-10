@@ -4,20 +4,24 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Users_Rentals", schema = "rentSchool2022", catalog = "")
-public class UsersRentalsEntity {
+@Table(name = "Users_Rentals", schema = "rentSchool2022")
+public class UsersRentals {
     @Basic
     @Column(name = "id_user", nullable = false)
     private int idUser;
     @Basic
     @Column(name = "id_rental", nullable = false)
     private int idRental;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_Users_Rentals", nullable = false)
+    private int idUsersRentals;
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id_user", nullable = false)
-    private UsersEntity usersByIdUser;
+    private Users usersByIdUser;
     @ManyToOne
     @JoinColumn(name = "id_rental", referencedColumnName = "id_rental", nullable = false)
-    private RentalsEntity rentalsByIdRental;
+    private Rentals rentalsByIdRental;
 
     public int getIdUser() {
         return idUser;
@@ -35,32 +39,40 @@ public class UsersRentalsEntity {
         this.idRental = idRental;
     }
 
+    public int getIdUsersRentals() {
+        return idUsersRentals;
+    }
+
+    public void setIdUsersRentals(int idUsersRentals) {
+        this.idUsersRentals = idUsersRentals;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UsersRentalsEntity that = (UsersRentalsEntity) o;
-        return idUser == that.idUser && idRental == that.idRental;
+        UsersRentals that = (UsersRentals) o;
+        return idUser == that.idUser && idRental == that.idRental && idUsersRentals == that.idUsersRentals;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUser, idRental);
+        return Objects.hash(idUser, idRental, idUsersRentals);
     }
 
-    public UsersEntity getUsersByIdUser() {
+    public Users getUsersByIdUser() {
         return usersByIdUser;
     }
 
-    public void setUsersByIdUser(UsersEntity usersByIdUser) {
+    public void setUsersByIdUser(Users usersByIdUser) {
         this.usersByIdUser = usersByIdUser;
     }
 
-    public RentalsEntity getRentalsByIdRental() {
+    public Rentals getRentalsByIdRental() {
         return rentalsByIdRental;
     }
 
-    public void setRentalsByIdRental(RentalsEntity rentalsByIdRental) {
+    public void setRentalsByIdRental(Rentals rentalsByIdRental) {
         this.rentalsByIdRental = rentalsByIdRental;
     }
 }

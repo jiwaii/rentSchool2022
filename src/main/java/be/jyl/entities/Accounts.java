@@ -3,10 +3,11 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries(value = {
+        @NamedQuery(name="Account.findAll",query = "select a from Accounts a order by a.idAccount desc ")
+})
 @Entity
-@Table(name = "Accounts", schema = "rentSchool2022", catalog = "")
-public class AccountsEntity {
+public class Accounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_account", nullable = false)
@@ -18,7 +19,7 @@ public class AccountsEntity {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
     @OneToMany(mappedBy = "accountsByIdAccount")
-    private Collection<UsersEntity> usersByIdAccount;
+    private Collection<Users> usersByIdAccount;
 
     public int getIdAccount() {
         return idAccount;
@@ -48,8 +49,8 @@ public class AccountsEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccountsEntity that = (AccountsEntity) o;
-        return idAccount == that.idAccount && Objects.equals(login, that.login) && Objects.equals(password, that.password);
+        Accounts accounts = (Accounts) o;
+        return idAccount == accounts.idAccount && Objects.equals(login, accounts.login) && Objects.equals(password, accounts.password);
     }
 
     @Override
@@ -57,11 +58,11 @@ public class AccountsEntity {
         return Objects.hash(idAccount, login, password);
     }
 
-    public Collection<UsersEntity> getUsersByIdAccount() {
+    public Collection<Users> getUsersByIdAccount() {
         return usersByIdAccount;
     }
 
-    public void setUsersByIdAccount(Collection<UsersEntity> usersByIdAccount) {
+    public void setUsersByIdAccount(Collection<Users> usersByIdAccount) {
         this.usersByIdAccount = usersByIdAccount;
     }
 }

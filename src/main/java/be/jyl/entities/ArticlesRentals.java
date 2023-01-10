@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Articles_Rentals", schema = "rentSchool2022", catalog = "")
-public class ArticlesRentalsEntity {
+@Table(name = "Articles_Rentals", schema = "rentSchool2022")
+public class ArticlesRentals {
     @Basic
     @Column(name = "id_article", nullable = false)
     private int idArticle;
@@ -15,12 +15,16 @@ public class ArticlesRentalsEntity {
     @Basic
     @Column(name = "qty", nullable = false)
     private int qty;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_Articles_Rentals", nullable = false)
+    private int idArticlesRentals;
     @ManyToOne
     @JoinColumn(name = "id_article", referencedColumnName = "id_article", nullable = false)
-    private ArticlesEntity articlesByIdArticle;
+    private Articles articlesByIdArticle;
     @ManyToOne
     @JoinColumn(name = "id_rental", referencedColumnName = "id_rental", nullable = false)
-    private RentalsEntity rentalsByIdRental;
+    private Rentals rentalsByIdRental;
 
     public int getIdArticle() {
         return idArticle;
@@ -46,32 +50,40 @@ public class ArticlesRentalsEntity {
         this.qty = qty;
     }
 
+    public int getIdArticlesRentals() {
+        return idArticlesRentals;
+    }
+
+    public void setIdArticlesRentals(int idArticlesRentals) {
+        this.idArticlesRentals = idArticlesRentals;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ArticlesRentalsEntity that = (ArticlesRentalsEntity) o;
-        return idArticle == that.idArticle && idRental == that.idRental && qty == that.qty;
+        ArticlesRentals that = (ArticlesRentals) o;
+        return idArticle == that.idArticle && idRental == that.idRental && qty == that.qty && idArticlesRentals == that.idArticlesRentals;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idArticle, idRental, qty);
+        return Objects.hash(idArticle, idRental, qty, idArticlesRentals);
     }
 
-    public ArticlesEntity getArticlesByIdArticle() {
+    public Articles getArticlesByIdArticle() {
         return articlesByIdArticle;
     }
 
-    public void setArticlesByIdArticle(ArticlesEntity articlesByIdArticle) {
+    public void setArticlesByIdArticle(Articles articlesByIdArticle) {
         this.articlesByIdArticle = articlesByIdArticle;
     }
 
-    public RentalsEntity getRentalsByIdRental() {
+    public Rentals getRentalsByIdRental() {
         return rentalsByIdRental;
     }
 
-    public void setRentalsByIdRental(RentalsEntity rentalsByIdRental) {
+    public void setRentalsByIdRental(Rentals rentalsByIdRental) {
         this.rentalsByIdRental = rentalsByIdRental;
     }
 }

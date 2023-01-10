@@ -6,8 +6,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Rentals", schema = "rentSchool2022", catalog = "")
-public class RentalsEntity {
+public class Rentals {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_rental", nullable = false)
@@ -25,11 +24,11 @@ public class RentalsEntity {
     @Column(name = "id_userRent", nullable = false)
     private int idUserRent;
     @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<ArticlesRentalsEntity> articlesRentalsByIdRental;
+    private Collection<ArticlesRentals> articlesRentalsByIdRental;
     @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<RemindersEntity> remindersByIdRental;
+    private Collection<Reminders> remindersByIdRental;
     @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<UsersRentalsEntity> usersRentalsByIdRental;
+    private Collection<UsersRentals> usersRentalsByIdRental;
 
     public int getIdRental() {
         return idRental;
@@ -75,8 +74,8 @@ public class RentalsEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RentalsEntity that = (RentalsEntity) o;
-        return idRental == that.idRental && idUser == that.idUser && idUserRent == that.idUserRent && Objects.equals(dateBegin, that.dateBegin) && Objects.equals(dateEnd, that.dateEnd);
+        Rentals rentals = (Rentals) o;
+        return idRental == rentals.idRental && idUser == rentals.idUser && idUserRent == rentals.idUserRent && Objects.equals(dateBegin, rentals.dateBegin) && Objects.equals(dateEnd, rentals.dateEnd);
     }
 
     @Override
@@ -84,27 +83,27 @@ public class RentalsEntity {
         return Objects.hash(idRental, idUser, dateBegin, dateEnd, idUserRent);
     }
 
-    public Collection<ArticlesRentalsEntity> getArticlesRentalsByIdRental() {
+    public Collection<ArticlesRentals> getArticlesRentalsByIdRental() {
         return articlesRentalsByIdRental;
     }
 
-    public void setArticlesRentalsByIdRental(Collection<ArticlesRentalsEntity> articlesRentalsByIdRental) {
+    public void setArticlesRentalsByIdRental(Collection<ArticlesRentals> articlesRentalsByIdRental) {
         this.articlesRentalsByIdRental = articlesRentalsByIdRental;
     }
 
-    public Collection<RemindersEntity> getRemindersByIdRental() {
+    public Collection<Reminders> getRemindersByIdRental() {
         return remindersByIdRental;
     }
 
-    public void setRemindersByIdRental(Collection<RemindersEntity> remindersByIdRental) {
+    public void setRemindersByIdRental(Collection<Reminders> remindersByIdRental) {
         this.remindersByIdRental = remindersByIdRental;
     }
 
-    public Collection<UsersRentalsEntity> getUsersRentalsByIdRental() {
+    public Collection<UsersRentals> getUsersRentalsByIdRental() {
         return usersRentalsByIdRental;
     }
 
-    public void setUsersRentalsByIdRental(Collection<UsersRentalsEntity> usersRentalsByIdRental) {
+    public void setUsersRentalsByIdRental(Collection<UsersRentals> usersRentalsByIdRental) {
         this.usersRentalsByIdRental = usersRentalsByIdRental;
     }
 }

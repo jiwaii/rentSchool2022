@@ -1,34 +1,44 @@
 package be.jyl.managedBeans;
 
+import be.jyl.entities.Accounts;
+import be.jyl.services.AccountService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import javax.enterprise.context.ApplicationScoped;
+
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@ApplicationScoped
+@SessionScoped
 public class UserConnectionBean implements Serializable {
     private Logger log = Logger.getLogger(UserConnectionBean.class);
     private String message = "Bienvenue ";
     private String login ;
     private String password ;
+    private Accounts account = new Accounts();
+    //private AccountService accountService = new AccountService();
 
 
     public String connectionLogin(){
-        System.out.println(login);
         log.log(Level.INFO,"From UserConnectionBean.connectionLogin() : "+ login);
-         if (login.equals("jiwaii")){
-             System.out.println("success");
-             return "success";
+
+        /** Test EntityManager */
+        AccountService accountService = new AccountService();
+        //List<AccountsEntity> accounts =  accountService.getAccounts();
+        //System.out.println(account.getLogin()+"  "+account.getPassword());
+
+        if (login.equals("jiwaii")){
+            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success");
+            return "success";
          }
          else {
-             System.out.println("fail");
+             log.log(Level.INFO,"UserConnectionBean.connectionLogin() : fail");
              return "fail";
          }
     }
     public String disconnect(){
-        System.out.println("disconecte to login");
+        log.log(Level.INFO,"UserConnectionBean.disconnect() : disconnect");
         return "login.xhtml";
     }
     public String getMessage() {

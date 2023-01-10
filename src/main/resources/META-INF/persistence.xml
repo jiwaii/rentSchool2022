@@ -6,25 +6,26 @@
     <persistence-unit name="rentSchool2022"  transaction-type="JTA">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <jta-data-source>java:comp/env/jdbc/rentSchool2022</jta-data-source>
+        <class>be.jyl.entities.Accounts</class>
+        <class>be.jyl.entities.Articles</class>
+        <class>be.jyl.entities.ArticlesRentals</class>
+        <class>be.jyl.entities.Categories</class>
+        <class>be.jyl.entities.Cities</class>
+        <class>be.jyl.entities.Countries</class>
+        <class>be.jyl.entities.Permissions</class>
+        <class>be.jyl.entities.Reminders</class>
+        <class>be.jyl.entities.Rentals</class>
+        <class>be.jyl.entities.Roles</class>
+        <class>be.jyl.entities.RolesPermissions</class>
+        <class>be.jyl.entities.Users</class>
+        <class>be.jyl.entities.UsersRentals</class>
 
-        <class>be.jyl.entities.AccountsEntity</class>
-        <class>be.jyl.entities.ArticlesEntity</class>
-        <class>be.jyl.entities.ArticlesRentalsEntity</class>
-        <class>be.jyl.entities.CategoriesEntity</class>
-        <class>be.jyl.entities.CitiesEntity</class>
-        <class>be.jyl.entities.CountriesEntity</class>
-        <class>be.jyl.entities.PermissionsEntity</class>
-        <class>be.jyl.entities.RemindersEntity</class>
-        <class>be.jyl.entities.RentalsEntity</class>
-        <class>be.jyl.entities.RolesEntity</class>
-        <class>be.jyl.entities.RolesPermissionsEntity</class>
-        <class>be.jyl.entities.UsersEntity</class>
-        <class>be.jyl.entities.UsersRentalsEntity</class>
+
         <properties>
-            <property name="eclipselink.jdbc.url" value="jdbc:mysql://jiwaii@localhost:3306/rentSchool2022"/>
+            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/rentSchool2022"/>
             <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="eclipselink.jdbc.user" value="jiwaii"/>
-            <property name="eclipselink.jdbc.password" value="jeanjean2022"/>
+            <property name="eclipselink.jdbc.user" value="jyl"/>
+            <property name="eclipselink.jdbc.password" value="allatc123"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Permissions", schema = "rentSchool2022", catalog = "")
-public class PermissionsEntity {
+public class Permissions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_permission", nullable = false)
@@ -18,7 +17,7 @@ public class PermissionsEntity {
     @Column(name = "summary", nullable = true, length = 250)
     private String summary;
     @OneToMany(mappedBy = "permissionsByIdPermission")
-    private Collection<RolesPermissionsEntity> rolesPermissionsByIdPermission;
+    private Collection<RolesPermissions> rolesPermissionsByIdPermission;
 
     public int getIdPermission() {
         return idPermission;
@@ -48,7 +47,7 @@ public class PermissionsEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PermissionsEntity that = (PermissionsEntity) o;
+        Permissions that = (Permissions) o;
         return idPermission == that.idPermission && Objects.equals(permissionName, that.permissionName) && Objects.equals(summary, that.summary);
     }
 
@@ -57,11 +56,11 @@ public class PermissionsEntity {
         return Objects.hash(idPermission, permissionName, summary);
     }
 
-    public Collection<RolesPermissionsEntity> getRolesPermissionsByIdPermission() {
+    public Collection<RolesPermissions> getRolesPermissionsByIdPermission() {
         return rolesPermissionsByIdPermission;
     }
 
-    public void setRolesPermissionsByIdPermission(Collection<RolesPermissionsEntity> rolesPermissionsByIdPermission) {
+    public void setRolesPermissionsByIdPermission(Collection<RolesPermissions> rolesPermissionsByIdPermission) {
         this.rolesPermissionsByIdPermission = rolesPermissionsByIdPermission;
     }
 }

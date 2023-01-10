@@ -5,8 +5,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Reminders", schema = "rentSchool2022", catalog = "")
-public class RemindersEntity {
+public class Reminders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_reminder", nullable = false)
@@ -25,10 +24,10 @@ public class RemindersEntity {
     private String message;
     @ManyToOne
     @JoinColumn(name = "id_user", referencedColumnName = "id_user", nullable = false)
-    private UsersEntity usersByIdUser;
+    private Users usersByIdUser;
     @ManyToOne
     @JoinColumn(name = "id_rental", referencedColumnName = "id_rental", nullable = false)
-    private RentalsEntity rentalsByIdRental;
+    private Rentals rentalsByIdRental;
 
     public int getIdReminder() {
         return idReminder;
@@ -74,8 +73,8 @@ public class RemindersEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RemindersEntity that = (RemindersEntity) o;
-        return idReminder == that.idReminder && idUser == that.idUser && idRental == that.idRental && Objects.equals(reminderDate, that.reminderDate) && Objects.equals(message, that.message);
+        Reminders reminders = (Reminders) o;
+        return idReminder == reminders.idReminder && idUser == reminders.idUser && idRental == reminders.idRental && Objects.equals(reminderDate, reminders.reminderDate) && Objects.equals(message, reminders.message);
     }
 
     @Override
@@ -83,19 +82,19 @@ public class RemindersEntity {
         return Objects.hash(idReminder, idUser, idRental, reminderDate, message);
     }
 
-    public UsersEntity getUsersByIdUser() {
+    public Users getUsersByIdUser() {
         return usersByIdUser;
     }
 
-    public void setUsersByIdUser(UsersEntity usersByIdUser) {
+    public void setUsersByIdUser(Users usersByIdUser) {
         this.usersByIdUser = usersByIdUser;
     }
 
-    public RentalsEntity getRentalsByIdRental() {
+    public Rentals getRentalsByIdRental() {
         return rentalsByIdRental;
     }
 
-    public void setRentalsByIdRental(RentalsEntity rentalsByIdRental) {
+    public void setRentalsByIdRental(Rentals rentalsByIdRental) {
         this.rentalsByIdRental = rentalsByIdRental;
     }
 }
