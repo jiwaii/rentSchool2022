@@ -24,7 +24,7 @@ public class UserConnectionBean implements Serializable {
         log.log(Level.INFO,"From UserConnectionBean.connectionLogin() : "+ login);
 
         /** Test EntityManager */
-        AccountService accountService = new AccountService();
+        //AccountService accountService = new AccountService();
         //List<AccountsEntity> accounts =  accountService.getAccounts();
         //System.out.println(account.getLogin()+"  "+account.getPassword());
 
