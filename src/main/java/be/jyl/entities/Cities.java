@@ -20,7 +20,7 @@ public class Cities {
     @Column(name = "id_country", nullable = false)
     private int idCountry;
     @ManyToOne
-    @JoinColumn(name = "id_country", referencedColumnName = "id_country", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_country", referencedColumnName = "id_country")
     private Countries countriesByIdCountry;
     @OneToMany(mappedBy = "citiesByIdCity")
     private Collection<Users> usersByIdCity;

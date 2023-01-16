@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "users")
 public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -42,13 +43,13 @@ public class Users {
     @OneToMany(mappedBy = "usersByIdUser")
     private Collection<Reminders> remindersByIdUser;
     @ManyToOne
-    @JoinColumn(name = "id_role", referencedColumnName = "id_role")
+    @PrimaryKeyJoinColumn(name = "id_role", referencedColumnName = "id_role")
     private Roles rolesByIdRole;
     @ManyToOne
-    @JoinColumn(name = "id_city", referencedColumnName = "id_city", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_city", referencedColumnName = "id_city")
     private Cities citiesByIdCity;
     @ManyToOne
-    @JoinColumn(name = "id_account", referencedColumnName = "id_account")
+    @PrimaryKeyJoinColumn(name = "id_account", referencedColumnName = "id_account")
     private Accounts accountsByIdAccount;
     @OneToMany(mappedBy = "usersByIdUser")
     private Collection<UsersRentals> usersRentalsByIdUser;

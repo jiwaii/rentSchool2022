@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "Roles_Permissions", schema = "rentSchool2022")
+@Table(name = "roles_permissions", schema = "rentschool2022")
 public class RolesPermissions {
     @Basic
     @Column(name = "id_permission", nullable = false)
@@ -17,10 +17,10 @@ public class RolesPermissions {
     @Column(name = "id_Roles_Permissions", nullable = false)
     private int idRolesPermissions;
     @ManyToOne
-    @JoinColumn(name = "id_permission", referencedColumnName = "id_permission", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_permission", referencedColumnName = "id_permission")
     private Permissions permissionsByIdPermission;
     @ManyToOne
-    @JoinColumn(name = "id_role", referencedColumnName = "id_role", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_role", referencedColumnName = "id_role")
     private Roles rolesByIdRole;
 
     public int getIdPermission() {

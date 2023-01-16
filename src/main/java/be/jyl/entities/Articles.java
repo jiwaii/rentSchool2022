@@ -28,7 +28,7 @@ public class Articles {
     @Column(name = "state", nullable = false)
     private State state;
     @ManyToOne
-    @JoinColumn(name = "id_category", referencedColumnName = "id_category", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_category", referencedColumnName = "id_category")
     private Categories categoriesByIdCategory;
     @OneToMany(mappedBy = "articlesByIdArticle")
     private Collection<ArticlesRentals> articlesRentalsByIdArticle;

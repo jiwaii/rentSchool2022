@@ -3,9 +3,8 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
 @NamedQueries(value = {
-        @NamedQuery(name="Account.findAll",query = "select a from Accounts a order by a.idAccount desc ")
+ @NamedQuery(name = "Account.findAll",query = "select a From Accounts a order by a.idAccount desc ")
 })
 @Entity
 public class Accounts {

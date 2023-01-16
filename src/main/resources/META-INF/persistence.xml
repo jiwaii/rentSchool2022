@@ -20,11 +20,10 @@
     <class>be.jyl.entities.Users</class>
     <class>be.jyl.entities.UsersRentals</class>
 <!--        <properties>-->
-<!--            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
 <!--            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/rentSchool2022"/>-->
 <!--            <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>-->
 <!--            <property name="eclipselink.jdbc.user" value="jyl"/>-->
-<!--            <property name="eclipselink.jdbc.password" value="allatc123"/>-->
 <!--        </properties>-->
+
     </persistence-unit>
 </persistence>

@@ -23,10 +23,10 @@ public class Reminders {
     @Column(name = "message", nullable = false, length = 250)
     private String message;
     @ManyToOne
-    @JoinColumn(name = "id_user", referencedColumnName = "id_user", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_user", referencedColumnName = "id_user")
     private Users usersByIdUser;
     @ManyToOne
-    @JoinColumn(name = "id_rental", referencedColumnName = "id_rental", nullable = false)
+    @PrimaryKeyJoinColumn(name = "id_rental", referencedColumnName = "id_rental")
     private Rentals rentalsByIdRental;
 
     public int getIdReminder() {
