@@ -3,6 +3,7 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "users_rentals", schema = "rentschool2022")
 public class UsersRentals {
