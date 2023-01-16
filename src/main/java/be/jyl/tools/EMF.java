@@ -12,9 +12,6 @@ public class EMF {
         return emfInstance;
     }
     public static EntityManager getEM(){
-        return getEmfInstance().createEntityManager();
-    }
-    public static void setEmfInstance(EntityManagerFactory emfInstance) {
-        EMF.emfInstance = emfInstance;
+        return emfInstance.createEntityManager();
     }
 }

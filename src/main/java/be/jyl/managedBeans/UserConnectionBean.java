@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 @Named
 @SessionScoped
@@ -24,9 +25,8 @@ public class UserConnectionBean implements Serializable {
         log.log(Level.INFO,"From UserConnectionBean.connectionLogin() : "+ login);
 
         /** Test EntityManager */
-        //AccountService accountService = new AccountService();
-        //List<AccountsEntity> accounts =  accountService.getAccounts();
-        //System.out.println(account.getLogin()+"  "+account.getPassword());
+        AccountService accountService = new AccountService();
+        List<Accounts> accounts =  accountService.getAccounts();
 
         if (login.equals("jiwaii")){
             log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success");

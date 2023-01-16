@@ -14,6 +14,7 @@
           <element id="module-output" name="rentSchool2022" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.47" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:eclipselink:2.7.8" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:jakarta.persistence:2.2.3" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" />

@@ -14,7 +14,7 @@ public class AccountService {
     private EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
     public List<Accounts> getAccounts (){
-        Query query = em.createNamedQuery("Account.findAll");
+        Query query = em.createNamedQuery("Account.findAll",Accounts.class);
         return query.getResultList();
     }
 }
