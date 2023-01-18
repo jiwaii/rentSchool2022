@@ -25,7 +25,7 @@
         </locale-config>
 
         <resource-bundle>
-            <base-name>be.jyl.messages</base-name>
+            <base-name>be.jyl.messages.messages</base-name>
             <var>bundle</var>
         </resource-bundle>
     </application>
