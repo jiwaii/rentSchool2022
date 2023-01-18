@@ -1,8 +1,14 @@
 package be.jyl.enums;
 
 public enum ResponsibleType {
-    available,
-    rental,
-    disabled,
-    lost;
+    student("student"),
+    teacher("teacher"),
+    secretariat("secretariat");
+
+    private String text;
+
+    ResponsibleType(String text) {
+        this.text = text;
+    }
+    public String display(){return text;}
 }

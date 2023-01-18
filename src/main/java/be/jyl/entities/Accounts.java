@@ -4,7 +4,8 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 @NamedQueries(value = {
- @NamedQuery(name = "Account.findAll",query = "select a From Accounts a order by a.idAccount desc ")
+    @NamedQuery(name = "Account.findAll",query = "select a From Accounts a order by a.idAccount desc "),
+    @NamedQuery(name = "Account.login",query = "select  a from Accounts a where a.login = :pLogin and a.password= :pPassword")
 })
 @Entity
 public class Accounts {

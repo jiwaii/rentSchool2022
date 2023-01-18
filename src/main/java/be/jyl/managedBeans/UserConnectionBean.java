@@ -1,13 +1,17 @@
 package be.jyl.managedBeans;
 
 import be.jyl.entities.Accounts;
+import be.jyl.entities.Users;
 import be.jyl.services.AccountService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Named
@@ -26,14 +30,13 @@ public class UserConnectionBean implements Serializable {
 
         /** Test EntityManager */
         AccountService accountService = new AccountService();
-        List<Accounts> accounts =  accountService.getAccounts();
-        for (Accounts a: accounts)
-            {
-                log.log(Level.INFO,a.getLogin()+" "+a.getPassword());
-        }
-        if (login.equals("jiwaii")){
-
-            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success");
+        Accounts myAccount = accountService.getConnectionLogin(this.login,this.password);
+        if (myAccount != null){
+            FacesContext context = FacesContext.getCurrentInstance();
+            Users myUser = myAccount.getUsersByIdAccount().stream().findFirst().get();
+            context.getExternalContext().getSessionMap().put("account",myAccount);
+            context.getExternalContext().getSessionMap().put("user",myUser);
+            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myAccount.getLogin() +" With id: "+ myAccount.getIdAccount());
             return "success";
          }
          else {

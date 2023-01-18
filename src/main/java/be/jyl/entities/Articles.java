@@ -26,6 +26,7 @@ public class Articles {
     private String barcode;
     @Basic
     @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
     private State state;
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_category", referencedColumnName = "id_category")
@@ -73,7 +74,7 @@ public class Articles {
         this.barcode = barcode;
     }
 
-    public Object getState() {
+    public State getState() {
         return state;
     }
 

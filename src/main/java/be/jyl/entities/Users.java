@@ -24,6 +24,7 @@ public class Users {
     private String email;
     @Basic
     @Column(name = "responsibleType", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ResponsibleType responsibleType;
     @Basic
     @Column(name = "firstname", nullable = false, length = 100)
@@ -86,7 +87,7 @@ public class Users {
         this.email = email;
     }
 
-    public Object getResponsibleType() {
+    public ResponsibleType getResponsibleType() {
         return responsibleType;
     }
 
