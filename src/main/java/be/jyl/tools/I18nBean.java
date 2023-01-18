@@ -21,16 +21,16 @@ public class I18nBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	// Log4j	 
-	@Inject
-	private transient Logger log;
+//	@Inject
+//	private transient Logger log;
 	
 	private Locale locale = FacesContext.getCurrentInstance().getApplication().getDefaultLocale();
 	private String language;
 	private TimeZone timeZone = TimeZone.getTimeZone("Europe/Brussels");
 
 	public String selectLanguage() {
-		log.debug("Selected language: " + language);
-		// Update language
+//		log.debug("Selected language: " + language);
+//		 Update language
 		int index = this.language.indexOf("_");
 		if (index > 0) {
 			String selectLanguage = this.language.substring(0, index);

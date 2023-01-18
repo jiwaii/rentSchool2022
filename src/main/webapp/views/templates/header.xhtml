@@ -13,11 +13,17 @@
                 <div class="navbar-nav me-auto">
                     <h:graphicImage value="/pics/Logo_RentSchool.png" width="50px" height="50px"/>
                 </div>
-                <h:outputText value=" Rent School 2022" styleClass="h2"></h:outputText>
+                <h:outputText value=" Rent School 22" styleClass="h2"></h:outputText>
             </div>
-            <h:outputText value="Welcome, #{user.firstname} "/>
+            <h:outputText value="#{bundle['header.welcome']}, #{user.firstname} "/>
             <h:form>
-                <h:commandButton value="Disconect" styleClass="btn btn-secondary my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                <h:commandButton value="#{bundle['header.logout']}" styleClass="btn btn-secondary my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+            </h:form>
+            <h:form>
+            <h:selectOneMenu value = "#{languageChanger.locale}" onchange = "submit()"
+                             valueChangeListener = "#{languageChanger.localeChanged}">
+                <f:selectItems value = "#{languageChanger.countriesList}" />
+            </h:selectOneMenu>
             </h:form>
         </div>
     </ui:composition>
