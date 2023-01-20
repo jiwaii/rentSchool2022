@@ -8,25 +8,25 @@
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
 <!--       <h:outputText value="#{user.firstname}"/>-->
-<h:dataTable value="#{rentalBean.rentalsList()}" var="itemRental">
+<h:dataTable value="#{rentalBean.rentalsList()}" var="itemRental" styleClass="table table-striped">
     <h:column>
-        <f:facet name="header">Nom</f:facet>
+        <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
         #{itemRental.idUserRent.lastname}
     </h:column>
     <h:column>
-        <f:facet name="header">Prénom</f:facet>
+        <f:facet name="header">#{bundle['tableHeader.firstname']}</f:facet>
         #{itemRental.idUserRent.firstname }
     </h:column>
     <h:column>
-        <f:facet name="header">Numéro de location</f:facet>
+        <f:facet name="header">#{bundle['tableHeader.rentalNumber']}</f:facet>
         #{itemRental.idRental}
     </h:column>
     <h:column>
-        <f:facet name="header">Créée par</f:facet>
+        <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
         #{itemRental.idUser.firstname}
     </h:column>
     <h:column>
-        <f:facet name="header">fin de location</f:facet>
+        <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
         #{itemRental.dateEnd}
     </h:column>
 </h:dataTable>
