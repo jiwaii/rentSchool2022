@@ -7,8 +7,29 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
-       <h:outputText value="#{user.firstname}"/>
-
+<!--       <h:outputText value="#{user.firstname}"/>-->
+<h:dataTable value="#{rentalBean.rentalsList()}" var="itemRental">
+    <h:column>
+        <f:facet name="header">Nom</f:facet>
+        #{itemRental.idUserRent.lastname}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Prénom</f:facet>
+        #{itemRental.idUserRent.firstname }
+    </h:column>
+    <h:column>
+        <f:facet name="header">Numéro de location</f:facet>
+        #{itemRental.idRental}
+    </h:column>
+    <h:column>
+        <f:facet name="header">Créée par</f:facet>
+        #{itemRental.idUser.firstname}
+    </h:column>
+    <h:column>
+        <f:facet name="header">fin de location</f:facet>
+        #{itemRental.dateEnd}
+    </h:column>
+</h:dataTable>
 
 
     </ui:define>

@@ -2,33 +2,28 @@ package be.jyl.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries(value = {
+        @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r")
+})
 @Entity
 public class Rentals {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_rental", nullable = false)
     private int idRental;
-    @Basic
-    @Column(name = "id_user", nullable = false)
-    private int idUser;
+    @ManyToOne
+    @PrimaryKeyJoinColumn(name = "id_user", referencedColumnName = "id_user")
+    private Users idUser;
     @Basic
     @Column(name = "dateBegin", nullable = false)
     private Date dateBegin;
     @Basic
     @Column(name = "dateEnd", nullable = false)
     private Date dateEnd;
-    @Basic
-    @Column(name = "id_userRent", nullable = false)
-    private int idUserRent;
-    @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<ArticlesRentals> articlesRentalsByIdRental;
-    @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<Reminders> remindersByIdRental;
-    @OneToMany(mappedBy = "rentalsByIdRental")
-    private Collection<UsersRentals> usersRentalsByIdRental;
+    @ManyToOne
+    @PrimaryKeyJoinColumn(name = "id_userRent", referencedColumnName = "id_user")
+    private Users idUserRent;
 
     public int getIdRental() {
         return idRental;
@@ -38,11 +33,11 @@ public class Rentals {
         this.idRental = idRental;
     }
 
-    public int getIdUser() {
+    public Users getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(Users idUser) {
         this.idUser = idUser;
     }
 
@@ -62,11 +57,11 @@ public class Rentals {
         this.dateEnd = dateEnd;
     }
 
-    public int getIdUserRent() {
+    public Users getIdUserRent() {
         return idUserRent;
     }
 
-    public void setIdUserRent(int idUserRent) {
+    public void setIdUserRent(int Users) {
         this.idUserRent = idUserRent;
     }
 
@@ -81,29 +76,5 @@ public class Rentals {
     @Override
     public int hashCode() {
         return Objects.hash(idRental, idUser, dateBegin, dateEnd, idUserRent);
-    }
-
-    public Collection<ArticlesRentals> getArticlesRentalsByIdRental() {
-        return articlesRentalsByIdRental;
-    }
-
-    public void setArticlesRentalsByIdRental(Collection<ArticlesRentals> articlesRentalsByIdRental) {
-        this.articlesRentalsByIdRental = articlesRentalsByIdRental;
-    }
-
-    public Collection<Reminders> getRemindersByIdRental() {
-        return remindersByIdRental;
-    }
-
-    public void setRemindersByIdRental(Collection<Reminders> remindersByIdRental) {
-        this.remindersByIdRental = remindersByIdRental;
-    }
-
-    public Collection<UsersRentals> getUsersRentalsByIdRental() {
-        return usersRentalsByIdRental;
-    }
-
-    public void setUsersRentalsByIdRental(Collection<UsersRentals> usersRentalsByIdRental) {
-        this.usersRentalsByIdRental = usersRentalsByIdRental;
     }
 }

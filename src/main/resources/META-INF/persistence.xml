@@ -19,7 +19,8 @@
     <class>be.jyl.entities.RolesPermissions</class>
     <class>be.jyl.entities.Users</class>
     <class>be.jyl.entities.UsersRentals</class>
-<!--        <properties>-->
+
+        <!--        <properties>-->
 <!--            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/rentSchool2022"/>-->
 <!--            <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>-->
 <!--            <property name="eclipselink.jdbc.user" value="jyl"/>-->
