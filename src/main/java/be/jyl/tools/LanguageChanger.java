@@ -1,5 +1,8 @@
 package be.jyl.tools;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
@@ -13,6 +16,7 @@ import java.util.*;
 @Named
 @SessionScoped
 public class LanguageChanger implements Serializable {
+    private Logger log = Logger.getLogger(LanguageChanger.class);
     private static final long serialVersionUID = 1L;
     private String locale;
 
@@ -20,9 +24,6 @@ public class LanguageChanger implements Serializable {
     private List<String> countriesList;
     @PostConstruct
     public void init() {
-        countries = new LinkedHashMap<String,Object>();
-        countries.put("fr", Locale.FRENCH);
-        countries.put("en", Locale.ENGLISH);
         countriesList = new ArrayList<>();
         countriesList.add("fr");
         countriesList.add("en");
@@ -46,8 +47,22 @@ public class LanguageChanger implements Serializable {
         this.locale = locale;
     }
 
+    public void changeToEN(){
+        log.log(Level.INFO,"changeToEN LANCeee");
+        FacesContext.getCurrentInstance()
+                .getViewRoot().setLocale(Locale.ENGLISH);
+    }
+    public void changeToFR(){
+        FacesContext.getCurrentInstance()
+                .getViewRoot().setLocale(Locale.FRENCH);
+    }
+    public void changeToES(){
+        Locale localeEs = new Locale("es","ES");
+        FacesContext.getCurrentInstance()
+                .getViewRoot().setLocale(localeEs);
+    }
     //value change event listener
-    public void localeChanged(ValueChangeEvent e) {
+    public void localeChange(ValueChangeEvent e) {
         locale = e.getNewValue().toString();
 
         if ("fr".equals(locale)) {

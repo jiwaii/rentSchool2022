@@ -8,23 +8,49 @@
 <f:view>
     <body>
     <ui:composition>
-        <div class="navbar navbar-expand-lg navbar-blue bg-primary ">
-            <div class="collapse navbar-collapse" id="navbarColor02">
-                <div class="navbar-nav me-auto">
-                    <h:graphicImage value="/pics/Logo_RentSchool.png" width="50px" height="50px"/>
-                </div>
-                <h:outputText value=" Rent School 22" styleClass="h2"></h:outputText>
+        <div class="navbar navbar-expand-lg navbar-light bg-primary">
+            <!--#region TITRE NAVBAR -->
+            <a class="navbar-brand" href="#">RentSchool 22
+                <h:graphicImage value="/pics/Logo_RentSchool.png" width="50px" height="50px"/>
+            </a>
+            <!--#endregion -->
+            <!--#region LIENS NAVBAR -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">#{bundle['header.navbar.currentLocationList']}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">#{bundle['header.navbar.makeLocation']}</a>
+                    </li>
+                    <!--                    <li class="nav-item">
+                                            <a class="nav-link disabled" href="#">Disabled</a>
+                                        </li>-->
+                </ul>
+                <!--#endregion -->
+                <!--#region COTE DROIT DU NAVBAR -->
+                <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{user.firstname} "/>
+
+                <h:form styleClass="form-inline">
+                    <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                </h:form>
+                <h:form>
+                    <h:commandLink action="#{languageChanger.changeToEN}">
+                        <h:graphicImage value="/pics/en.jpg" width="30px" height="20px"/>
+                    </h:commandLink>
+                </h:form>
+                <h:form>
+                    <h:commandLink action="#{languageChanger.changeToFR}">
+                        <h:graphicImage value="/pics/fr.jpg" width="30px" height="20px"/>
+                    </h:commandLink>
+                </h:form>
+                <h:form>
+                    <h:commandLink action="#{languageChanger.changeToES}">
+                        <h:graphicImage value="/pics/es.jpg" width="30px" height="20px"/>
+                    </h:commandLink>
+                </h:form>
+                <!--#endregion -->
             </div>
-            <h:outputText value="#{bundle['header.welcome']}, #{user.firstname} "/>
-            <h:form>
-                <h:commandButton value="#{bundle['header.logout']}" styleClass="btn btn-secondary my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
-            </h:form>
-            <h:form>
-            <h:selectOneMenu value = "#{languageChanger.locale}" onchange = "submit()"
-                             valueChangeListener = "#{languageChanger.localeChanged}">
-                <f:selectItems value = "#{languageChanger.countriesList}" />
-            </h:selectOneMenu>
-            </h:form>
         </div>
     </ui:composition>
     </body>
