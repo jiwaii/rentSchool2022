@@ -3,7 +3,28 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="default">
+    <persistence-unit name="rentSchool2022"  transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>java:comp/env/jdbc/rentSchool2022</jta-data-source>
+    <class>be.jyl.entities.Accounts</class>
+    <class>be.jyl.entities.Articles</class>
+    <class>be.jyl.entities.ArticlesRentals</class>
+    <class>be.jyl.entities.Categories</class>
+    <class>be.jyl.entities.Cities</class>
+    <class>be.jyl.entities.Countries</class>
+    <class>be.jyl.entities.Permissions</class>
+    <class>be.jyl.entities.Reminders</class>
+    <class>be.jyl.entities.Rentals</class>
+    <class>be.jyl.entities.Roles</class>
+    <class>be.jyl.entities.RolesPermissions</class>
+    <class>be.jyl.entities.Users</class>
+    <class>be.jyl.entities.UsersRentals</class>
+
+        <!--        <properties>-->
+<!--            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/rentSchool2022"/>-->
+<!--            <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>-->
+<!--            <property name="eclipselink.jdbc.user" value="jyl"/>-->
+<!--        </properties>-->
 
     </persistence-unit>
 </persistence>

@@ -23,7 +23,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>views/index.xhtml</welcome-file>
+        <welcome-file>views/login.xhtml</welcome-file>
     </welcome-file-list>
     <context-param>
         <param-name>facelets.SKIP_COMMENTS</param-name>
