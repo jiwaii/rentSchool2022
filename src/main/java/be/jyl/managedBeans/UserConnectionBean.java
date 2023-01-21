@@ -18,17 +18,14 @@ import java.util.List;
 @SessionScoped
 public class UserConnectionBean implements Serializable {
     private Logger log = Logger.getLogger(UserConnectionBean.class);
-    private String message = "Bienvenue ";
     private String login ;
     private String password ;
     private Accounts account = new Accounts();
-    //private AccountService accountService = new AccountService();
-
 
     public String connectionLogin(){
         log.log(Level.INFO,"From UserConnectionBean.connectionLogin() : "+ login);
 
-        /** Test EntityManager */
+        /** Test Login and password */
         AccountService accountService = new AccountService();
         Accounts myAccount = accountService.getConnectionLogin(this.login,this.password);
         if (myAccount != null){
@@ -45,15 +42,11 @@ public class UserConnectionBean implements Serializable {
          }
     }
     public String disconnect(){
+        ((HttpSession)FacesContext.getCurrentInstance().getExternalContext().getSession(true)).invalidate();
         log.log(Level.INFO,"UserConnectionBean.disconnect() : disconnect");
         return "login.xhtml";
     }
-    public String getMessage() {
-        return message;
-    }
-    public void setMessage(String message) {
-        this.message = message;
-    }
+
     public String getLogin() {
         return login;
     }

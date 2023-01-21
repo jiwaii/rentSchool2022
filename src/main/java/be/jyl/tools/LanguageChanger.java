@@ -48,7 +48,7 @@ public class LanguageChanger implements Serializable {
     }
 
     public void changeToEN(){
-        log.log(Level.INFO,"changeToEN LANCeee");
+        log.log(Level.INFO,"changeToEN");
         FacesContext.getCurrentInstance()
                 .getViewRoot().setLocale(Locale.ENGLISH);
     }
