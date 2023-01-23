@@ -22,6 +22,12 @@
         #{itemRental.idRental}
     </h:column>
     <h:column>
+        <f:facet name="header">#{bundle['tableHeader.materials']}</f:facet>
+        <ui:repeat value="#{itemRental.rentalsArticlesByIdRental}" var="art">
+            #{art.articlesByIdArticle.articleName}
+        </ui:repeat>
+    </h:column>
+    <h:column>
         <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
         #{itemRental.idUser.firstname}
     </h:column>

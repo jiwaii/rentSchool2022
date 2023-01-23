@@ -2,6 +2,7 @@ package be.jyl.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 @NamedQueries(value = {
         @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r")
@@ -24,6 +25,19 @@ public class Rentals {
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_userRent", referencedColumnName = "id_user")
     private Users idUserRent;
+
+    public Collection<ArticlesRentals> getRentalsArticlesByIdRental() {
+        return rentalsArticlesByIdRental;
+    }
+
+    public void setRentalsArticlesByIdRental(Collection<ArticlesRentals> rentalsArticlesByIdRental) {
+        this.rentalsArticlesByIdRental = rentalsArticlesByIdRental;
+    }
+
+    @OneToMany(mappedBy = "rentalsByIdRental")
+    private Collection<ArticlesRentals> rentalsArticlesByIdRental;
+
+
 
     public int getIdRental() {
         return idRental;
@@ -77,4 +91,5 @@ public class Rentals {
     public int hashCode() {
         return Objects.hash(idRental, idUser, dateBegin, dateEnd, idUserRent);
     }
+
 }
