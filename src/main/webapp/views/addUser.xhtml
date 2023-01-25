@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="templates/mainPage.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h:outputLabel value="prenom" styleClass="form-label"/>
+                        <h:inputText value="#{userBean.user.firstname}" styleClass="form-control"/>
+                        <br/>
+                        <h:outputLabel value="nom" styleClass="form-label"/>
+                        <h:inputText value="#{userBean.user.lastname}" styleClass="form-control"/>
+                    </div>
+
+                    <div class="col">
+                        <h:outputLabel value="email" styleClass="form-label"/>
+                        <h:inputText value="#{userBean.user.email}" styleClass="form-control"/>
+                        <br/>
+                        <h:outputLabel value="address" styleClass="form-label"/>
+                        <h:inputText value="#{userBean.user.address}" styleClass="form-control"/>
+                        <br/>
+                        <h:commandButton styleClass="w-100 btn btn-lg btn-primary" value="Submit" action="#{userBean.addUser}"/>
+
+                    </div>
+                    <div class="col">
+
+
+<!--                        <h:outputText value="Model-Mark" styleClass="form-label"/>-->
+<!--                        <h:selectOneMenu styleClass="form-select" value="#{}">-->
+<!--                            <f:selectItems id="" value="#{}" var="brand"-->
+<!--                                           itemLabel="#{}" itemValue="#{}">-->
+<!--                            </f:selectItems>-->
+<!--                            <f:ajax event="change"-->
+<!--                                    listener="#{}"-->
+<!--                                    render=""-->
+<!--                                    execute=""-->
+<!--                            />-->
+<!--                        </h:selectOneMenu>-->
+                        <h:outputLabel value="Responsible type" styleClass="form-label"/>
+                        <h:selectOneMenu id="ModelSelection" styleClass="form-select" value="#{userBean.user.responsibleType}">
+                            <f:selectItems value="#{userBean.responsibleTypesList()}" var="r" itemValue="#{r}"></f:selectItems>
+                        </h:selectOneMenu>
+
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

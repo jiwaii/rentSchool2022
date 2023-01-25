@@ -14,6 +14,15 @@ import java.util.List;
 public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
+    private List<Rentals> rentalsList;
+
+    public List<Rentals> getRentalsList() {
+        return rentalsList;
+    }
+
+    public void setRentalsList(List<Rentals> rentalsList) {
+        this.rentalsList = rentalsList;
+    }
 
     public List<Rentals> rentalsList(){
         return rentalsService.rentalsList();
