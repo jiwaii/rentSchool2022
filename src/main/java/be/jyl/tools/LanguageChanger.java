@@ -5,8 +5,10 @@ import org.apache.log4j.Logger;
 
 import javax.annotation.ManagedBean;
 import javax.annotation.PostConstruct;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
@@ -55,6 +57,7 @@ public class LanguageChanger implements Serializable {
     public void changeToFR(){
         FacesContext.getCurrentInstance()
                 .getViewRoot().setLocale(Locale.FRENCH);
+
     }
     public void changeToES(){
         Locale localeEs = new Locale("es","ES");
