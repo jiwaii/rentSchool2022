@@ -22,8 +22,12 @@
                     </li>
                     <li class="nav-item">
 
-                            <h:link class="nav-link" outcome="addUser.xhtml" value="#{bundle['header.navbar.addUser']}"/>
+<!--                            <h:link class="nav-link" outcome="addUser.xhtml" value="#{bundle['header.navbar.addUser']}"/>-->
+                        <h:form>
+                            <h:commandLink class="nav-link" action="#{userBean.addUserPage}" value="#{bundle['header.navbar.addUser']}">
 
+                            </h:commandLink>
+                        </h:form>
                     </li>
                     <!--                    <li class="nav-item">
                                             <a class="nav-link disabled" href="#">Disabled</a>

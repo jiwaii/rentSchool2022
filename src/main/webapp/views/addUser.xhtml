@@ -43,12 +43,21 @@
 <!--                                    execute=""-->
 <!--                            />-->
 <!--                        </h:selectOneMenu>-->
-
-                        
                         <h:outputLabel value="Responsible type" styleClass="form-label"/>
+                        <br/>
                         <p:importEnum type="be.jyl.enums.ResponsibleType" var="enumResponsibleType" />
-                        <h:selectOneMenu id="ModelSelection" styleClass="form-select" value="#{userBean.user.responsibleType}">
+                        <h:selectOneMenu id="ModelSelection" styleClass="form-select form-control" value="#{userBean.user.responsibleType}">
                             <f:selectItems value="#{enumResponsibleType}" var="r" itemValue="#{r}"></f:selectItems>
+                        </h:selectOneMenu>
+                        <br/>
+                        <h:outputLabel value="Ville" styleClass="form-label"/>
+                        <br/>
+                        <h:selectOneMenu id="villeSelection" styleClass="form-select form-control" value="#{userBean.user.idCity}">
+                            <f:selectItems value="#{userBean.citiesList}"
+                                           var="city"
+                                           itemLabel="#{city.cityName}"
+                                           itemValue="#{city.idCity}">
+                            </f:selectItems>
                         </h:selectOneMenu>
 
                     </div>

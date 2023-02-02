@@ -1,5 +1,6 @@
 package be.jyl.services;
 
+import be.jyl.entities.Cities;
 import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
@@ -18,6 +19,10 @@ public class UserService {
         transaction.begin();
             em.persist(user);
         transaction.commit();
+    }
+    public List<Cities> listCities(){
+       Query query = em.createNamedQuery("Cities.findAll");
+       return query.getResultList();
     }
 
 }
