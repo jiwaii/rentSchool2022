@@ -24,5 +24,15 @@ public class UserService {
        Query query = em.createNamedQuery("Cities.findAll");
        return query.getResultList();
     }
+    public List<Users> listUsers(){
+        Query query = em.createNamedQuery("Users.findAll");
+        return query.getResultList();
+    }
+    public List<Users> listUserByName(String name){
 
+        Query query = em.createNamedQuery("Users.findWhere")
+                .setParameter("pFirstname","%"+name+"%")
+                .setParameter("pLastname","%"+name+"%");
+        return query.getResultList();
+    }
 }

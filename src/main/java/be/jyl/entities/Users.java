@@ -5,7 +5,11 @@ import be.jyl.enums.ResponsibleType;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries( value = {
+        @NamedQuery(name = "Users.findAll",query = "SELECT c FROM Users c "),
+        @NamedQuery(name = "Users.findWhere",query = "select c from Users c " +
+                "Where c.firstname like :pFirstname or c.lastname like :pLastname")
+})
 @Entity
 @Table(name = "users")
 public class Users {

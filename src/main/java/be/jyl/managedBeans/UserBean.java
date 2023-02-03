@@ -17,8 +17,10 @@ import java.util.List;
 public class UserBean implements Serializable {
     private Logger log = Logger.getLogger(UserBean.class);
     private Users user;
+    private String userSeachText;
     private UserService userService = new UserService();
     private List<Cities> citiesList;
+    private List<Users> usersList;
 
     @PostConstruct
     public void init(){
@@ -36,17 +38,35 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,"Lastname : "+ user.getLastname());
         log.log(Level.INFO,"ResponsibleType : "+ user.getResponsibleType());
         log.log(Level.INFO,"Address : "+ user.getAddress());
-//        user.setIdCity(1);
         log.log(Level.INFO,"IdCity : "+ user.getIdCity());
 //        user.setCitiesByIdCity(userCity);
 
-//        userService.insert(user);
-    }
-    public String addUserPage(){
-        citiesList = userService.listCities();
-        return "addUser";
+        userService.insert(user);
     }
 
+    /** Page pour ajouter un utilisateur
+     * et Chargement des villes
+     *
+     * @return String nom de la jsf
+     */
+    public String addUserPage(){
+        citiesList = userService.listCities();
+        return "userAdd";
+    }
+    /** Page pour lister les utilisateurs
+     *  Chargement des utilisateur
+     *
+     * @return String nom de la jsf
+     */
+    public String listUserPage(){
+        usersList = userService.listUsers();
+        return "usersList";
+    }
+    public void searchUserBar(){
+        log.log(Level.INFO,"UserBean.searchUserBar called !");
+        log.log(Level.INFO,"UserBean.userSeachText is = " + userSeachText);
+        usersList = userService.listUserByName(userSeachText);
+    }
 
 
     public Users getUser() {
@@ -65,4 +85,19 @@ public class UserBean implements Serializable {
         this.citiesList = citiesList;
     }
 
+    public List<Users> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
+    }
+
+    public String getUserSeachText() {
+        return userSeachText;
+    }
+
+    public void setUserSeachText(String userSeachText) {
+        this.userSeachText = userSeachText;
+    }
 }

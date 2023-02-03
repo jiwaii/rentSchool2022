@@ -18,20 +18,21 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">#{bundle['header.navbar.currentLocationList']}</a>
+                        <h:link class="nav-link" outcome="index.xhtml">#{bundle['header.navbar.currentLocationList']}</h:link>
                     </li>
                     <li class="nav-item">
-
-<!--                            <h:link class="nav-link" outcome="addUser.xhtml" value="#{bundle['header.navbar.addUser']}"/>-->
+<!--                            <h:link class="nav-link" outcome="userAdd.xhtml" value="#{bundle['header.navbar.addUser']}"/>-->
                         <h:form>
-                            <h:commandLink class="nav-link" action="#{userBean.addUserPage}" value="#{bundle['header.navbar.addUser']}">
+                            <h:commandLink class="nav-link" action="#{userBean.listUserPage()}" value="#{bundle['header.navbar.users']}">
 
                             </h:commandLink>
                         </h:form>
                     </li>
-                    <!--                    <li class="nav-item">
-                                            <a class="nav-link disabled" href="#">Disabled</a>
-                                        </li>-->
+                    <!--
+                    <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                    -->
                 </ul>
                 <!--#endregion -->
                 <!--#region COTE DROIT DU NAVBAR -->
