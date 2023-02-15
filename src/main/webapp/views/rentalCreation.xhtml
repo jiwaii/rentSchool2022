@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templates/mainPage.xhtml">
+    <ui:define name="content">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col" id="SelectionUserCol" >
+                <!--            <h:form>-->
+                <!--                <h:inputText id="inputSearchUser" value="#{}" styleClass="form-control" a:placeholder="Rechercher">-->
+                <!--                    <f:ajax event="keyup"-->
+                <!--                            render="userRentTable"-->
+                <!--                            listener="#{}"/>-->
+                <!--                </h:inputText>-->
+                <!--            </h:form>-->
+                <h:form id="formDataTable">
+                    <p:dataTable id="radioDT" value="#{rentalBean.usersList}" var="user"
+                                 selection="#{rentalBean.userSelected}"
+                                 rowKey="#{user.idUser}"
+                                 styleClass="table table-striped table-hover" >
+                        <p:ajax event="rowSelect"
+                                listener="#{rentalBean.dtUserSelection}"/>
+                        <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                        <p:column headerText="Nom">
+                            <h:outputText value="#{user.lastname}" />
+                        </p:column>
+                        <p:column headerText="Prénom">
+                            <h:outputText value="#{user.firstname}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+            <div class="col" id="SelectionArticleCol" >
+
+            </div>
+        </div>
+
+    </div>
+    </ui:define>
+</ui:composition>
+</html>
