@@ -3,6 +3,7 @@ package be.jyl.managedBeans;
 import be.jyl.entities.Articles;
 import be.jyl.entities.Rentals;
 import be.jyl.entities.Users;
+import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.UserService;
 import org.apache.log4j.Level;
@@ -24,10 +25,12 @@ public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
     private UserService userService = new UserService();
+    private ArticlesService articlesService = new ArticlesService();
     private List<Rentals> rentalsList;
     private Users userSelected ;
     private List<Users> usersList;
-    private List<Articles> ArticlesMultipleSelected;
+    private List<Articles> articlesMultipleSelected;
+    private Articles articleSelected;
     private List<Articles> articlesList;
     private String userSearchText;
     private String articlesSearchText;
@@ -40,6 +43,7 @@ public class RentalBean implements Serializable {
     @PostConstruct
     public void init(){
         usersList = userService.listUsers();
+        articlesList = articlesService.articlesAvailableList();
     }
     public List<Rentals> rentalsList(){
         return rentalsService.rentalsList();
@@ -52,6 +56,10 @@ public class RentalBean implements Serializable {
         userSelected = (Users)selectEvent.getObject();
         log.log(Level.INFO, "dtUserSelection() = "+userSelected.getLastname()+" "+userSelected.getFirstname());
 
+    }
+    public void dtArticleSelection(SelectEvent selectEvent){
+        articleSelected = (Articles) selectEvent.getObject();
+        log.log(Level.INFO, "dtArticleSelection() = "+articleSelected.getArticleName());
     }
 
 
@@ -88,11 +96,11 @@ public class RentalBean implements Serializable {
     }
 
     public List<Articles> getArticlesMultipleSelected() {
-        return ArticlesMultipleSelected;
+        return articlesMultipleSelected;
     }
 
     public void setArticlesMultipleSelected(List<Articles> articlesMultipleSelected) {
-        ArticlesMultipleSelected = articlesMultipleSelected;
+        articlesMultipleSelected = articlesMultipleSelected;
     }
 
     public List<Articles> getArticlesList() {
@@ -117,5 +125,13 @@ public class RentalBean implements Serializable {
 
     public void setArticlesSearchText(String articlesSearchText) {
         this.articlesSearchText = articlesSearchText;
+    }
+
+    public Articles getArticleSelected() {
+        return articleSelected;
+    }
+
+    public void setArticleSelected(Articles articleSelected) {
+        this.articleSelected = articleSelected;
     }
 }

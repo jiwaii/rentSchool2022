@@ -13,7 +13,7 @@
     <div class="container">
 
         <div class="row">
-            <div class="col" id="SelectionUserCol" >
+            <div class="col col-md-4" id="SelectionUserCol" >
                 <h:form id="formDataTable">
                     <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher">
                         <f:ajax event="keyup"
@@ -37,7 +37,21 @@
                 </h:form>
             </div>
             <div class="col" id="SelectionArticleCol" >
+                <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
+                             selection="#{rentalBean.articleSelected}"
+                             rowKey="#{article.idArticle}"
+                             styleClass="table table-striped table-hover">
+                    <p:ajax event="rowSelect"
+                            listener="#{rentalBean.dtArticleSelection}"/>
+                    <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                    <p:column headerText="Materiel">
+                        <h:outputText value="#{article.articleName}"/>
+                    </p:column>
+                    <p:column headerText="Reference">
+                        <h:outputText value="#{article.refSn}"/>
+                    </p:column>
 
+                </p:dataTable>
             </div>
         </div>
 

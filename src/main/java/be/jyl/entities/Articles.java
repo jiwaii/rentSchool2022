@@ -5,7 +5,13 @@ import be.jyl.enums.State;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries(value = {
+        @NamedQuery(name = "article.findAll",query = "SELECT a FROM Articles a "),
+        @NamedQuery(name = "articles.available", query = "SELECT a FROM Articles a " +
+                "WHERE a.state = be.jyl.enums.State.available "),
+        @NamedQuery(name = "articles.findWhere",query = "SELECT a FROM Articles a " +
+                "WHERE a.articleName like :pArticleName AND a.state = be.jyl.enums.State.available ")
+})
 @Entity
 public class Articles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
