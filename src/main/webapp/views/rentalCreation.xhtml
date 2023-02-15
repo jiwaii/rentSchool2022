@@ -14,15 +14,13 @@
 
         <div class="row">
             <div class="col" id="SelectionUserCol" >
-                <!--            <h:form>-->
-                <!--                <h:inputText id="inputSearchUser" value="#{}" styleClass="form-control" a:placeholder="Rechercher">-->
-                <!--                    <f:ajax event="keyup"-->
-                <!--                            render="userRentTable"-->
-                <!--                            listener="#{}"/>-->
-                <!--                </h:inputText>-->
-                <!--            </h:form>-->
                 <h:form id="formDataTable">
-                    <p:dataTable id="radioDT" value="#{rentalBean.usersList}" var="user"
+                    <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher">
+                        <f:ajax event="keyup"
+                                render="userRadioTD"
+                                listener="#{rentalBean.usersListByName}"/>
+                    </h:inputText>
+                    <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
                                  selection="#{rentalBean.userSelected}"
                                  rowKey="#{user.idUser}"
                                  styleClass="table table-striped table-hover" >

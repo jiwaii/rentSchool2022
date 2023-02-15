@@ -29,6 +29,8 @@ public class RentalBean implements Serializable {
     private List<Users> usersList;
     private List<Articles> ArticlesMultipleSelected;
     private List<Articles> articlesList;
+    private String userSearchText;
+    private String articlesSearchText;
 
     /**
      * ------------------------
@@ -42,12 +44,14 @@ public class RentalBean implements Serializable {
     public List<Rentals> rentalsList(){
         return rentalsService.rentalsList();
     }
-    public List<Users> usersListByName(){
-        return userService.listUsers();
+    public void usersListByName(){
+        log.log(Level.INFO,"userListByName");
+        usersList = userService.listUserByName(userSearchText) ;
     }
     public void dtUserSelection(SelectEvent selectEvent){
-        Users selectedUsersEvent = (Users)selectEvent.getObject();
-        log.log(Level.INFO, "dtUserSelection() = "+selectedUsersEvent.getFirstname() );
+        userSelected = (Users)selectEvent.getObject();
+        log.log(Level.INFO, "dtUserSelection() = "+userSelected.getLastname()+" "+userSelected.getFirstname());
+
     }
 
 
@@ -97,5 +101,21 @@ public class RentalBean implements Serializable {
 
     public void setArticlesList(List<Articles> articlesList) {
         this.articlesList = articlesList;
+    }
+
+    public String getUserSearchText() {
+        return userSearchText;
+    }
+
+    public void setUserSearchText(String userSearchText) {
+        this.userSearchText = userSearchText;
+    }
+
+    public String getArticlesSearchText() {
+        return articlesSearchText;
+    }
+
+    public void setArticlesSearchText(String articlesSearchText) {
+        this.articlesSearchText = articlesSearchText;
     }
 }
