@@ -10,52 +10,62 @@
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
 
-    <div class="container">
+        <div class="container">
 
-        <div class="row">
-            <div class="col col-md-4" id="SelectionUserCol" >
-                <h:form id="formDataTable">
-                    <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher">
-                        <f:ajax event="keyup"
-                                render="userRadioTD"
-                                listener="#{rentalBean.usersListByName}"/>
-                    </h:inputText>
-                    <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
-                                 selection="#{rentalBean.userSelected}"
-                                 rowKey="#{user.idUser}"
-                                 styleClass="table table-striped table-hover" >
-                        <p:ajax event="rowSelect"
-                                listener="#{rentalBean.dtUserSelection}"/>
-                        <p:column selectionMode="single" style="width:16px;text-align:center"/>
-                        <p:column headerText="Nom">
-                            <h:outputText value="#{user.lastname}" />
-                        </p:column>
-                        <p:column headerText="Prénom">
-                            <h:outputText value="#{user.firstname}" />
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
-            </div>
-            <div class="col" id="SelectionArticleCol" >
-                <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
-                             selection="#{rentalBean.articleSelected}"
-                             rowKey="#{article.idArticle}"
-                             styleClass="table table-striped table-hover">
-                    <p:ajax event="rowSelect"
-                            listener="#{rentalBean.dtArticleSelection}"/>
-                    <p:column selectionMode="single" style="width:16px;text-align:center"/>
-                    <p:column headerText="Materiel">
-                        <h:outputText value="#{article.articleName}"/>
-                    </p:column>
-                    <p:column headerText="Reference">
-                        <h:outputText value="#{article.refSn}"/>
-                    </p:column>
+            <h:form id="formDataTable">
+                <div class="row">
+                    <div class="col col-md-4" id="SelectionUserCol" >
+                        <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher">
+                            <f:ajax event="keyup"
+                                    render="userRadioTD"
+                                    listener="#{rentalBean.usersListByName}"/>
+                        </h:inputText>
+                        <br/>
+                        <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
+                                     selection="#{rentalBean.userSelected}"
+                                     rowKey="#{user.idUser}"
+                                     styleClass="table table-striped table-hover" >
+                            <p:ajax event="rowSelect"
+                                    listener="#{rentalBean.dtUserSelection}"/>
+                            <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                            <p:column headerText="Nom">
+                                <h:outputText value="#{user.lastname}" />
+                            </p:column>
+                            <p:column headerText="Prénom">
+                                <h:outputText value="#{user.firstname}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="col col-md-4" id="SelectionArticleCol" >
+                        <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
+                                     selection="#{rentalBean.articleSelected}"
+                                     rowKey="#{article.idArticle}"
+                                     styleClass="table table-striped table-hover">
+                            <p:ajax event="rowSelect"
+                                    listener="#{rentalBean.dtArticleSelection}"/>
+                            <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                            <p:column headerText="Materiel">
+                                <h:outputText value="#{article.articleName}"/>
+                            </p:column>
+                            <p:column headerText="Reference">
+                                <h:outputText value="#{article.refSn}"/>
+                            </p:column>
 
-                </p:dataTable>
-            </div>
+                        </p:dataTable>
+                    </div>
+                    <div class="col col-md-4">
+                        <p:outputLabel style="font-weight: bold" for="datePikerRental" value="Date de remise"/>
+                        <br/>
+                        <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}">
+                            <p:ajax event="dateSelect" listener="#{rentalBean.dateSelection}"/>
+                        </p:datePicker>
+                        <br/>
+                        <br/>
+                        <p:commandButton styleClass="button btn-primary btn-lg btn-block" value="#{bundle['button.submit']}" type="submit" action="#{rentalBean.createRental}"/>
+                    </div>
+                </div>
+            </h:form>
         </div>
-
-    </div>
     </ui:define>
 </ui:composition>
 </html>

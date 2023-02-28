@@ -11,11 +11,11 @@
 <h:dataTable value="#{rentalBean.rentalsList()}" var="itemRental" styleClass="table table-striped">
     <h:column>
         <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
-        #{itemRental.idUserRent.lastname}
+        #{itemRental.userRent.lastname}
     </h:column>
     <h:column>
         <f:facet name="header">#{bundle['tableHeader.firstname']}</f:facet>
-        #{itemRental.idUserRent.firstname }
+        #{itemRental.userRent.firstname }
     </h:column>
     <h:column>
         <f:facet name="header">#{bundle['tableHeader.rentalNumber']}</f:facet>
@@ -29,7 +29,7 @@
     </h:column>
     <h:column>
         <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
-        #{itemRental.idUser.firstname}
+        #{itemRental.user.firstname}
     </h:column>
     <h:column>
         <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
