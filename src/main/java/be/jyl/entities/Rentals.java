@@ -34,7 +34,7 @@ public class Rentals {
         this.rentalsArticlesByIdRental = rentalsArticlesByIdRental;
     }
 
-    @OneToMany(mappedBy = "rentalsByIdRental")
+    @OneToMany(mappedBy = "rentalsByIdRental", cascade = CascadeType.PERSIST)
     private Collection<ArticlesRentals> rentalsArticlesByIdRental;
 
 

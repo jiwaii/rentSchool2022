@@ -19,7 +19,7 @@ public class RentalsService {
         Query query = em.createNamedQuery("Rentals.findAll");
         return query.getResultList();
     }
-    public void persistNewRental(Rentals rental, Articles articles){
+    public void persistNewRental(Rentals rental){
         transaction.begin();
         log.log(Level.INFO, "persisteNewRental() : Start Transaction");
         log.log(Level.INFO, " rental.id_user : "+ rental.getUser().getIdUser());
@@ -29,7 +29,6 @@ public class RentalsService {
         log.log(Level.INFO, " rental.id_rental : "+ rental.getIdRental());
 
         log.log(Level.INFO, " Call em.persist ");
-
         em.persist(rental);
 
         transaction.commit();

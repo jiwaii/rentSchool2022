@@ -1,8 +1,10 @@
 package be.jyl.managedBeans;
 
 import be.jyl.entities.Articles;
+import be.jyl.entities.ArticlesRentals;
 import be.jyl.entities.Rentals;
 import be.jyl.entities.Users;
+import be.jyl.enums.State;
 import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.UserService;
@@ -83,28 +85,43 @@ public class RentalBean implements Serializable {
 
     public String createRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
-        DateConverter dateConverter = new DateConverter();
-        dateConverter.getSqlDateFromUtilDate(endDateSelected);
-        java.sql.Date dateNow = new java.sql.Date(new java.util.Date().getTime());
+        // Variable imperatives pour créer la location :
+        java.sql.Date dateNow ;
+        java.sql.Date dateEnd ;
+        Users userSession ; //l'utilsateur connecté (qui crée la location)
 
-        log.log(Level.INFO,"UserID : "+userSelected.getIdUser());
-        log.log(Level.INFO,"UserName : "+userSelected.getFirstname()+" "+userSelected.getLastname());
-
-
-
-        //Rental
-        Rentals newRental = new Rentals();
-        newRental.setUser(userSelected);
+        //affectation des variables date :
+        dateNow = new java.sql.Date(new java.util.Date().getTime());
+        DateConverter dateConverter = new DateConverter(); //classe créé par moi pour la conversion des dates
+        dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
+        log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
+        //affectation Recuperation de l'utilisateur de la session :
         FacesContext context = FacesContext.getCurrentInstance();
-        Users userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
-        log.log(Level.INFO, "user connected is : "+userSession.getFirstname());
-        newRental.setUserRent(userSession);
-        log.log(Level.INFO,"userRental is  : "+newRental.getUserRent().getFirstname()+" "
-                + newRental.getUserRent().getLastname());
-        newRental.setDateBegin(dateNow);
-        newRental.setDateEnd(dateConverter.getSqlDateFromUtilDate(endDateSelected));
+        userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
 
-        rentalsService.persistNewRental(newRental, articleSelected);
+        /** -------------------------------------------------------------
+         * @autor jiwaii
+         *  Configuration des mes entités pour la creation de ma location :
+         ---------------------------------------------------------------*/
+        log.log(Level.INFO,"Start config entities");
+        Rentals newRental = new Rentals();
+        newRental.setUser(userSession);
+        newRental.setUserRent(userSelected);
+        newRental.setDateBegin(dateNow);
+        newRental.setDateEnd(dateEnd);
+
+        articleSelected.setState(State.rental);
+
+        ArticlesRentals articlesRentals = new ArticlesRentals();
+        articlesRentals.setQty(1);
+        articlesRentals.setArticlesByIdArticle(articleSelected);
+        articlesRentals.setRentalsByIdRental(newRental);
+        Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
+        articlesRentalsCollection.add(articlesRentals);
+
+        newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
+
+        rentalsService.persistNewRental(newRental);
 
         return "index.xhtml";
     }
