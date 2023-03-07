@@ -29,6 +29,7 @@ public class RentalBean implements Serializable {
     private UserService userService = new UserService();
     private ArticlesService articlesService = new ArticlesService();
     private List<Rentals> rentalsList;
+    private Rentals rentalSelected;
     private Users userSelected ;
     private List<Users> usersList;
     private List<Articles> articlesMultipleSelected;
@@ -45,10 +46,11 @@ public class RentalBean implements Serializable {
      **/
     @PostConstruct
     public void init(){
+        rentalsList = gRentalsList();
         usersList = userService.listUsers();
         articlesList = articlesService.articlesAvailableList();
     }
-    public List<Rentals> rentalsList(){
+    public List<Rentals> gRentalsList(){
         return rentalsService.rentalsList();
     }
 
@@ -82,6 +84,13 @@ public class RentalBean implements Serializable {
     public void dateSelection(SelectEvent selectEvent){
         log.log(Level.INFO,"dateSelection() = "+selectEvent.getObject().toString());
     }
+    public void dtRentalSelection(SelectEvent selectEvent){
+//        rentalsSelected = (Rentals) selectEvent.getObject();
+//        log.log(Level.INFO,"dtRentalSelection'() id = "+ rentalsSelected.getIdRental());
+    }
+    public void dtRentalDetails(Rentals rental){
+        rentalSelected = rental;
+    }
 
     public String createRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
@@ -110,7 +119,7 @@ public class RentalBean implements Serializable {
         newRental.setDateBegin(dateNow);
         newRental.setDateEnd(dateEnd);
 
-        articleSelected.setState(State.rental);
+        articleSelected.setState(State.rental); // mettre à jour l'article en status loué
 
         ArticlesRentals articlesRentals = new ArticlesRentals();
         articlesRentals.setQty(1);
@@ -121,11 +130,16 @@ public class RentalBean implements Serializable {
 
         newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
-        rentalsService.persistNewRental(newRental);
+        rentalsService.persistNewRental(newRental,articleSelected);
+        rentalsList = rentalsService.rentalsList();
+        return "index.xhtml";
+    }
+    public String deleteRental(){
+        rentalsService.removeRental(rentalSelected);
+        rentalsList = rentalsService.rentalsList();
 
         return "index.xhtml";
     }
-
 
 
     /**
@@ -205,5 +219,13 @@ public class RentalBean implements Serializable {
 
     public void setEndDateSelected(Date endDateSelected) {
         this.endDateSelected = endDateSelected;
+    }
+
+    public Rentals getRentalSelected() {
+        return rentalSelected;
+    }
+
+    public void setRentalSelected(Rentals rentalSelected) {
+        this.rentalSelected = rentalSelected;
     }
 }
