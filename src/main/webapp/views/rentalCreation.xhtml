@@ -15,7 +15,7 @@
             <h:form id="formDataTable">
                 <div class="row">
                     <div class="col col-md-4" id="SelectionUserCol" >
-                        <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher">
+                        <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
                             <f:ajax event="keyup"
                                     render="userRadioTD"
                                     listener="#{rentalBean.usersListByName}"/>
@@ -28,10 +28,10 @@
                             <p:ajax event="rowSelect"
                                     listener="#{rentalBean.dtUserSelection}"/>
                             <p:column selectionMode="single" style="width:16px;text-align:center"/>
-                            <p:column headerText="Nom">
+                            <p:column headerText="#{bundle['tableHeader.lastname']}">
                                 <h:outputText value="#{user.lastname}" />
                             </p:column>
-                            <p:column headerText="Prénom">
+                            <p:column headerText="#{bundle['tableHeader.firstname']}">
                                 <h:outputText value="#{user.firstname}" />
                             </p:column>
                         </p:dataTable>
@@ -44,17 +44,17 @@
                             <p:ajax event="rowSelect"
                                     listener="#{rentalBean.dtArticleSelection}"/>
                             <p:column selectionMode="single" style="width:16px;text-align:center"/>
-                            <p:column headerText="Materiel">
+                            <p:column headerText="#{bundle['tableHeader.materials']}">
                                 <h:outputText value="#{article.articleName}"/>
                             </p:column>
-                            <p:column headerText="Reference">
+                            <p:column headerText="#{bundle['tableHeader.ref']}">
                                 <h:outputText value="#{article.refSn}"/>
                             </p:column>
 
                         </p:dataTable>
                     </div>
                     <div class="col col-md-4">
-                        <p:outputLabel style="font-weight: bold" for="datePikerRental" value="Date de remise"/>
+                        <p:outputLabel style="font-weight: bold" for="datePikerRental" value="#{bundle['tableHeader.dueDate']}"/>
                         <br/>
                         <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}">
                             <p:ajax event="dateSelect" listener="#{rentalBean.dateSelection}"/>

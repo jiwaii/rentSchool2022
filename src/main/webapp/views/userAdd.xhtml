@@ -9,17 +9,17 @@
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
         <h:form>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h:outputLabel value="prenom" styleClass="form-label">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <h:outputLabel value="prenom">
                             <h:inputText id="prenom" value="#{userBean.user.firstname}" styleClass="form-control"
-                                         required="true" requiredMessage="* Veuillez insérer un prénom">
+                                         required="true"
+                                         requiredMessage="* Veuillez insérer un prénom">
                             </h:inputText>
-                        </h:outputLabel><br/>
+                        </h:outputLabel>
                         <h:message for="prenom" style="color: red" />
-                        <br/>
-
+                    </div>
+                    <div class="form-group">
                         <h:outputLabel value="nom" styleClass="form-label">
                             <h:inputText id="nom" value="#{userBean.user.lastname}" styleClass="form-control"
                                          required="true" requiredMessage="* Veuiller insérer un nom">
@@ -27,48 +27,46 @@
                         </h:outputLabel><br/>
                         <h:message for="nom" style="color: red" />
                     </div>
-
-                    <div class="col">
-                        <h:outputLabel value="email" styleClass="form-label">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <h:outputLabel value="email">
                             <h:inputText id="email" value="#{userBean.user.email}" styleClass="form-control"
                                          required="true" requiredMessage="* Veuillez insérer un Email">
                             </h:inputText>
-                        </h:outputLabel><br/>
+                        </h:outputLabel>
                         <h:message for="email" style="color: red" />
-                        <br/>
+                    </div>
+                    <div class="form-group col-md-2">
                         <h:outputLabel value="address" styleClass="form-label">
                             <h:inputText id="adress" value="#{userBean.user.address}" styleClass="form-control"
                                          required="true" requiredMessage="* Veuillez insérer une adresse">
                             </h:inputText>
                         </h:outputLabel><br/>
                         <h:message for="adress" style="color: red"/>
-
-                        <br/>
-                        <h:commandButton styleClass="w-100 btn btn-lg btn-primary" value="submit" action="#{userBean.addNewUser}"/>
-
-                    </div>
-                    <div class="col">
-                        <h:outputLabel value="Responsible type" styleClass="form-label"/>
-                        <br/>
-                        <p:importEnum type="be.jyl.enums.ResponsibleType" var="enumResponsibleType" />
-                        <h:selectOneMenu id="ModelSelection" styleClass="form-select form-control" value="#{userBean.user.responsibleType}">
-                            <f:selectItems value="#{enumResponsibleType}" var="r" itemValue="#{r}"></f:selectItems>
-                        </h:selectOneMenu>
-                        <br/>
-                        <h:outputLabel value="Ville" styleClass="form-label"/>
-                        <br/>
-                        <h:selectOneMenu id="villeSelection" styleClass="form-select form-control" value="#{userBean.user.idCity}">
-                            <f:selectItems value="#{userBean.citiesList}"
-                                           var="city"
-                                           itemLabel="#{city.postalCode } #{city.cityName}"
-                                           itemValue="#{city.idCity}">
-                            </f:selectItems>
-                        </h:selectOneMenu>
-
                     </div>
                 </div>
-            </div>
 
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <h:outputLabel value="Responsible type" styleClass="form-label"/>
+                    <p:importEnum type="be.jyl.enums.ResponsibleType" var="enumResponsibleType" />
+                    <h:selectOneMenu id="ModelSelection" styleClass="form-control" value="#{userBean.user.responsibleType}" required="true">
+                        <f:selectItems value="#{enumResponsibleType}" var="r" itemValue="#{r}"></f:selectItems>
+                    </h:selectOneMenu>
+                </div>
+                <div class="form-group">
+                    <h:outputLabel value="Ville" styleClass="form-label"/>
+                    <h:selectOneMenu id="villeSelection" styleClass="form-control" value="#{userBean.user.idCity}" required="true">
+                        <f:selectItems value="#{userBean.citiesList}"
+                                       var="city"
+                                       itemLabel="#{city.postalCode } #{city.cityName}"
+                                       itemValue="#{city.idCity}">
+                        </f:selectItems>
+                    </h:selectOneMenu>
+                </div>
+            </div>
+            <h:commandButton styleClass="btn btn-primary" value="#{bundle['button.submit']}" action="#{userBean.addNewUser}"/>
         </h:form>
     </ui:define>
 </ui:composition>
