@@ -25,10 +25,21 @@ public class UserService {
        return query.getResultList();
     }
     public List<Users> listUsers(){
+        Query query = em.createNamedQuery("Users.findProfsStudentsOnly");
+        return query.getResultList();
+    }
+    public List<Users> listUsersForAdmin(){
         Query query = em.createNamedQuery("Users.findAll");
         return query.getResultList();
     }
     public List<Users> listUserByName(String name){
+
+        Query query = em.createNamedQuery("Users.findWhereProfStudentOnly")
+                .setParameter("pFirstname","%"+name+"%")
+                .setParameter("pLastname","%"+name+"%");
+        return query.getResultList();
+    }
+    public List<Users> listUserByNamForAdmin(String name){
 
         Query query = em.createNamedQuery("Users.findWhere")
                 .setParameter("pFirstname","%"+name+"%")

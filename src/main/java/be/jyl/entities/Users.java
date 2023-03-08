@@ -6,9 +6,17 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 @NamedQueries( value = {
-        @NamedQuery(name = "Users.findAll",query = "SELECT c FROM Users c "),
+        @NamedQuery(name = "Users.findAll",query = "SELECT c FROM Users c order by c.idUser desc "),
         @NamedQuery(name = "Users.findWhere",query = "select c from Users c " +
-                "Where c.firstname like :pFirstname or c.lastname like :pLastname")
+                "WHERE (c.firstname like :pFirstname or c.lastname like :pLastname)"),
+        //Requetes pour le role secrétariat
+        @NamedQuery(name = "Users.findProfsStudentsOnly",query = "SELECT c FROM Users c " +
+                "WHERE c.responsibleType = be.jyl.enums.ResponsibleType.student " +
+                "OR c.responsibleType = be.jyl.enums.ResponsibleType.teacher"),
+        @NamedQuery(name = "Users.findWhereProfStudentOnly",query = "SELECT c FROM Users c " +
+                "Where (c.firstname like :pFirstname or c.lastname like :pLastname) " +
+                "AND (c.responsibleType = be.jyl.enums.ResponsibleType.teacher" +
+                " OR c.responsibleType = be.jyl.enums.ResponsibleType.student)")
 })
 @Entity
 @Table(name = "users")

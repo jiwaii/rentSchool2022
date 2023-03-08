@@ -31,6 +31,7 @@ public class RentalBean implements Serializable {
     private List<Rentals> rentalsList;
     private Rentals rentalSelected;
     private Users userSelected ;
+    private Users userSession;
     private List<Users> usersList;
     private List<Articles> articlesMultipleSelected;
     private Articles articleSelected;
@@ -47,7 +48,16 @@ public class RentalBean implements Serializable {
     @PostConstruct
     public void init(){
         rentalsList = gRentalsList();
-        usersList = userService.listUsers();
+        FacesContext context = FacesContext.getCurrentInstance();
+        this.userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
+        log.log(Level.INFO,userSession.getRolesByIdRole().getRoleName().toString());
+        //List d'utilisateur dépendant du role
+        if (userSession.getRolesByIdRole().getRoleName().toString() == "administrateur"){
+            usersList = userService.listUsersForAdmin();
+        }
+        else {
+            usersList = userService.listUsers();
+        }
         articlesList = articlesService.articlesAvailableList();
     }
     public List<Rentals> gRentalsList(){
@@ -60,7 +70,12 @@ public class RentalBean implements Serializable {
      */
     public void usersListByName(){
         log.log(Level.INFO,"userListByName");
-        usersList = userService.listUserByName(userSearchText) ;
+        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+            usersList = userService.listUserByNamForAdmin(userSearchText) ;
+        }
+        else {
+            usersList = userService.listUserByName(userSearchText);
+        }
     }
 
     /**
@@ -97,7 +112,7 @@ public class RentalBean implements Serializable {
         // Variable imperatives pour créer la location :
         java.sql.Date dateNow ;
         java.sql.Date dateEnd ;
-        Users userSession ; //l'utilsateur connecté (qui crée la location)
+//        Users userSession ; //l'utilsateur connecté (qui crée la location)
 
         //affectation des variables date :
         dateNow = new java.sql.Date(new java.util.Date().getTime());
@@ -105,8 +120,8 @@ public class RentalBean implements Serializable {
         dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
         log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
         //affectation Recuperation de l'utilisateur de la session :
-        FacesContext context = FacesContext.getCurrentInstance();
-        userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
 
         /** -------------------------------------------------------------
          * @autor jiwaii
@@ -131,13 +146,16 @@ public class RentalBean implements Serializable {
         newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
         rentalsService.persistNewRental(newRental,articleSelected);
+        //mise à jour de la liste location et article disponible pour la vue :
         rentalsList = rentalsService.rentalsList();
+        articlesList = articlesService.articlesAvailableList();
+
         return "index.xhtml";
     }
     public String deleteRental(){
         rentalsService.removeRental(rentalSelected);
         rentalsList = rentalsService.rentalsList();
-
+        articlesList = articlesService.articlesAvailableList();
         return "index.xhtml";
     }
 

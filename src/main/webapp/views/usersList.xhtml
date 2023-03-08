@@ -15,7 +15,7 @@
             <div class="col col-lg-9">
                <!-- SEARCH BAR in TABLE USER -->
                <h:form id="userSearch">
-                  <h:inputText id="inputSearch" value="#{userBean.userSeachText}" styleClass="form-control" a:placeholder="Rechercher" >
+                  <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
                      <f:ajax event="keyup"
                              render="usersTable"
                              listener="#{userBean.searchUserBar}"/>
