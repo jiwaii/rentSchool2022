@@ -24,7 +24,8 @@
 <!--                            <h:link class="nav-link" outcome="userAdd.xhtml" value="#{bundle['header.navbar.addUser']}"/>-->
                         <h:form>
                             <h:commandLink class="nav-link" action="#{userBean.listUserPage()}" value="#{bundle['header.navbar.users']}">
-
+                            </h:commandLink>
+                            <h:commandLink class="nav-link" action="#{categoryBean.categories()}" value="#{bundle['header.navbar.categories']}">
                             </h:commandLink>
                         </h:form>
                     </li>

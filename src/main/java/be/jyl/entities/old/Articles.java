@@ -1,10 +1,13 @@
-package be.jyl.entities;
+package be.jyl.entities.old;
 
+import be.jyl.entities.ArticlesRentals;
+import be.jyl.entities.Categories;
 import be.jyl.enums.State;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
+
 @NamedQueries(value = {
         @NamedQuery(name = "articles.findAll",query = "SELECT a FROM Articles a "),
         @NamedQuery(name = "articles.available", query = "SELECT a FROM Articles a " +
