@@ -83,12 +83,12 @@
 <!--                                </h:selectOneMenu>-->
 
 
-                                <p:selectOneMenu id="idCategory" styleClass="form-select form-control" value="#{articleBean.selectedArticle.categoryByIdCategory.idCategory}" converter="selectOneMenuConverter">
+                                <p:selectOneMenu id="idCategory" styleClass="form-select form-control" value="#{articleBean.selectedArticle.categoryByIdCategory}" converter="selectOneMenuConverter">
                                     <p:ajax update="@this" process="@this"/>
                                     <f:selectItems value="#{articleBean.categoriesList}"
                                                    var="category"
                                                    itemLabel="#{category.categoryName}"
-                                                   itemValue="#{category.idCategory}">
+                                                   itemValue="#{category}">
                                     </f:selectItems>
                                 </p:selectOneMenu>
 

@@ -7,7 +7,11 @@ import java.util.Objects;
 
 @Entity
 @NamedQueries(value = {
-        @NamedQuery(name = "Categories.findAll",query = "select c From Categories c")
+        @NamedQuery(name = "Categories.findAll",query = "select c From Categories c"),
+        @NamedQuery(
+                name = "Category.findById",
+                query = "SELECT c FROM Categories c WHERE c.idCategory = :idCategory"
+        )
 })
 public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

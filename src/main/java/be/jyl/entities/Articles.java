@@ -86,12 +86,12 @@ public class Articles {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Articles articles = (Articles) o;
-        return idArticle == articles.idArticle && categoryByIdCategory == articles.categoryByIdCategory && Objects.equals(articleName, articles.articleName) && Objects.equals(refSn, articles.refSn) && Objects.equals(barcode, articles.barcode) && Objects.equals(state, articles.state);
+        return idArticle == articles.idArticle && categoryByIdCategory.getIdCategory() == articles.categoryByIdCategory.getIdCategory() && Objects.equals(articleName, articles.articleName) && Objects.equals(refSn, articles.refSn) && Objects.equals(barcode, articles.barcode) && Objects.equals(state, articles.state);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idArticle, categoryByIdCategory, articleName, refSn, barcode, state);
+        return Objects.hash(idArticle, categoryByIdCategory ,articleName, refSn, barcode, state);
     }
 
     public Categories getCategoryByIdCategory() {

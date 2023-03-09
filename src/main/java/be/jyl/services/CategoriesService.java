@@ -9,12 +9,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
 
+// TODO : TRY CATCH
 public class CategoriesService {
     private Logger log = Logger.getLogger(RentalsService.class);
     private EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
-
-
 
     public List<Categories> getAllCategories() {
         Query query = em.createNamedQuery("Categories.findAll");
