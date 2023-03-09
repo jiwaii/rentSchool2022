@@ -29,7 +29,7 @@
     <Resource name="jdbc/rentSchool2022" auth="Container" type="javax.sql.DataSource"
               maxActive="-1" maxIdle="-1" maxWait="10000" username="jyl"
               password="allatc123" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/rentSchool2022?autoReconnect=true"/>
+              url="jdbc:mysql://localhost:3306/rentSchool2022?autoReconnect=true&amp;useSSL=false"/>
 
     <!-- to use Weld (CDI) on tomcat -->
     <Resource name="BeanManager"

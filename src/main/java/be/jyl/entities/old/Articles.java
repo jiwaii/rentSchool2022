@@ -1,20 +1,19 @@
-package be.jyl.entities;
+package be.jyl.entities.old;
 
+import be.jyl.entities.ArticlesRentals;
+import be.jyl.entities.Categories;
 import be.jyl.enums.State;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
+
 @NamedQueries(value = {
         @NamedQuery(name = "articles.findAll",query = "SELECT a FROM Articles a "),
         @NamedQuery(name = "articles.available", query = "SELECT a FROM Articles a " +
                 "WHERE a.state = be.jyl.enums.State.available "),
         @NamedQuery(name = "articles.findWhere",query = "SELECT a FROM Articles a " +
-                "WHERE (a.articleName like :pArticleSearch OR a.barcode like :pArticleSearch OR a.refSn like :pArticleSearch) " +
-                "AND a.state = be.jyl.enums.State.available "),
-        //Retourne les articles qui ne sont pas en location basé sur la date de dateRetour de articleRental
-        @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles  a " +
-                "JOIN a.articlesRentalsByIdArticle ar WHERE ar.dateReturned != null")
+                "WHERE a.articleName like :pArticleName AND a.state = be.jyl.enums.State.available ")
 })
 @Entity
 public class Articles {

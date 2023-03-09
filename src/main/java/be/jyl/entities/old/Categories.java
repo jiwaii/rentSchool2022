@@ -1,4 +1,4 @@
-package be.jyl.entities;
+package be.jyl.entities.old;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -18,7 +18,7 @@ public class Categories {
     @Column(name = "categoryName", nullable = false, length = 100)
     private String categoryName;
     @OneToMany(mappedBy = "categoryByIdCategory")
-    private Collection<Articles> articlesByIdCategory;
+    private Collection<be.jyl.entities.old.Articles> articlesByIdCategory;
 
     public int getIdCategory() {
         return idCategory;
@@ -49,7 +49,7 @@ public class Categories {
         return Objects.hash(idCategory, categoryName);
     }
 
-    public Collection<Articles> getArticlesByIdCategory() {
+    public Collection<be.jyl.entities.old.Articles> getArticlesByIdCategory() {
         return articlesByIdCategory;
     }
 
