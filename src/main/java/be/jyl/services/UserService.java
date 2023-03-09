@@ -17,7 +17,8 @@ public class UserService {
     private EntityTransaction transaction = em.getTransaction();
 
     /**
-     * Insertion d'un nouvelle utilisateur avec role d'emprunteur par défaut
+     * Insertion d'un nouvelle utilisateur
+     * avec role d'emprunteur par défaut
      * @param user
      */
     public void insert(Users user){
@@ -71,6 +72,13 @@ public class UserService {
             return listUsers();
         }
     }
+
+    /**
+     * Idem que listUsers avec recherche par nom ou prenom
+     * @param name
+     * @param userSession
+     * @return
+     */
     public List<Users> listUserByName(String name, Users userSession){
         if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
             return listUserByNamForAdmin(name) ;
