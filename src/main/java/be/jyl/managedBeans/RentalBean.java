@@ -49,15 +49,10 @@ public class RentalBean implements Serializable {
     public void init(){
         rentalsList = gRentalsList();
         FacesContext context = FacesContext.getCurrentInstance();
-        this.userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
+        this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         log.log(Level.INFO,userSession.getRolesByIdRole().getRoleName().toString());
         //List d'utilisateur dépendant du role
-        if (userSession.getRolesByIdRole().getRoleName().toString() == "administrateur"){
-            usersList = userService.listUsersForAdmin();
-        }
-        else {
-            usersList = userService.listUsers();
-        }
+        usersList = userService.listUsers(userSession);
         articlesList = articlesService.articlesAvailableList();
     }
     public List<Rentals> gRentalsList(){
@@ -70,12 +65,13 @@ public class RentalBean implements Serializable {
      */
     public void usersListByName(){
         log.log(Level.INFO,"userListByName");
-        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
-            usersList = userService.listUserByNamForAdmin(userSearchText) ;
-        }
-        else {
-            usersList = userService.listUserByName(userSearchText);
-        }
+        usersList = userService.listUserByName(userSearchText,userSession);
+//        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+//            usersList = userService.listUserByNamForAdmin(userSearchText) ;
+//        }
+//        else {
+//            usersList = userService.listUserByName(userSearchText);
+//        }
     }
 
     /**

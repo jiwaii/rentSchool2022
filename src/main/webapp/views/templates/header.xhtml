@@ -39,7 +39,7 @@
                 </ul>
                 <!--#endregion -->
                 <!--#region COTE DROIT DU NAVBAR -->
-                <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{user.firstname} "/>
+                <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
 
                 <h:form styleClass="form-inline">
                     <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>

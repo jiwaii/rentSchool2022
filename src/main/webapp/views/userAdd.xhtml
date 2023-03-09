@@ -49,11 +49,19 @@
 
             <div class="form-row">
                 <div class="form-group col-md-2">
-                    <h:outputLabel value="Responsible type" styleClass="form-label"/>
-                    <p:importEnum type="be.jyl.enums.ResponsibleType" var="enumResponsibleType" />
-                    <h:selectOneMenu id="ModelSelection" styleClass="form-control" value="#{userBean.user.responsibleType}" required="true">
-                        <f:selectItems value="#{enumResponsibleType}" var="r" itemValue="#{r}"></f:selectItems>
-                    </h:selectOneMenu>
+
+<!--                    <h:outputLabel value="Responsible type" styleClass="form-label"/>-->
+<!--                    <p:importEnum type="be.jyl.enums.ResponsibleType" var="enumResponsibleType" />-->
+<!--                    <h:selectOneMenu id="ModelSelection" styleClass="form-control" value="#{userBean.user.responsibleType}" required="true">-->
+<!--                        <f:selectItems value="#{enumResponsibleType}" var="r" itemValue="#{r}"></f:selectItems>-->
+<!--                    </h:selectOneMenu>-->
+                    <p:importEnum type="be.jyl.enums.ResponsibleType"/>
+                    <p:outputLabel for="responsibleTypeDropdown" value="Responsible type :"/>
+                    <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.user.responsibleType}">
+                        <f:selectItems value="#{ResponsibleType.ALL_VALUES}"
+                                       itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
+                    </p:selectOneMenu>
+
                 </div>
                 <div class="form-group">
                     <h:outputLabel value="Ville" styleClass="form-label"/>

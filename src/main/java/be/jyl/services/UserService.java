@@ -1,6 +1,7 @@
 package be.jyl.services;
 
 import be.jyl.entities.Cities;
+import be.jyl.entities.Roles;
 import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
@@ -15,9 +16,18 @@ public class UserService {
     private EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
 
+    /**
+     * Insertion d'un nouvelle utilisateur avec role d'emprunteur par défaut
+     * @param user
+     */
     public void insert(Users user){
+        Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
+                .setParameter("pRoleName","emprunteur");
+        Roles roleEmprunteur = (Roles) query.getSingleResult();
+        user.setRolesByIdRole(roleEmprunteur);
+
         transaction.begin();
-            em.persist(user);
+        em.persist(user);
         transaction.commit();
     }
     public List<Cities> listCities(){
@@ -39,11 +49,36 @@ public class UserService {
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
-    public List<Users> listUserByNamForAdmin(String name){
+    private List<Users> listUserByNamForAdmin(String name){
 
         Query query = em.createNamedQuery("Users.findWhere")
                 .setParameter("pFirstname","%"+name+"%")
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
+
+    /**
+     * Renvois la liste d'utilisateurs dépendant du rôle
+     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
+     * @param userSession
+     * @return
+     */
+    public List<Users> listUsers(Users userSession){
+        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+            return listUsersForAdmin() ;
+        }
+        else {
+            return listUsers();
+        }
+    }
+    public List<Users> listUserByName(String name, Users userSession){
+        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+            return listUserByNamForAdmin(name) ;
+        }
+        else {
+            return listUserByName(name);
+        }
+    }
+
+
 }

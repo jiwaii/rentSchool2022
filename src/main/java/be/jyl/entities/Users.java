@@ -11,12 +11,10 @@ import java.util.Objects;
                 "WHERE (c.firstname like :pFirstname or c.lastname like :pLastname)"),
         //Requetes pour le role secrétariat
         @NamedQuery(name = "Users.findProfsStudentsOnly",query = "SELECT c FROM Users c " +
-                "WHERE c.responsibleType = be.jyl.enums.ResponsibleType.student " +
-                "OR c.responsibleType = be.jyl.enums.ResponsibleType.teacher"),
+                "WHERE c.rolesByIdRole.roleName != 'administrateur' OR c.rolesByIdRole.roleName = 'emprunteur'   "),
         @NamedQuery(name = "Users.findWhereProfStudentOnly",query = "SELECT c FROM Users c " +
                 "Where (c.firstname like :pFirstname or c.lastname like :pLastname) " +
-                "AND (c.responsibleType = be.jyl.enums.ResponsibleType.teacher" +
-                " OR c.responsibleType = be.jyl.enums.ResponsibleType.student)")
+                "AND (c.rolesByIdRole.roleName != 'administrateur' OR c.rolesByIdRole.roleName = 'emprunteur') ")
 })
 @Entity
 @Table(name = "users")
@@ -25,9 +23,9 @@ public class Users {
     @Id
     @Column(name = "id_user", nullable = false)
     private int idUser;
-    @Basic
-    @Column(name = "id_role", nullable = true)
-    private Integer idRole;
+//    @Basic
+//    @Column(name = "id_role", nullable = true)
+//    private Integer idRole;
     @Basic
     @Column(name = "address", nullable = false, length = 100)
     private String address;
@@ -55,8 +53,8 @@ public class Users {
     private Integer idAccount;
     @OneToMany(mappedBy = "usersByIdUser")
     private Collection<Reminders> remindersByIdUser;
-    @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_role", referencedColumnName = "id_role")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_role")
     private Roles rolesByIdRole;
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_city", referencedColumnName = "id_city")
@@ -64,8 +62,7 @@ public class Users {
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_account", referencedColumnName = "id_account")
     private Accounts accountsByIdAccount;
-    @OneToMany(mappedBy = "usersByIdUser")
-    private Collection<UsersRentals> usersRentalsByIdUser;
+
 
     public int getIdUser() {
         return idUser;
@@ -75,13 +72,13 @@ public class Users {
         this.idUser = idUser;
     }
 
-    public Integer getIdRole() {
-        return idRole;
-    }
-
-    public void setIdRole(Integer idRole) {
-        this.idRole = idRole;
-    }
+//    public Integer getIdRole() {
+//        return idRole;
+//    }
+//
+//    public void setIdRole(Integer idRole) {
+//        this.idRole = idRole;
+//    }
 
     public String getAddress() {
         return address;
@@ -152,12 +149,12 @@ public class Users {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return idUser == users.idUser && idCity == users.idCity && Objects.equals(idRole, users.idRole) && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode) && Objects.equals(idAccount, users.idAccount);
+        return idUser == users.idUser && idCity == users.idCity && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode) && Objects.equals(idAccount, users.idAccount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUser, idRole, address, email, responsibleType, firstname, lastname, barcode, idCity, idAccount);
+        return Objects.hash(idUser, address, email, responsibleType, firstname, lastname, barcode, idCity, idAccount);
     }
 
     public Collection<Reminders> getRemindersByIdUser() {
@@ -192,11 +189,4 @@ public class Users {
         this.accountsByIdAccount = accountsByIdAccount;
     }
 
-    public Collection<UsersRentals> getUsersRentalsByIdUser() {
-        return usersRentalsByIdUser;
-    }
-
-    public void setUsersRentalsByIdUser(Collection<UsersRentals> usersRentalsByIdUser) {
-        this.usersRentalsByIdUser = usersRentalsByIdUser;
-    }
 }

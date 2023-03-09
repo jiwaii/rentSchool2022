@@ -3,7 +3,11 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries( value = {
+        @NamedQuery(name = "Roles.findAll", query = "SELECT r FROM Roles r"),
+        @NamedQuery(name = "Roles.findWhereRoleNameIs", query = "SELECT r FROM Roles r " +
+                "WHERE r.roleName = :pRoleName ")
+})
 @Entity
 public class Roles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

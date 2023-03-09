@@ -5,7 +5,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
 <ui:composition template="templates/mainPage.xhtml">
    <ui:define name="content">
       <f:view>
@@ -39,8 +42,9 @@
                      <f:facet name="header">Type</f:facet>
                      #{user.responsibleType}
                   </h:column>
+<!--                  <h:column rendered="#{empty userSession.rolesByIdRole.roleName eq 'secretariat'}">-->
                   <h:column>
-                     <f:facet name="header">role</f:facet>
+                  <f:facet name="header">role</f:facet>
                      #{user.rolesByIdRole.roleName}
                   </h:column>
                   <h:column>

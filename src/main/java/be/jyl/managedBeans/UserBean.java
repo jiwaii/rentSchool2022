@@ -11,6 +11,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Named
@@ -27,7 +29,7 @@ public class UserBean implements Serializable {
     @PostConstruct
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
-        this.userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
+        this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         user = new Users();
     }
     /**
@@ -36,6 +38,7 @@ public class UserBean implements Serializable {
      *
      * **/
     public String addNewUser(){
+        //<editor-fold desc="logs Info New User">
         log.log(Level.INFO,"UserBean.addNewUser()");
         log.log(Level.INFO,"___NEW USER___ ");
         log.log(Level.INFO,"Firstname : "+ user.getFirstname());
@@ -43,10 +46,32 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,"ResponsibleType : "+ user.getResponsibleType());
         log.log(Level.INFO,"Address : "+ user.getAddress());
         log.log(Level.INFO,"IdCity : "+ user.getIdCity());
+        //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
+
         userService.insert(user);
-        usersList = userService.listUsersForAdmin();
+        usersList = listUsersForUserRoleSession();
+        Collections.reverse(usersList);
+        user = new Users();
         return "usersList";
+    }
+
+    /**
+     * Renvois la liste d'utilisateurs dépendant du rôle
+     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
+     * @return list Users
+     */
+    private List<Users> listUsersForUserRoleSession(){
+        return userService.listUsers(userSession);
+    }
+    private List<Users> listUsersForUserRoleSessionByName(String searchText){
+//        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+//            return userService.listUserByNamForAdmin(searchText) ;
+//        }
+//        else {
+//            return userService.listUserByName(searchText);
+//        }
+        return userService.listUserByName(searchText,userSession);
     }
 
     /** Page pour ajouter un utilisateur
@@ -64,23 +89,13 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String listUserPage(){
-        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
-            usersList = userService.listUsersForAdmin() ;
-        }
-        else {
-            usersList = userService.listUsers();
-        }
+        usersList = listUsersForUserRoleSession();
         return "usersList";
     }
     public void searchUserBar(){
         log.log(Level.INFO,"UserBean.searchUserBar called !");
         log.log(Level.INFO,"UserBean.userSeachText is = " + userSearchText);
-        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
-            usersList = userService.listUserByNamForAdmin(userSearchText) ;
-        }
-        else {
-            usersList = userService.listUserByName(userSearchText);
-        }
+        usersList = listUsersForUserRoleSessionByName(userSearchText);
     }
 
     public Users getUser() {

@@ -3,7 +3,7 @@ package be.jyl.enums;
 public enum ResponsibleType {
     student("student"),
     teacher("teacher"),
-    secretariat("secretariat");
+    staff("staff");
 
     private String text;
 
