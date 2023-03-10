@@ -37,6 +37,11 @@
                         </p:dataTable>
                     </div>
                     <div class="col col-md-4" id="SelectionArticleCol" >
+                        <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
+                            <f:ajax event="keyup"
+                                    render="articleRadioTD"
+                                    listener="#{rentalBean.articleListByNameRefBarcode}"/>
+                        </h:inputText>
                         <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
                                      selection="#{rentalBean.articleSelected}"
                                      rowKey="#{article.idArticle}"

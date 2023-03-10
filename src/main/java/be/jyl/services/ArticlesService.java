@@ -19,4 +19,11 @@ public class ArticlesService {
         Query query = em.createNamedQuery("articles.available");
         return query.getResultList();
     }
+    public List<Articles> articlesAvailableListBySearch(String articlesSearch){
+        log.log(Level.INFO,"articlesAvailableListBySearch()");
+        Query query = em.createNamedQuery("articles.findWhere")
+                .setParameter("pArticleSearch","%"+articlesSearch+"%");
+
+        return query.getResultList();
+    }
 }

@@ -70,14 +70,11 @@ public class RentalBean implements Serializable {
     public void usersListByName(){
         log.log(Level.INFO,"userListByName");
         usersList = userService.listUserByName(userSearchText,userSession);
-//        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
-//            usersList = userService.listUserByNamForAdmin(userSearchText) ;
-//        }
-//        else {
-//            usersList = userService.listUserByName(userSearchText);
-//        }
     }
-
+    public void articleListByNameRefBarcode(){
+        log.log(Level.INFO, "articleListByNameRefBarcode");
+        articlesList = articlesService.articlesAvailableListBySearch(articlesSearchText);
+    }
     /**
      * Met à jours l'utlisateur sélectionné dans la bean
      * @param selectEvent

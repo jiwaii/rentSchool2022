@@ -10,7 +10,8 @@ import java.util.Objects;
         @NamedQuery(name = "articles.available", query = "SELECT a FROM Articles a " +
                 "WHERE a.state = be.jyl.enums.State.available "),
         @NamedQuery(name = "articles.findWhere",query = "SELECT a FROM Articles a " +
-                "WHERE a.articleName like :pArticleName AND a.state = be.jyl.enums.State.available ")
+                "WHERE (a.articleName like :pArticleSearch OR a.barcode like :pArticleSearch OR a.refSn like :pArticleSearch) " +
+                "AND a.state = be.jyl.enums.State.available ")
 })
 @Entity
 public class Articles {
