@@ -9,14 +9,12 @@ import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.UserService;
 import be.jyl.tools.DateConverter;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -109,12 +107,11 @@ public class RentalBean implements Serializable {
         rentalSelected = rental;
     }
 
-    public String createRental() throws ParseException {
+    public String submitNewRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
         if (userSession != null){
             if (userSelected != null && articleSelected != null){
 
-            }
             // Variable imperatives pour créer la location :
             java.sql.Date dateNow ;
             java.sql.Date dateEnd ;
@@ -156,6 +153,9 @@ public class RentalBean implements Serializable {
             articlesList = articlesService.articlesAvailableList();
 
             return "index.xhtml";
+            }else {
+                return "rentalCreation.xhtml";
+            }
         }
         else {
             return "login.xhtml";

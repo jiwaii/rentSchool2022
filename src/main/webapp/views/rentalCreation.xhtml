@@ -10,7 +10,7 @@
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
 
-        <div class="container">
+        <div class="container py-3">
 
             <h:form id="formDataTable">
                 <div class="row">
@@ -37,7 +37,9 @@
                         </p:dataTable>
                     </div>
                     <div class="col col-md-4" id="SelectionArticleCol" >
-                        <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
+                        <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control"
+                                     a:placeholder="#{bundle['form.search']}"
+                                     onkeypress="if (events.which == '13'){return false; }">
                             <f:ajax event="keyup"
                                     render="articleRadioTD"
                                     listener="#{rentalBean.articleListByNameRefBarcode}"/>
@@ -69,7 +71,7 @@
                         <br/>
                         <br/>
 
-                        <p:commandButton styleClass="button btn-primary btn-sm btn-block" value="#{bundle['button.submit']}" type="submit" action="#{rentalBean.createRental}"/>
+                        <p:commandButton styleClass="button btn-primary btn-sm btn-block" value="#{bundle['button.submit']}" type="submit" action="#{rentalBean.submitNewRental}"/>
                     </div>
                 </div>
             </h:form>
