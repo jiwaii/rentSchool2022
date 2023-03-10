@@ -112,48 +112,48 @@ public class RentalBean implements Serializable {
         if (userSession != null){
             if (userSelected != null && articleSelected != null){
 
-            // Variable imperatives pour créer la location :
-            java.sql.Date dateNow ;
-            java.sql.Date dateEnd ;
+                // Variable imperatives pour créer la location :
+                java.sql.Date dateNow ;
+                java.sql.Date dateEnd ;
 
-            //affectation des variables date :
-            dateNow = new java.sql.Date(new java.util.Date().getTime());
-            DateConverter dateConverter = new DateConverter(); //classe créé par moi pour la conversion des dates
-            dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
-            log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
-            //affectation Recuperation de l'utilisateur de la session :
+                //affectation des variables date :
+                dateNow = new java.sql.Date(new java.util.Date().getTime());
+                DateConverter dateConverter = new DateConverter(); //classe créé par moi pour la conversion des dates
+                dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
+                log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
+                //affectation Recuperation de l'utilisateur de la session :
 //        FacesContext context = FacesContext.getCurrentInstance();
 //        userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
 
-            /** -------------------------------------------------------------
-             * @autor jiwaii
-             *  Configuration des mes entités pour la creation de ma location :
-            ---------------------------------------------------------------*/
-            log.log(Level.INFO,"Start config entities");
-            Rentals newRental = new Rentals();
-            newRental.setUser(userSession);
-            newRental.setUserRent(userSelected);
-            newRental.setDateBegin(dateNow);
-            newRental.setDateEnd(dateEnd);
+                /** -------------------------------------------------------------
+                 * @autor jiwaii
+                 *  Configuration des mes entités pour la creation de ma location :
+                ---------------------------------------------------------------*/
+                log.log(Level.INFO,"Start config entities");
+                Rentals newRental = new Rentals();
+                newRental.setUser(userSession);
+                newRental.setUserRent(userSelected);
+                newRental.setDateBegin(dateNow);
+                newRental.setDateEnd(dateEnd);
 
-            articleSelected.setState(State.rental); // mettre à jour l'article en status loué
+                articleSelected.setState(State.rental); // mettre à jour l'article en status loué
 
-            ArticlesRentals articlesRentals = new ArticlesRentals();
-            articlesRentals.setQty(1);
-            articlesRentals.setArticlesByIdArticle(articleSelected);
-            articlesRentals.setRentalsByIdRental(newRental);
-            Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
-            articlesRentalsCollection.add(articlesRentals);
+                ArticlesRentals articlesRentals = new ArticlesRentals();
+                articlesRentals.setQty(1);
+                articlesRentals.setArticlesByIdArticle(articleSelected);
+                articlesRentals.setRentalsByIdRental(newRental);
+                Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
+                articlesRentalsCollection.add(articlesRentals);
 
-            newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
+                newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
-            rentalsService.persistNewRental(newRental,articleSelected);
-            //mise à jour de la liste location et article disponible pour la vue :
-            rentalsList = rentalsService.rentalsList();
-            articlesList = articlesService.articlesAvailableList();
+                rentalsService.persistNewRental(newRental,articleSelected);
+                //mise à jour de la liste location et article disponible pour la vue :
+                rentalsList = rentalsService.rentalsList();
+                articlesList = articlesService.articlesAvailableList();
 
-            return "index.xhtml";
-            }else {
+                return "index.xhtml";
+            } else {
                 return "rentalCreation.xhtml";
             }
         }
