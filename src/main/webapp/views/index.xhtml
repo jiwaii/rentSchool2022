@@ -46,20 +46,47 @@
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
-<!-- MODAL popup-->
-        <p:dialog header="#{bundle['rentalPage.rentalInfo']}" widgetVar="productDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-            <p:outputPanel id="rentalDetail" style="text-align:center;">
-                <p:column rendered="#{not empty rentalBean.rentalSelected}">
+            <!-- MODAL popup-->
+            <p:dialog header="#{bundle['rentalPage.rentalInfo']}" widgetVar="productDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400px">
+                <p:outputPanel id="rentalDetail">
+                    <p:column rendered="#{not empty rentalBean.rentalSelected}">
 
-                    <h:outputText value="#{rentalBean.rentalSelected.userRent.lastname} #{rentalBean.rentalSelected.userRent.firstname}"/>
+                        <table class="table-view table-striped" width="100%">
+                            <tr>
+                                <th>Nom &amp; Prénom</th>
+                                <td>#{rentalBean.rentalSelected.userRent.lastname} #{rentalBean.rentalSelected.userRent.firstname}</td>
+                            </tr>
+                            <tr>
+                                <th>Type de personne</th>
+                                <td>#{rentalBean.rentalSelected.userRent.responsibleType}</td>
+                            </tr>
+                            <tr>
+                                <th>Article(s)</th>
+                                <td>
+                                    <ui:repeat value="#{rentalBean.rentalSelected.rentalsArticlesByIdRental}" var="art">
+                                        #{art.articlesByIdArticle.articleName}
+                                    </ui:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Début location</th>
+                                <td><h:outputText value="#{rentalBean.rentalSelected.dateBegin}"/></td>
+                            </tr>
+                            <tr>
+                                <th>A rendre pour</th>
+                                <td><h:outputText value="#{rentalBean.rentalSelected.dateEnd}"/></td>
+                            </tr>
 
-                    <h:outputText value="#{rentalBean.rentalSelected.dateBegin}"/>
-                    <h:outputText value="#{rentalBean.rentalSelected.dateEnd}"/>
-                </p:column>
-                    <h:commandButton styleClass="button btn-primary btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.deleteRental}"/>
-            </p:outputPanel>
-        </p:dialog>
-    </h:form>
-</ui:define>
+                        </table>
+
+                    </p:column>
+                    <h:commandButton styleClass="button btn-success btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.deleteRental}"/>
+                    <h:commandButton styleClass="button btn-info btn-block" value="Allonger la location" type="submit" action="#{rentalBean.extendDateRental}"/>
+                    <h:commandButton styleClass="button btn-danger btn-block" value="signaler un probleme sur le matériel" type="submit" action="#{rentalBean.reportRentalIssue}"/>
+
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
 </ui:composition>
-        </html>
+</html>

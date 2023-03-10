@@ -56,9 +56,11 @@
                     <div class="col col-md-4">
                         <p:outputLabel style="font-weight: bold" for="datePikerRental" value="#{bundle['tableHeader.dueDate']}"/>
                         <br/>
-                        <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}">
+                        <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}" mindate="#{rentalBean.minDate}" >
                             <p:ajax event="dateSelect" listener="#{rentalBean.dateSelection}"/>
+                            <p:ajax event="keyup" listener="#{rentalBean.dateSelectionKeyUpEvent}"/>
                         </p:datePicker>
+                        <p:message for="datePikerRental"/>
                         <br/>
                         <br/>
 

@@ -17,33 +17,20 @@ public class UserService {
     private EntityTransaction transaction = em.getTransaction();
 
     /**
-     * Insertion d'un nouvelle utilisateur
-     * avec role d'emprunteur par défaut
-     * @param user
+     * ----------------------------------
+     * Methode et Fonctions :
+     * ----------------------------------
      */
-    public void insert(Users user){
-        Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
-                .setParameter("pRoleName","emprunteur");
-        Roles roleEmprunteur = (Roles) query.getSingleResult();
-        user.setRolesByIdRole(roleEmprunteur);
 
-        transaction.begin();
-        em.persist(user);
-        transaction.commit();
-    }
-    public List<Cities> listCities(){
-       Query query = em.createNamedQuery("Cities.findAll");
-       return query.getResultList();
-    }
-    public List<Users> listUsers(){
+    private List<Users> listUsers(){
         Query query = em.createNamedQuery("Users.findProfsStudentsOnly");
         return query.getResultList();
     }
-    public List<Users> listUsersForAdmin(){
+    private List<Users> listUsersForAdmin(){
         Query query = em.createNamedQuery("Users.findAll");
         return query.getResultList();
     }
-    public List<Users> listUserByName(String name){
+    private List<Users> listUserByName(String name){
 
         Query query = em.createNamedQuery("Users.findWhereProfStudentOnly")
                 .setParameter("pFirstname","%"+name+"%")
@@ -59,9 +46,31 @@ public class UserService {
     }
 
     /**
+     * Insertion d'un nouvelle utilisateur
+     * avec role d'emprunteur par défaut
+     * @param user
+     */
+    public void insert(Users user){
+        //obtention et affectation du Role emprunteur :
+        Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
+                .setParameter("pRoleName","emprunteur");
+        Roles roleEmprunteur = (Roles) query.getSingleResult();
+        user.setRolesByIdRole(roleEmprunteur);
+
+        // Lancement de la Transaction Persist :
+        transaction.begin();
+        em.persist(user);
+        transaction.commit();
+    }
+    public List<Cities> listCities(){
+       Query query = em.createNamedQuery("Cities.findAll");
+       return query.getResultList();
+    }
+
+    /**
      * Renvois la liste d'utilisateurs dépendant du rôle
      * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
-     * @param userSession
+     * @param userSession : pour connaitre quel roles il s'agit
      * @return
      */
     public List<Users> listUsers(Users userSession){
@@ -87,6 +96,4 @@ public class UserService {
             return listUserByName(name);
         }
     }
-
-
 }
