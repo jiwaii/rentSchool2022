@@ -11,7 +11,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,7 +23,9 @@ public class UserBean implements Serializable {
     private UserService userService = new UserService();
     private List<Cities> citiesList;
     private List<Users> usersList;
+    private List<Users> filteredUser;
     private Users userSession;
+    private Users userSelected;
 
     @PostConstruct
     public void init(){
@@ -128,5 +129,21 @@ public class UserBean implements Serializable {
 
     public void setUserSearchText(String userSearchText) {
         this.userSearchText = userSearchText;
+    }
+
+    public Users getUserSelected() {
+        return userSelected;
+    }
+
+    public void setUserSelected(Users userSelected) {
+        this.userSelected = userSelected;
+    }
+
+    public List<Users> getFilteredUser() {
+        return filteredUser;
+    }
+
+    public void setFilteredUser(List<Users> filteredUser) {
+        this.filteredUser = filteredUser;
     }
 }
