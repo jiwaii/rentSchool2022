@@ -4,34 +4,121 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
-<!--       <h:outputText value="#{user.firstname}"/>-->
-<h:dataTable value="#{rentalBean.rentalsList()}" var="itemRental" styleClass="table table-striped">
-    <h:column>
-        <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
-        #{itemRental.idUserRent.lastname}
-    </h:column>
-    <h:column>
-        <f:facet name="header">#{bundle['tableHeader.firstname']}</f:facet>
-        #{itemRental.idUserRent.firstname }
-    </h:column>
-    <h:column>
-        <f:facet name="header">#{bundle['tableHeader.rentalNumber']}</f:facet>
-        #{itemRental.idRental}
-    </h:column>
-    <h:column>
-        <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
-        #{itemRental.idUser.firstname}
-    </h:column>
-    <h:column>
-        <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
-        #{itemRental.dateEnd}
-    </h:column>
-</h:dataTable>
+        <!--       <h:outputText value="#{user.firstname}"/>-->
+        <div class="p-3">
+            <div class="row justify-content-md-center">
+                <div class="col-lg-8">
+                    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center-group-item">
+                        <div class="col text-center">
+                            <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                                <div class="card-header py-3">Locations en cours</div>
+                                <div class="card-body">
+                                    #{rentalBean.rentalsList.size()}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <div class="card mb-4 rounded-3 shadow-sm border-success">
+                                <div class="card-header py-3 border-primary">matériels disponibles</div>
+                                <div class="card-body">
+                                    #{rentalBean.articlesList.size()}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col text-center">
+                            <div class="card mb-4 rounded-3 shadow-sm border-danger ">
+                                <div class="card-header py-3">Retard(s)</div>
+                                <div class="card-body">
+                                    "Comming soon"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h:form id="form">
 
+                <p:dataTable value="#{rentalBean.rentalsList}" var="itemRental" styleClass="table table-striped">
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
+                        #{itemRental.userRent.lastname}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.firstname']}</f:facet>
+                        #{itemRental.userRent.firstname }
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.rentalNumber']}</f:facet>
+                        #{itemRental.idRental}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.materials']}</f:facet>
+                        <ui:repeat value="#{itemRental.rentalsArticlesByIdRental}" var="art">
+                            #{art.articlesByIdArticle.articleName}
+                        </ui:repeat>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
+                        #{itemRental.user.firstname}
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
+                        #{itemRental.dateEnd}
+                    </p:column>
+                    <p:column style="width: 3rem;text-align: center">
+                        <p:commandButton update=":form:rentalDetail" oncomplete="PF('productDialog').show()"
+                                         icon="pi pi-search" title="View">
+                            <f:setPropertyActionListener value="#{itemRental}"
+                                                         target="#{rentalBean.rentalSelected}"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                <!-- MODAL popup-->
+                <p:dialog header="#{bundle['rentalPage.rentalInfo']}" widgetVar="productDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400px">
+                    <p:outputPanel id="rentalDetail">
+                        <p:column rendered="#{not empty rentalBean.rentalSelected}">
 
+                            <table class="table-view table-striped" width="100%">
+                                <tr>
+                                    <th>Nom &amp; Prénom</th>
+                                    <td>#{rentalBean.rentalSelected.userRent.lastname} #{rentalBean.rentalSelected.userRent.firstname}</td>
+                                </tr>
+                                <tr>
+                                    <th>Type de personne</th>
+                                    <td>#{rentalBean.rentalSelected.userRent.responsibleType}</td>
+                                </tr>
+                                <tr>
+                                    <th>Article(s)</th>
+                                    <td>
+                                        <ui:repeat value="#{rentalBean.rentalSelected.rentalsArticlesByIdRental}" var="art">
+                                            #{art.articlesByIdArticle.articleName}
+                                        </ui:repeat>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Début location</th>
+                                    <td><h:outputText value="#{rentalBean.rentalSelected.dateBegin}"/></td>
+                                </tr>
+                                <tr>
+                                    <th>A rendre pour</th>
+                                    <td><h:outputText value="#{rentalBean.rentalSelected.dateEnd}"/></td>
+                                </tr>
+
+                            </table>
+
+                        </p:column>
+                        <h:commandButton styleClass="button btn-success btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.deleteRental}"/>
+                        <h:commandButton styleClass="button btn-info btn-block" value="Allonger la location" type="submit" action="#{rentalBean.extendDateRental}"/>
+                        <h:commandButton styleClass="button btn-danger btn-block" value="signaler un probleme sur le matériel" type="submit" action="#{rentalBean.reportRentalIssue}"/>
+
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
+        </div>
     </ui:define>
 </ui:composition>
 </html>

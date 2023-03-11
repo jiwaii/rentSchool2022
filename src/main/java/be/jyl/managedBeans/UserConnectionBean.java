@@ -31,8 +31,8 @@ public class UserConnectionBean implements Serializable {
         if (myAccount != null){
             FacesContext context = FacesContext.getCurrentInstance();
             Users myUser = myAccount.getUsersByIdAccount().stream().findFirst().get();
-            context.getExternalContext().getSessionMap().put("account",myAccount);
-            context.getExternalContext().getSessionMap().put("user",myUser);
+            context.getExternalContext().getSessionMap().put("accountSession",myAccount);
+            context.getExternalContext().getSessionMap().put("userSession",myUser);
             log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myAccount.getLogin() +" With id: "+ myAccount.getIdAccount());
             return "success";
          }

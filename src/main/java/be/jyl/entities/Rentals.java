@@ -2,6 +2,7 @@ package be.jyl.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 @NamedQueries(value = {
         @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r")
@@ -12,18 +13,31 @@ public class Rentals {
     @Id
     @Column(name = "id_rental", nullable = false)
     private int idRental;
-    @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_user", referencedColumnName = "id_user")
-    private Users idUser;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user")
+    private Users user;
     @Basic
     @Column(name = "dateBegin", nullable = false)
     private Date dateBegin;
     @Basic
     @Column(name = "dateEnd", nullable = false)
     private Date dateEnd;
-    @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_userRent", referencedColumnName = "id_user")
-    private Users idUserRent;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_userRent")
+    private Users userRent;
+
+    public Collection<ArticlesRentals> getRentalsArticlesByIdRental() {
+        return rentalsArticlesByIdRental;
+    }
+
+    public void setRentalsArticlesByIdRental(Collection<ArticlesRentals> rentalsArticlesByIdRental) {
+        this.rentalsArticlesByIdRental = rentalsArticlesByIdRental;
+    }
+
+    @OneToMany(mappedBy = "rentalsByIdRental", cascade = CascadeType.PERSIST)
+    private Collection<ArticlesRentals> rentalsArticlesByIdRental;
+
+
 
     public int getIdRental() {
         return idRental;
@@ -33,12 +47,12 @@ public class Rentals {
         this.idRental = idRental;
     }
 
-    public Users getIdUser() {
-        return idUser;
+    public Users getUser() {
+        return user;
     }
 
-    public void setIdUser(Users idUser) {
-        this.idUser = idUser;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     public Date getDateBegin() {
@@ -57,12 +71,12 @@ public class Rentals {
         this.dateEnd = dateEnd;
     }
 
-    public Users getIdUserRent() {
-        return idUserRent;
+    public Users getUserRent() {
+        return userRent;
     }
 
-    public void setIdUserRent(int Users) {
-        this.idUserRent = idUserRent;
+    public void setUserRent(Users userRent) {
+        this.userRent = userRent;
     }
 
     @Override
@@ -70,11 +84,12 @@ public class Rentals {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rentals rentals = (Rentals) o;
-        return idRental == rentals.idRental && idUser == rentals.idUser && idUserRent == rentals.idUserRent && Objects.equals(dateBegin, rentals.dateBegin) && Objects.equals(dateEnd, rentals.dateEnd);
+        return idRental == rentals.idRental && user == rentals.user && userRent == rentals.userRent && Objects.equals(dateBegin, rentals.dateBegin) && Objects.equals(dateEnd, rentals.dateEnd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idRental, idUser, dateBegin, dateEnd, idUserRent);
+        return Objects.hash(idRental, user, dateBegin, dateEnd, userRent);
     }
+
 }

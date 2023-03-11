@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templates/mainPage.xhtml">
+    <ui:define name="content">
+        <div class="p-3">
+
+            <h:form>
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel value="prenom">
+                            <h:inputText id="prenom" value="#{userBean.user.firstname}" styleClass="form-control"
+                                         required="true"
+                                         requiredMessage="* Veuillez insérer un prénom">
+                            </h:inputText>
+                        </h:outputLabel>
+                        <h:message for="prenom" style="color: red" />
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="nom" styleClass="form-label">
+                            <h:inputText id="nom" value="#{userBean.user.lastname}" styleClass="form-control"
+                                         required="true" requiredMessage="* Veuiller insérer un nom">
+                            </h:inputText>
+                        </h:outputLabel><br/>
+                        <h:message for="nom" style="color: red" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <h:outputLabel value="email">
+                            <h:inputText id="email" value="#{userBean.user.email}" styleClass="form-control"
+                                         required="true" requiredMessage="* Veuillez insérer un Email">
+                            </h:inputText>
+                        </h:outputLabel>
+                        <h:message for="email" style="color: red" />
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="address" styleClass="form-label">
+                            <h:inputText id="adress" value="#{userBean.user.address}" styleClass="form-control"
+                                         required="true" requiredMessage="* Veuillez insérer une adresse">
+                            </h:inputText>
+                        </h:outputLabel><br/>
+                        <h:message for="adress" style="color: red"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <p:importEnum type="be.jyl.enums.ResponsibleType"/>
+                        <p:outputLabel for="responsibleTypeDropdown" value="Responsible type :"/><br/>
+                        <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.user.responsibleType}">
+                            <f:selectItems value="#{ResponsibleType.ALL_VALUES}"
+                                           itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
+                        </p:selectOneMenu>
+
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Ville" styleClass="form-label"/>
+                        <h:selectOneMenu id="villeSelection" styleClass="form-control" value="#{userBean.user.idCity}" required="true">
+                            <f:selectItems value="#{userBean.citiesList}"
+                                           var="city"
+                                           itemLabel="#{city.postalCode } #{city.cityName}"
+                                           itemValue="#{city.idCity}">
+                            </f:selectItems>
+                        </h:selectOneMenu>
+                    </div>
+                </div>
+                <h:commandButton styleClass="btn btn-primary" value="#{bundle['button.submit']}" action="#{userBean.addNewUser}"/>
+            </h:form>
+    </div>
+
+    </ui:define>
+</ui:composition>
+</html>

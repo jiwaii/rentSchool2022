@@ -3,7 +3,12 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
-
+@NamedQueries( value = {
+        @NamedQuery(name = "Cities.findAll",query = "SELECT c FROM Cities c order by c.postalCode asc "),
+        @NamedQuery(name = "Cities.finWhere",query = "select c from Cities c " +
+                "where c.cityName like :pCityName or cast(c.postalCode as string) = :pCityName ")
+    }
+)
 @Entity
 public class Cities {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

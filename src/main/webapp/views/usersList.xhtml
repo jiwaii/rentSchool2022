@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/mainPage.xhtml">
+   <ui:define name="content">
+      <f:view>
+      <div class="container py-3">
+         <h2 class="h2">#{bundle['header.navbar.users']}</h2>
+         <div class="row">
+            <div class="col col-lg-9">
+               <!-- SEARCH BAR in TABLE USER -->
+               <h:form id="userSearch">
+                  <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
+                     <f:ajax event="keyup"
+                             render="usersTable"
+                             listener="#{userBean.searchUserBar}"/>
+                  </h:inputText>
+               </h:form>
+               <!-- #TABLE USERS -->
+               <h:dataTable id="usersTable" value="#{userBean.usersList}" var="user" styleClass="table table-striped table-hover">
+                  <h:column>
+                     <f:facet name="header">#{bundle['tableHeader.lastname']} </f:facet>
+                     #{user.lastname}
+                  </h:column>
+                  <h:column>
+                     <f:facet name="header">#{bundle['tableHeader.firstname']} </f:facet>
+                     #{user.firstname}
+                  </h:column>
+                  <h:column>
+                     <f:facet name="header">Email</f:facet>
+                     #{user.email}
+                  </h:column>
+                  <h:column>
+                     <f:facet name="header">Type</f:facet>
+                     #{user.responsibleType}
+                  </h:column>
+<!--                  <h:column rendered="#{empty userSession.rolesByIdRole.roleName eq 'secretariat'}">-->
+                  <h:column>
+                  <f:facet name="header">role</f:facet>
+                     #{user.rolesByIdRole.roleName}
+                  </h:column>
+                  <h:column>
+                     <f:facet name="header">Option</f:facet>
+                  </h:column>
+               </h:dataTable>
+            </div>
+            <div class="col">
+               <h:form>
+                  <h:commandButton styleClass="btn btn-success" action="#{userBean.addUserPage()}" value="#{bundle['header.navbar.addUser']}"/>
+               </h:form>
+            </div>
+         </div>
+      </div>
+      </f:view>
+   </ui:define>
+</ui:composition>
+</html>

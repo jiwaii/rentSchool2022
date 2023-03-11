@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="templates/mainPage.xhtml">
+    <ui:define name="content">
+
+        <div class="container py-3">
+
+            <h:form id="formDataTable">
+                <div class="row">
+                    <div class="col col-md-4" id="SelectionUserCol" >
+                        <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
+                            <f:ajax event="keyup"
+                                    render="userRadioTD"
+                                    listener="#{rentalBean.usersListByName}"/>
+                        </h:inputText>
+                        <br/>
+                        <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
+                                     selection="#{rentalBean.userSelected}"
+                                     rowKey="#{user.idUser}"
+                                     styleClass="table table-striped table-hover" >
+                            <p:ajax event="rowSelect"
+                                    listener="#{rentalBean.dtUserSelection}"/>
+                            <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                            <p:column headerText="#{bundle['tableHeader.lastname']}">
+                                <h:outputText value="#{user.lastname}" />
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.firstname']}">
+                                <h:outputText value="#{user.firstname}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                    <div class="col col-md-4" id="SelectionArticleCol" >
+                        <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control"
+                                     a:placeholder="#{bundle['form.search']}"
+                                     onkeypress="if (events.which == '13'){return false; }">
+                            <f:ajax event="keyup"
+                                    render="articleRadioTD"
+                                    listener="#{rentalBean.articleListByNameRefBarcode}"/>
+                        </h:inputText>
+                        <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
+                                     selection="#{rentalBean.articleSelected}"
+                                     rowKey="#{article.idArticle}"
+                                     styleClass="table table-striped table-hover">
+                            <p:ajax event="rowSelect"
+                                    listener="#{rentalBean.dtArticleSelection}"/>
+                            <p:column selectionMode="single" style="width:16px;text-align:center"/>
+                            <p:column headerText="#{bundle['tableHeader.materials']}">
+                                <h:outputText value="#{article.articleName}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.ref']}">
+                                <h:outputText value="#{article.refSn}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                    <div class="col col-md-4">
+                        <p:outputLabel style="font-weight: bold" for="datePikerRental" value="#{bundle['tableHeader.dueDate']}"/>
+                        <br/>
+                        <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}" mindate="#{rentalBean.minDate}" >
+                            <p:ajax event="dateSelect" listener="#{rentalBean.dateSelection}"/>
+                            <p:ajax event="keyup" listener="#{rentalBean.dateSelectionKeyUpEvent}"/>
+                        </p:datePicker>
+                        <p:message for="datePikerRental"/>
+                        <br/>
+                        <br/>
+
+                        <p:commandButton styleClass="button btn-primary btn-sm btn-block"
+                                         value="#{bundle['button.submit']}"
+                                         type="submit"
+                                         action="#{rentalBean.submitNewRental}"/>
+                    </div>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

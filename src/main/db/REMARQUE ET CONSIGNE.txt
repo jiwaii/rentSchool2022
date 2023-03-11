@@ -1,0 +1,9 @@
+Dans Faire une Location:
+    L'administrateur ne doit pas s'affiché dans la recherche
+
+
+Dans Ajouter un Utilisateur:
+    Faire une regex pour l'Email
+    Faire Aller a la page des utilisateurs après avoir submit l'utilisateur
+
+
