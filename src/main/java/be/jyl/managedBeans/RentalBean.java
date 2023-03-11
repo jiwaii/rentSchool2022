@@ -11,12 +11,15 @@ import be.jyl.services.UserService;
 import be.jyl.tools.DateConverter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.*;
@@ -107,10 +110,15 @@ public class RentalBean implements Serializable {
         rentalSelected = rental;
     }
 
+    /**
+     * @// TODO: 11-03-23 message d'erreur à afficher (message primefaces) 
+     * @return
+     * @throws ParseException
+     */
     public String submitNewRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
         if (userSession != null){
-            if (userSelected != null && articleSelected != null){
+            if (userSelected != null && articleSelected != null && endDateSelected != null){
 
                 // Variable imperatives pour créer la location :
                 java.sql.Date dateNow ;
@@ -122,8 +130,7 @@ public class RentalBean implements Serializable {
                 dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
                 log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
                 //affectation Recuperation de l'utilisateur de la session :
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        userSession = (Users) context.getExternalContext().getSessionMap().get("user") ;
+
 
                 /** -------------------------------------------------------------
                  * @autor jiwaii
@@ -142,18 +149,20 @@ public class RentalBean implements Serializable {
                 articlesRentals.setQty(1);
                 articlesRentals.setArticlesByIdArticle(articleSelected);
                 articlesRentals.setRentalsByIdRental(newRental);
+                articlesRentals.setDateReturned(null);
                 Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
                 articlesRentalsCollection.add(articlesRentals);
 
                 newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
                 rentalsService.persistNewRental(newRental,articleSelected);
-                //mise à jour de la liste location et article disponible pour la vue :
+                //mise à jour de la liste location et article disponible pour l'utilisateur :
                 rentalsList = rentalsService.rentalsList();
                 articlesList = articlesService.articlesAvailableList();
-
+                endDateSelected = null;
                 return "index.xhtml";
             } else {
+                //FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"ATTENTION", "PrimeFaces rock"));
                 return "rentalCreation.xhtml";
             }
         }

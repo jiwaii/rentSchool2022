@@ -30,6 +30,7 @@ public class RentalsService {
         transaction.commit();
     }
     public void removeRental(Rentals rental){
+
         if (!transaction.isActive()){
             transaction.begin();
             log.log(Level.INFO,"removeRental : transaction begin");
@@ -38,6 +39,7 @@ public class RentalsService {
             for (ArticlesRentals articlesRentalsItem :articlesRentalsCollection) {
                 articlesRentalsItem.getArticlesByIdArticle().setState(State.available);
                 em.merge(articlesRentalsItem.getArticlesByIdArticle());
+                //mettre à jour au lieu de supprimer
                 em.remove(articlesRentalsItem);
             }
             em.remove(rental);

@@ -1,6 +1,7 @@
 package be.jyl.entities;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -20,6 +21,10 @@ public class ArticlesRentals {
     @ManyToOne
     @JoinColumn(name = "id_rental")
     private Rentals rentalsByIdRental;
+
+    @Basic
+    @Column(name = "dateReturned", nullable = true)
+    private Date dateReturned;
 
 
     public int getQty() {
@@ -53,5 +58,13 @@ public class ArticlesRentals {
 
     public void setRentalsByIdRental(Rentals rentalsByIdRental) {
         this.rentalsByIdRental = rentalsByIdRental;
+    }
+
+    public Date getDateReturned() {
+        return dateReturned;
+    }
+
+    public void setDateReturned(Date dateReturned) {
+        this.dateReturned = dateReturned;
     }
 }

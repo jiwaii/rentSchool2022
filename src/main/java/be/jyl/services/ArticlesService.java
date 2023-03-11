@@ -16,7 +16,7 @@ public class ArticlesService {
     private EntityTransaction transaction = em.getTransaction();
     public List<Articles> articlesAvailableList(){
         log.log(Level.INFO,"articleList() ");
-        Query query = em.createNamedQuery("articles.available");
+        Query query = em.createNamedQuery("articles.availableBasedOnDateReturn");
         return query.getResultList();
     }
     public List<Articles> articlesAvailableListBySearch(String articlesSearch){
