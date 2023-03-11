@@ -7,6 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -22,7 +23,8 @@ public class CategoryBean implements Serializable {
     private List<Categories> categories;
     private Categories selectedCategory;
 
-    public CategoryBean() {
+    @PostConstruct
+    public void init() {
         categoriesService = new CategoriesService();
         categories = categoriesService.getAllCategories();
     }
