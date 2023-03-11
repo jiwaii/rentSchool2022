@@ -1,11 +1,10 @@
 package be.jyl.managedBeans;
 
 
+import be.jyl.entities.Articles;
 import be.jyl.entities.Categories;
 import be.jyl.enums.State;
 import be.jyl.services.ArticlesService;
-import be.jyl.entities.Articles;
-import be.jyl.services.CategoriesService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -27,15 +26,16 @@ public class ArticleBean implements Serializable {
     private List<Articles> articles;
     private Articles selectedArticle;
     private List<Categories> categoriesList;
+    private List<Articles> filteredArticles;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         articlesService = new ArticlesService();
         articles = articlesService.getAllArticles();
     }
 
-    public void save(){
-        if (selectedArticle.getIdArticle()==0) {
+    public void save() {
+        if (selectedArticle.getIdArticle() == 0) {
             articlesService.addArticle(selectedArticle);
             //Langue des facesMessage à rajouter
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.articleAdded']"));
@@ -50,6 +50,7 @@ public class ArticleBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-articles");
 
     }
+
     public void delete(Articles article) {
         articlesService.deleteArticle(article);
         articles.remove(article);
@@ -77,7 +78,7 @@ public class ArticleBean implements Serializable {
         //setting the category to don't return null to the view wich cause a problem
         this.selectedArticle.setCategoryByIdCategory(new Categories());
         categoriesList = articlesService.listCategories();
-        log.log(Level.INFO,"catlist: "+ categoriesList);
+        log.log(Level.INFO, "catlist: " + categoriesList);
     }
 
     public State[] getStatesList() {
@@ -93,5 +94,11 @@ public class ArticleBean implements Serializable {
     }
 
 
+    public List<Articles> getFilteredArticles() {
+        return filteredArticles;
+    }
 
+    public void setFilteredArticles(List<Articles> filteredArticles) {
+        this.filteredArticles = filteredArticles;
+    }
 }
