@@ -42,7 +42,14 @@
                                                   action="#{userBean.addUserPage()}"
                                                   update=":dialogs:manage-user-content"
                                                   oncomplete="PF('manageUserDialog').show()"
-                                                  styleClass="ui-button-success" style="margin-right: .5rem">
+                                                  styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
+                                    <p:resetInput target=":dialogs:manage-user-content"/>
+                                 </p:commandButton>
+                                 <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
+                                                  action="#{userBean.addUserPage()}"
+                                                  update=":dialogs:manage-user-content"
+                                                  oncomplete="PF('manageUserDialog').show()"
+                                                  styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
                                     <p:resetInput target=":dialogs:manage-user-content"/>
                                  </p:commandButton>
                               </p:toolbarGroup>
@@ -73,64 +80,53 @@
                      <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
                         <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
                                          oncomplete="PF('manageUserDialog').show()"
-                                         styleClass="edit-button rounded-button ui-button-success"
+                                         styleClass="edit-button rounded-button ui-button-primary"
                                          process="@this">
                            <f:setPropertyActionListener value="#{user}"
                                                         target="#{userBean.userSelected}"/>
                            <p:resetInput target=":dialogs:manage-user-content"/>
                         </p:commandButton>
+
                      </p:column>
 
                   </p:dataTable>
                </h:form>
 
                <h:form id="dialogs">
-                  <p:dialog header="#{bundle['header.navbar.users']}" showEffect="fade" modal="true"
+                  <p:dialog header="#{bundle['modal.title.update']}" showEffect="fade" modal="true"
                             widgetVar="manageUserDialog"
                             responsive="true">
                      <p:outputPanel id="manage-user-content" class="ui-fluid">
                         <p:outputPanel rendered="#{not empty userBean.userSelected}">
                            <div class="field">
-                              <p:outputLabel for="userName">#{bundle['tableHeader.name']}</p:outputLabel>
-                              <p:inputText id="userName" value="#{userBean.userSelected.firstname}"
+                              <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
+                              <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
                                            required="true"/>
                            </div>
-                           <!--                           <div class="field">-->
-                           <!--                              <p:outputLabel-->
-                           <!--                                      for="idCategory">#{bundle['tableHeader.category']}</p:outputLabel>-->
-                           <!--                              <p:selectOneMenu id="idCategory" styleClass="form-select form-control"-->
-                           <!--                                               value="#{articleBean.selectedArticle.categoryByIdCategory}"-->
-                           <!--                                               converter="selectOneMenuConverter">-->
-                           <!--                                 <p:ajax update="@this" process="@this"/>-->
-                           <!--                                 <f:selectItems value="#{articleBean.categoriesList}"-->
-                           <!--                                                var="category"-->
-                           <!--                                                itemLabel="#{category.categoryName}"-->
-                           <!--                                                itemValue="#{category}">-->
-                           <!--                                 </f:selectItems>-->
-                           <!--                              </p:selectOneMenu>-->
-                           <!--                           </div>-->
-                           <!--                           <div class="field">-->
-                           <!--                              <p:outputLabel for="refSn">#{bundle['tableHeader.refSn']}</p:outputLabel>-->
-                           <!--                              <p:inputText id="refSn" value="#{articleBean.selectedArticle.refSn}"-->
-                           <!--                                           required="true"/>-->
-                           <!--                           </div>-->
-                           <!--                           <div class="field">-->
-                           <!--                              <p:outputLabel for="barcode">#{bundle['tableHeader.barcode']}</p:outputLabel>-->
-                           <!--                              <p:inputText id="barcode" value="#{articleBean.selectedArticle.barcode}"-->
-                           <!--                                           required="false"/>-->
-                           <!--                           </div>-->
-                           <!--                           <div class="field">-->
-                           <!--                              <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>-->
-                           <!--                              <p:selectOneRadio id="state" value="#{articleBean.selectedArticle.state}"-->
-                           <!--                                                layout="responsive" columns="2" required="true">-->
-                           <!--                                 <f:selectItems value="#{articleBean.statesList}"/>-->
-                           <!--                              </p:selectOneRadio>-->
-                           <!--                           </div>-->
+
+                           <div class="field">
+                              <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
+                              <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
+                                           required="true"/>
+                           </div>
+                           <div class="field">
+                              <p:outputLabel for="email">E-mail</p:outputLabel>
+                              <p:inputText id="email" value="#{userBean.userSelected.email}"
+                                           required="false"/>
+                           </div>
+                           <div class="field">
+                              <p:importEnum type="be.jyl.enums.ResponsibleType"/>
+                              <p:outputLabel for="responsibleTypeDropdown" value="Responsible type :"/><br/>
+                              <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.userSelected.responsibleType}">
+                                 <f:selectItems value="#{ResponsibleType.ALL_VALUES}"
+                                                itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
+                              </p:selectOneMenu>
+                           </div>
                         </p:outputPanel>
                      </p:outputPanel>
 
                      <f:facet name="footer">
-                        <p:commandButton value="Save" icon="pi pi-check"
+                        <p:commandButton value="Save" icon="pi pi-check" actionListener="#{userBean.update}"
                                          update="manage-user-content"
                                          process="manage-user-content @this"/>
                         <p:commandButton value="Cancel" icon="pi pi-times"

@@ -63,11 +63,14 @@
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
-                        #{itemRental.user.firstname}
+                        <h:outputText value="#{itemRental.user.firstname}"/>
+
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
-                        #{itemRental.dateEnd}
+                        <h:outputText value="#{itemRental.dateEnd}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
                     </p:column>
                     <p:column style="width: 3rem;text-align: center">
                         <p:commandButton update=":form:rentalDetail" oncomplete="PF('productDialog').show()"

@@ -5,6 +5,7 @@ import be.jyl.entities.Users;
 import be.jyl.services.UserService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.primefaces.PrimeFaces;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -55,6 +56,12 @@ public class UserBean implements Serializable {
         Collections.reverse(usersList);
         user = new Users();
         return "usersList";
+    }
+    public void update(){
+        log.log(Level.INFO,"update()");
+        userService.updateUser(userSelected);
+        PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
     }
 
     /**

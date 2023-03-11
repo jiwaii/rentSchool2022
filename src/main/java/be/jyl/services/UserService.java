@@ -62,9 +62,16 @@ public class UserService {
         em.persist(user);
         transaction.commit();
     }
+    public void updateUser(Users user){
+        if (!transaction.isActive()){
+            transaction.begin();
+            em.merge(user);
+            transaction.commit();
+        }
+    }
     public List<Cities> listCities(){
-       Query query = em.createNamedQuery("Cities.findAll");
-       return query.getResultList();
+        Query query = em.createNamedQuery("Cities.findAll");
+        return query.getResultList();
     }
 
     /**
