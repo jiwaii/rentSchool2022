@@ -30,12 +30,6 @@
                                styleClass="table table-striped table-hover">
                      <f:facet name="header">
                         <div class="table-header">
-                           <!--                                <span class="filter-container ui-input-icon-left">-->
-                           <!--                                    <i class="pi pi-search"></i>-->
-                           <!--                                    <p:inputText id="globalFilter" onkeyup="PF('dtUser').filter()"-->
-                           <!--                                                 valueChangeListener="#{}"-->
-                           <!--                                                 placeholder="#{bundle['form.search']}"/>-->
-                           <!--                                </span>-->
                            <p:toolbar>
                               <p:toolbarGroup align="right">
                                  <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
@@ -46,7 +40,7 @@
                                     <p:resetInput target=":dialogs:manage-user-content"/>
                                  </p:commandButton>
                                  <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
-                                                  action="#{userBean.addUserPage()}"
+                                                  action="#{userBean.addAccountToUserPage()}"
                                                   update=":dialogs:manage-user-content"
                                                   oncomplete="PF('manageUserDialog').show()"
                                                   styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">

@@ -1,11 +1,13 @@
 package be.jyl.managedBeans;
 
+import be.jyl.entities.Accounts;
 import be.jyl.entities.Cities;
 import be.jyl.entities.Users;
 import be.jyl.services.UserService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -13,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.EventListener;
 import java.util.List;
 
 @Named
@@ -27,6 +30,7 @@ public class UserBean implements Serializable {
     private List<Users> filteredUser;
     private Users userSession;
     private Users userSelected;
+    private Accounts newAccount;
 
     @PostConstruct
     public void init(){
@@ -34,11 +38,9 @@ public class UserBean implements Serializable {
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         user = new Users();
     }
-    /**
-     * @jiwaii commentaire:
-     *Ok Mais, revoir la liaison avec l'entité City
-     *
-     * **/
+    /**-------------------------
+     * @jiwaii CRUDs
+     --------------------------*/
     public String addNewUser(){
         //<editor-fold desc="logs Info New User">
         log.log(Level.INFO,"UserBean.addNewUser()");
@@ -50,37 +52,40 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,"IdCity : "+ user.getIdCity());
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
-
         userService.insert(user);
         usersList = listUsersForUserRoleSession();
         Collections.reverse(usersList);
         user = new Users();
         return "usersList";
     }
+
+    private List<Users> listUsersForUserRoleSession(){
+        return userService.listUsers(userSession);
+    }
+    private List<Users> listUsersForUserRoleSessionByName(String searchText){
+        return userService.listUserByName(searchText,userSession);
+    }
+    /**
+     * Renvois la liste d'utilisateurs dépendant du rôle
+     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
+     * @return list Users
+     */
     public void update(){
         log.log(Level.INFO,"update()");
         userService.updateUser(userSelected);
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
     }
+    public void updateAccountToUser(){
+        userSelected.setAccountsByIdAccount(newAccount);
+        log.log(Level.INFO, userSelected.getFirstname()+" " +
+                " with login :"+userSelected.getAccountsByIdAccount().getLogin()+" " +
+                "password : "+ userSelected.getAccountsByIdAccount().getPassword());
+    }
 
-    /**
-     * Renvois la liste d'utilisateurs dépendant du rôle
-     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
-     * @return list Users
-     */
-    private List<Users> listUsersForUserRoleSession(){
-        return userService.listUsers(userSession);
-    }
-    private List<Users> listUsersForUserRoleSessionByName(String searchText){
-//        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
-//            return userService.listUserByNamForAdmin(searchText) ;
-//        }
-//        else {
-//            return userService.listUserByName(searchText);
-//        }
-        return userService.listUserByName(searchText,userSession);
-    }
+    /**-----------------------------
+     * Navigation Pages
+     -----------------------------*/
 
     /** Page pour ajouter un utilisateur
      * et Chargement des villes
@@ -91,6 +96,11 @@ public class UserBean implements Serializable {
         citiesList = userService.listCities();
         return "userAdd";
     }
+    public String addAccountToUserPage(){
+        newAccount = new Accounts();
+        return "userLinkAccount";
+    }
+
     /** Page pour lister les utilisateurs
      *  Chargement des utilisateur
      *
@@ -100,6 +110,16 @@ public class UserBean implements Serializable {
         usersList = listUsersForUserRoleSession();
         return "usersList";
     }
+
+    public void dtUserSelection(SelectEvent selectEvent){
+        userSelected = (Users) selectEvent.getObject();
+        log.log(Level.INFO,userSelected.getFirstname()+" Selected");
+    }
+
+    /** ------------------
+     * GETTERS AND SETTERS
+     ----------------------*/
+
     public void searchUserBar(){
         log.log(Level.INFO,"UserBean.searchUserBar called !");
         log.log(Level.INFO,"UserBean.userSeachText is = " + userSearchText);
@@ -152,5 +172,13 @@ public class UserBean implements Serializable {
 
     public void setFilteredUser(List<Users> filteredUser) {
         this.filteredUser = filteredUser;
+    }
+
+    public Accounts getNewAccount() {
+        return newAccount;
+    }
+
+    public void setNewAccount(Accounts newAccount) {
+        this.newAccount = newAccount;
     }
 }
