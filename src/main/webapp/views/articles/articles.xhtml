@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/mainPage.xhtml">
+    <ui:define name="content">
+        <div class="layout-content">
+            <h1>#{bundle['title.manageArticles']}</h1>
+            <div class="card crud">
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true"/>
+
+                    <p:dataTable id="dt-articles" widgetVar="dtArticles" var="article"
+                                 value="#{articleBean.articles}"
+                                 filteredValue="#{articleBean.filteredArticles}"
+                                 reflow="true" styleClass="table"
+                                 rowKey="#{article.idArticle}" paginator="true" rows="5" rowSelectMode="add"
+                                 paginatorPosition="bottom">
+                        <f:facet name="header">
+                            <div class="table-header">
+
+                                <span class="filter-container ui-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtArticles').filter()" placeholder="Search"/>
+                                </span>
+                                <p:toolbar>
+                                    <p:toolbarGroup align="right">
+                                        <p:commandButton value="#{bundle['header.navbar.addArticle']}" icon="pi pi-plus"
+                                                         actionListener="#{articleBean.openNew}"
+                                                         update=":dialogs:manage-article-content"
+                                                         oncomplete="PF('manageArticleDialog').show()"
+                                                         styleClass="ui-button-success" style="margin-right: .5rem">
+                                            <p:resetInput target=":dialogs:manage-article-content"/>
+                                        </p:commandButton>
+                                    </p:toolbarGroup>
+                                </p:toolbar>
+                            </div>
+                        </f:facet>
+
+
+                        <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{article.idArticle}">
+                            <h:outputText value="#{article.idArticle}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{article.articleName}"
+                                  filterBy="#{article.articleName}">
+                            <h:outputText value="#{article.articleName}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.category']}"
+                                  sortBy="#{article.categoryByIdCategory.categoryName}"
+                                  filterBy="#{article.categoryByIdCategory.categoryName}">
+                            <h:outputText value="#{article.categoryByIdCategory.categoryName}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.refSn']}" sortBy="#{article.refSn}"
+                                  filterBy="#{article.refSn}">
+                            <h:outputText value="#{article.refSn}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.barcode']}" sortBy="#{article.barcode}"
+                                  filterBy="#{article.barcode}">
+                            <h:outputText value="#{article.barcode}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.state']}" sortBy="#{article.state}">
+                            <h:outputText value="#{article.state}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
+                            <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-article-content"
+                                             oncomplete="PF('manageArticleDialog').show()"
+                                             styleClass="edit-button rounded-button ui-button-success"
+                                             process="@this">
+                                <f:setPropertyActionListener value="#{article}"
+                                                             target="#{articleBean.selectedArticle}"/>
+                                <p:resetInput target=":dialogs:manage-article-content"/>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+
+                <h:form id="dialogs">
+                    <p:dialog header="#{bundle['header.navbar.articlesDetails']}" showEffect="fade" modal="true"
+                              widgetVar="manageArticleDialog"
+                              responsive="true">
+                        <p:outputPanel id="manage-article-content" class="ui-fluid">
+                            <p:outputPanel rendered="#{not empty articleBean.selectedArticle}">
+                                <div class="field">
+                                    <p:outputLabel for="articleName">#{bundle['tableHeader.name']}</p:outputLabel>
+                                    <p:inputText id="articleName" value="#{articleBean.selectedArticle.articleName}"
+                                                 required="true"/>
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel
+                                            for="idCategory">#{bundle['tableHeader.category']}</p:outputLabel>
+
+                                    <!--                                <h:selectOneMenu id="idCategory" value="#{articleBean.selectedArticle.idCategory}" converter="selectOneMenuConverter" required="true">-->
+                                    <!--                                    <p:ajax update="@this" process="@this"/>-->
+                                    <!--                                    <f:selectItem value="#{articleBean.categoriesList}" var="category" itemLabel="#{category.categoryName}" itemValue="#{category.idCategory}"/>-->
+                                    <!--                                </h:selectOneMenu>-->
+
+
+                                    <p:selectOneMenu id="idCategory" styleClass="form-select form-control"
+                                                     value="#{articleBean.selectedArticle.categoryByIdCategory}"
+                                                     converter="selectOneMenuConverter">
+                                        <p:ajax update="@this" process="@this"/>
+                                        <f:selectItems value="#{articleBean.categoriesList}"
+                                                       var="category"
+                                                       itemLabel="#{category.categoryName}"
+                                                       itemValue="#{category}">
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel for="refSn">#{bundle['tableHeader.refSn']}</p:outputLabel>
+                                    <p:inputText id="refSn" value="#{articleBean.selectedArticle.refSn}"
+                                                 required="true"/>
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel for="barcode">#{bundle['tableHeader.barcode']}</p:outputLabel>
+                                    <p:inputText id="barcode" value="#{articleBean.selectedArticle.barcode}"
+                                                 required="false"/>
+                                </div>
+                                <div class="field">
+                                    <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>
+                                    <p:selectOneRadio id="state" value="#{articleBean.selectedArticle.state}"
+                                                      layout="responsive" columns="2" required="true">
+                                        <f:selectItems value="#{articleBean.statesList}"/>
+                                    </p:selectOneRadio>
+                                </div>
+                            </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                            <p:commandButton value="Save" icon="pi pi-check" actionListener="#{articleBean.save}"
+                                             update="manage-article-content"
+                                             process="manage-article-content @this"/>
+                            <p:commandButton value="Cancel" icon="pi pi-times"
+                                             onclick="PF('manageArticleDialog').hide()"
+                                             class="ui-button-secondary" type="button"/>
+                        </f:facet>
+                    </p:dialog>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

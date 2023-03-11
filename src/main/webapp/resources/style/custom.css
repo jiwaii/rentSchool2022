@@ -1,0 +1,174 @@
+html {
+    font-size: 14px
+}
+
+body {
+    margin: 0px;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: var(--surface-a);
+    font-family: var(--font-family);
+    font-weight: normal;
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+a {
+    text-decoration: none
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 1.5rem 0 1rem 0;
+    font-family: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    color: inherit
+}
+
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child,
+h5:first-child,
+h6:first-child {
+    margin-top: 0
+}
+
+h1 {
+    font-size: 2.5rem
+}
+
+h2 {
+    font-size: 2rem
+}
+
+h3 {
+    font-size: 1.75rem
+}
+
+h4 {
+    font-size: 1.5rem
+}
+
+h5 {
+    font-size: 1.25rem
+}
+
+h6 {
+    font-size: 1rem
+}
+
+p {
+    line-height: 1.5;
+    margin: 0 0 1rem 0
+}
+
+input[type=number] {
+    -moz-appearance: textfield
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+.p-toast.p-toast-topright,
+.p-toast.p-toast-topleft {
+    top: 100px
+}
+
+.action-button {
+    font-weight: bold;
+    text-align: center;
+    color: #2b3034 !important;
+    background-color: #feab4d;
+    padding: 10px 24px 9px 24px;
+    border-radius: 3px;
+    transition: background-color .2s
+}
+
+.action-button:hover {
+    background-color: #feb767;
+    color: #fff;
+    text-decoration: none !important
+}
+
+.layout-content {
+    padding: 2rem
+}
+
+.layout-content .crud .ui-toolbar {
+    border: none;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.layout-content .card {
+    background: var(--surface-e);
+    padding: 0rem 2rem;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 1px 3px 0 rgba(0, 0, 0, .12);
+    border-radius: 4px;
+    margin-bottom: 2rem
+}
+
+.layout-content .card .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.crud .ui-datatable {
+    margin-top: 2rem;
+}
+
+.crud .ui-datatable .ui-datatable-header{
+    background: none;
+    border: none;
+    padding: 1rem 0rem;
+
+}
+
+.crud .ui-datatable .ui-column-filter {
+    display: none
+}
+
+.crud .table-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.crud .edit-button.ui-button {
+    margin-right: .5rem
+}
+
+@media (max-width: 640px) {
+    .table > .ui-datatable-tablewrapper > table > thead > tr > th:nth-child(2) .ui-column-title,
+    .table > .ui-datatable-tablewrapper > table > tbody > tr > td:nth-child(2) .ui-column-title {
+        display: none !important
+    }
+
+    .products-buttonbar {
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+
+    .products-buttonbar > div:last-child {
+        margin-top: .5rem
+    }
+}
+

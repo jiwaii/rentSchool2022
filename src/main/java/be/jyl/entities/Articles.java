@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 @NamedQueries(value = {
-        @NamedQuery(name = "article.findAll",query = "SELECT a FROM Articles a "),
+        @NamedQuery(name = "articles.findAll",query = "SELECT a FROM Articles a "),
         @NamedQuery(name = "articles.available", query = "SELECT a FROM Articles a " +
                 "WHERE a.state = be.jyl.enums.State.available "),
         @NamedQuery(name = "articles.findWhere",query = "SELECT a FROM Articles a " +
@@ -23,9 +23,6 @@ public class Articles {
     @Column(name = "id_article", nullable = false)
     private int idArticle;
     @Basic
-    @Column(name = "id_category", nullable = false)
-    private int idCategory;
-    @Basic
     @Column(name = "articleName", nullable = false, length = 100)
     private String articleName;
     @Basic
@@ -39,8 +36,8 @@ public class Articles {
     @Enumerated(EnumType.STRING)
     private State state;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_category", referencedColumnName = "id_category")
-    private Categories categoriesByIdCategory;
+    @JoinColumn(name = "id_category" , nullable = false)
+    private Categories categoryByIdCategory;
     @OneToMany(mappedBy = "articlesByIdArticle")
     private Collection<ArticlesRentals> articlesRentalsByIdArticle;
 
@@ -50,14 +47,6 @@ public class Articles {
 
     public void setIdArticle(int idArticle) {
         this.idArticle = idArticle;
-    }
-
-    public int getIdCategory() {
-        return idCategory;
-    }
-
-    public void setIdCategory(int idCategory) {
-        this.idCategory = idCategory;
     }
 
     public String getArticleName() {
@@ -97,20 +86,20 @@ public class Articles {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Articles articles = (Articles) o;
-        return idArticle == articles.idArticle && idCategory == articles.idCategory && Objects.equals(articleName, articles.articleName) && Objects.equals(refSn, articles.refSn) && Objects.equals(barcode, articles.barcode) && Objects.equals(state, articles.state);
+        return idArticle == articles.idArticle && categoryByIdCategory.getIdCategory() == articles.categoryByIdCategory.getIdCategory() && Objects.equals(articleName, articles.articleName) && Objects.equals(refSn, articles.refSn) && Objects.equals(barcode, articles.barcode) && Objects.equals(state, articles.state);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idArticle, idCategory, articleName, refSn, barcode, state);
+        return Objects.hash(idArticle, categoryByIdCategory ,articleName, refSn, barcode, state);
     }
 
-    public Categories getCategoriesByIdCategory() {
-        return categoriesByIdCategory;
+    public Categories getCategoryByIdCategory() {
+        return categoryByIdCategory;
     }
 
-    public void setCategoriesByIdCategory(Categories categoriesByIdCategory) {
-        this.categoriesByIdCategory = categoriesByIdCategory;
+    public void setCategoryByIdCategory(Categories categoriesByIdCategory) {
+        this.categoryByIdCategory = categoriesByIdCategory;
     }
 
     public Collection<ArticlesRentals> getArticlesRentalsByIdArticle() {

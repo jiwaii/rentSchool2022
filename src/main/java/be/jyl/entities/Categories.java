@@ -4,7 +4,15 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
+
 @Entity
+@NamedQueries(value = {
+        @NamedQuery(name = "Categories.findAll",query = "select c From Categories c"),
+        @NamedQuery(
+                name = "Category.findById",
+                query = "SELECT c FROM Categories c WHERE c.idCategory = :idCategory"
+        )
+})
 public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -13,7 +21,7 @@ public class Categories {
     @Basic
     @Column(name = "categoryName", nullable = false, length = 100)
     private String categoryName;
-    @OneToMany(mappedBy = "categoriesByIdCategory")
+    @OneToMany(mappedBy = "categoryByIdCategory")
     private Collection<Articles> articlesByIdCategory;
 
     public int getIdCategory() {
