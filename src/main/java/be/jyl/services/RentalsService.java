@@ -35,6 +35,7 @@ public class RentalsService {
     //List des Rentals en retard
     public List<Rentals> lateRentalsList(){
         Query query = em.createNamedQuery("Rentals.findLateRentals");
+        query.setParameter("today",Date.valueOf(LocalDate.now()));
         return query.getResultList();
     }
 

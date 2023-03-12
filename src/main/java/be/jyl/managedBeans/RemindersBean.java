@@ -13,6 +13,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.List;
 
 @Named
@@ -25,12 +26,12 @@ public class RemindersBean implements Serializable {
     @PostConstruct
     public void init() {
         rentalsService = new RentalsService();
-        //lateRentalsList = rentalsService.lateRentalsList();
+        lateRentalsList = rentalsService.lateRentalsList();
     }
 
-    public long getNumberOfDayLate(LocalDate endDate) {
+    public long getNumberOfDayLate(java.sql.Date endDate) {
         LocalDate todayDate = LocalDate.now();
-        return ChronoUnit.DAYS.between(endDate, todayDate);
+        return ChronoUnit.DAYS.between( endDate.toLocalDate(), todayDate);
     }
 
     public List<Rentals> getLateRentalsList() {
