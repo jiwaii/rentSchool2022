@@ -51,7 +51,7 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,"Lastname : "+ user.getLastname());
         log.log(Level.INFO,"ResponsibleType : "+ user.getResponsibleType());
         log.log(Level.INFO,"Address : "+ user.getAddress());
-        log.log(Level.INFO,"IdCity : "+ user.getIdCity());
+        log.log(Level.INFO,"IdCity : "+ user.getCitiesByIdCity().getCityName());
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
         userService.insert(user);

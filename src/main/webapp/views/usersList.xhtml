@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:c="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/mainPage.xhtml">
@@ -39,13 +39,17 @@
                                                   styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
                                     <p:resetInput target=":dialogs:manage-user-content"/>
                                  </p:commandButton>
-                                 <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
-                                                  action="#{userBean.addAccountToUserPage()}"
-                                                  update=":dialogs:manage-user-content"
-                                                  oncomplete="PF('manageUserDialog').show()"
-                                                  styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
-                                    <p:resetInput target=":dialogs:manage-user-content"/>
-                                 </p:commandButton>
+                                 <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
+                                                or userSession.rolesByIdRole.roleName.trim() eq 'direction'}">
+
+                                    <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
+                                                     action="#{userBean.addAccountToUserPage()}"
+                                                     update=":dialogs:manage-user-content"
+                                                     oncomplete="PF('manageUserDialog').show()"
+                                                     styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
+                                       <p:resetInput target=":dialogs:manage-user-content"/>
+                                    </p:commandButton>
+                                 </c:if>
                               </p:toolbarGroup>
                            </p:toolbar>
                         </div>
@@ -71,6 +75,10 @@
                                filterBy="#{user.rolesByIdRole.roleName}">
                         <h:outputText value="#{user.rolesByIdRole.roleName}"/>
                      </p:column>
+                     <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
+                     <!--                               filterBy="#{user.rolesByIdRole.roleName}">-->
+                     <!--                        <h:outputText value="#{user.rolesByIdRole.roleName}"/>-->
+                     <!--                     </p:column>-->
                      <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
                         <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
                                          oncomplete="PF('manageUserDialog').show()"

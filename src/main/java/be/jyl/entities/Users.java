@@ -54,19 +54,20 @@ public class Users {
     @Basic
     @Column(name = "barcode", nullable = true, length = 100)
     private String barcode;
-    @Basic
-    @Column(name = "id_city", nullable = false)
-    private int idCity;
+//    @Basic
+//    @Column(name = "id_city", nullable = false)
+//    private int idCity;
 //    @Basic
 //    @Column(name = "id_account", nullable = true)
 //    private Integer idAccount;
     @OneToMany(mappedBy = "usersByIdUser")
     private Collection<Reminders> remindersByIdUser;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role")
     private Roles rolesByIdRole;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_city", referencedColumnName = "id_city")
+    @JoinColumn(name = "id_city")
     private Cities citiesByIdCity;
     @ManyToOne
     @JoinColumn(name = "id_account")
@@ -137,13 +138,13 @@ public class Users {
         this.barcode = barcode;
     }
 
-    public int getIdCity() {
-        return idCity;
-    }
-
-    public void setIdCity(int idCity) {
-        this.idCity = idCity;
-    }
+//    public int getIdCity() {
+//        return idCity;
+//    }
+//
+//    public void setIdCity(int idCity) {
+//        this.idCity = idCity;
+//    }
 
 //    public Integer getIdAccount() {
 //        return idAccount;
@@ -158,12 +159,12 @@ public class Users {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return idUser == users.idUser && idCity == users.idCity && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode);
+        return idUser == users.idUser  && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUser, address, email, responsibleType, firstname, lastname, barcode, idCity);
+        return Objects.hash(idUser, address, email, responsibleType, firstname, lastname, barcode);
     }
 
     public Collection<Reminders> getRemindersByIdUser() {

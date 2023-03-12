@@ -38,7 +38,6 @@ public class Rentals {
     private Collection<ArticlesRentals> rentalsArticlesByIdRental;
 
 
-
     public int getIdRental() {
         return idRental;
     }
