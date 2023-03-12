@@ -11,12 +11,14 @@ import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.EventListener;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @Named
 @SessionScoped
@@ -40,7 +42,7 @@ public class UserBean implements Serializable {
     }
     /**-------------------------
      * @jiwaii CRUDs
-     --------------------------*/
+    --------------------------*/
     public String addNewUser(){
         //<editor-fold desc="logs Info New User">
         log.log(Level.INFO,"UserBean.addNewUser()");
@@ -76,11 +78,24 @@ public class UserBean implements Serializable {
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
     }
-    public void updateAccountToUser(){
-        userSelected.setAccountsByIdAccount(newAccount);
-        log.log(Level.INFO, userSelected.getFirstname()+" " +
-                " with login :"+userSelected.getAccountsByIdAccount().getLogin()+" " +
-                "password : "+ userSelected.getAccountsByIdAccount().getPassword());
+    public String updateAccountToUser(){
+        log.log(Level.INFO, "updateAccountToUser");
+        if (!newAccount.getLogin().trim().isEmpty()
+                && !newAccount.getPassword().trim().isEmpty()
+                && userSelected != null){
+            userService.insertAccountToUser(userSelected,newAccount);
+            userSelected.setAccountsByIdAccount(newAccount);
+            log.log(Level.INFO, userSelected.getFirstname()+" " +
+                    " with login :"+userSelected.getAccountsByIdAccount().getLogin()+" " +
+                    "password : "+ userSelected.getAccountsByIdAccount().getPassword());
+            return "usersList";
+        }else {
+            FacesContext.getCurrentInstance()
+                    .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal", " No Selection or login/password forgot "));
+
+            return "userLinkAccount";
+        }
+
     }
 
     /**-----------------------------
@@ -98,6 +113,7 @@ public class UserBean implements Serializable {
     }
     public String addAccountToUserPage(){
         newAccount = new Accounts();
+        usersList = userService.listUserWithoutAccount();
         return "userLinkAccount";
     }
 
@@ -115,17 +131,19 @@ public class UserBean implements Serializable {
         userSelected = (Users) selectEvent.getObject();
         log.log(Level.INFO,userSelected.getFirstname()+" Selected");
     }
-
-    /** ------------------
-     * GETTERS AND SETTERS
-     ----------------------*/
-
     public void searchUserBar(){
         log.log(Level.INFO,"UserBean.searchUserBar called !");
         log.log(Level.INFO,"UserBean.userSeachText is = " + userSearchText);
         usersList = listUsersForUserRoleSessionByName(userSearchText);
     }
+    public void searchUserBarToLinkAccount(){
+        usersList = userService.listUserWithoutAccountByName(userSearchText);
+    }
 
+    /** ------------------
+     * GETTERS AND SETTERS
+     ----------------------*/
+//<editor-fold desc="Getters Setters">
     public Users getUser() {
         return user;
     }
@@ -181,4 +199,7 @@ public class UserBean implements Serializable {
     public void setNewAccount(Accounts newAccount) {
         this.newAccount = newAccount;
     }
+
+
+    //</editor-fold>
 }

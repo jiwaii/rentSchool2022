@@ -1,6 +1,7 @@
 package be.jyl.services;
 
 import be.jyl.entities.Accounts;
+import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -18,18 +19,24 @@ public class AccountService {
         Query query = em.createNamedQuery("Account.findAll",Accounts.class);
         return query.getResultList();
     }
-    public Accounts getConnectionLogin(String pLogin, String pPassword){
-        Query query= em.createNamedQuery("Account.login",Accounts.class)
+    public Users getConnectionLogin(String pLogin, String pPassword){
+        log.log(Level.INFO,"getConnectionLogin ( )");
+        log.log(Level.INFO,pLogin);
+        log.log(Level.INFO,pPassword);
+
+        Query query= em.createNamedQuery("User.login")
                 .setParameter("pLogin",pLogin)
                 .setParameter("pPassword",pPassword);
-        Accounts myAccount = null;
+        Users user = null ;
         try{
-            myAccount = (Accounts) query.getSingleResult();
+            user = (Users) query.getSingleResult();
+            log.log(Level.INFO,"User is OK :"+user.getFirstname());
         }
         catch (Exception e){
-            myAccount = null;
+            user = null;
+            log.log(Level.INFO,"user is NULL : "+e.getMessage());
         }finally {
-            return myAccount;
+            return user;
         }
     }
 }

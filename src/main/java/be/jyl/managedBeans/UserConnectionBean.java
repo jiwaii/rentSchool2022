@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -15,29 +16,25 @@ import java.util.Collection;
 import java.util.List;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class UserConnectionBean implements Serializable {
     private Logger log = Logger.getLogger(UserConnectionBean.class);
     private String login ;
     private String password ;
-    private Accounts account = new Accounts();
 
     public String connectionLogin(){
-        log.log(Level.INFO,"From UserConnectionBean.connectionLogin() : "+ login);
-
         /** Test Login and password */
         AccountService accountService = new AccountService();
-        Accounts myAccount = accountService.getConnectionLogin(this.login,this.password);
-        if (myAccount != null){
+        Users myUser = accountService.getConnectionLogin(login,password);
+        if (myUser != null){
             FacesContext context = FacesContext.getCurrentInstance();
-            Users myUser = myAccount.getUsersByIdAccount().stream().findFirst().get();
-            context.getExternalContext().getSessionMap().put("accountSession",myAccount);
+            log.log(Level.INFO, "user is :"+ myUser.getFirstname());
+//            context.getExternalContext().getSessionMap().put("accountSession",myUser);
             context.getExternalContext().getSessionMap().put("userSession",myUser);
-            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myAccount.getLogin() +" With id: "+ myAccount.getIdAccount());
+            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myUser.getAccountsByIdAccount().getLogin() +" With id: "+ myUser.getAccountsByIdAccount().getLogin());
             return "success";
          }
          else {
-             log.log(Level.INFO,"UserConnectionBean.connectionLogin() : fail");
              return "fail";
          }
     }

@@ -1,5 +1,6 @@
 package be.jyl.services;
 
+import be.jyl.entities.Accounts;
 import be.jyl.entities.Cities;
 import be.jyl.entities.Roles;
 import be.jyl.entities.Users;
@@ -44,6 +45,16 @@ public class UserService {
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
+    public List<Users> listUserWithoutAccount(){
+        Query query = em.createNamedQuery("User.findAllNoAccount");
+        return query.getResultList();
+    }
+    public List<Users>listUserWithoutAccountByName(String name){
+        Query query = em.createNamedQuery("User.findWhereNoAccount")
+                .setParameter("pFirstname","%"+name+"%")
+                .setParameter("pLastname","%"+name+"%");
+        return query.getResultList();
+    }
 
     /**
      * Insertion d'un nouvelle utilisateur
@@ -65,6 +76,15 @@ public class UserService {
     public void updateUser(Users user){
         if (!transaction.isActive()){
             transaction.begin();
+            em.merge(user);
+            transaction.commit();
+        }
+    }
+    public void insertAccountToUser(Users user, Accounts accounts){
+        if (!transaction.isActive()){
+            transaction.begin();
+            em.persist(accounts);
+            user.setAccountsByIdAccount(accounts);
             em.merge(user);
             transaction.commit();
         }
