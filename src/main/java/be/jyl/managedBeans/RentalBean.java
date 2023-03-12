@@ -61,7 +61,7 @@ public class RentalBean implements Serializable {
         minDate = new Date();
     }
     public List<Rentals> gRentalsList(){
-        return rentalsService.rentalsList();
+        return rentalsService.currentRentalsList();
     }
 
     /**
@@ -143,7 +143,8 @@ public class RentalBean implements Serializable {
                 newRental.setDateBegin(dateNow);
                 newRental.setDateEnd(dateEnd);
 
-                articleSelected.setState(State.rental); // mettre à jour l'article en status loué
+                //pas besoin de changer l'état de l'article
+                //articleSelected.setState(State.rental); // mettre à jour l'article en status loué
 
                 ArticlesRentals articlesRentals = new ArticlesRentals();
                 articlesRentals.setQty(1);
@@ -155,9 +156,9 @@ public class RentalBean implements Serializable {
 
                 newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
-                rentalsService.persistNewRental(newRental,articleSelected);
+                rentalsService.persistNewRental(newRental);
                 //mise à jour de la liste location et article disponible pour l'utilisateur :
-                rentalsList = rentalsService.rentalsList();
+                rentalsList = rentalsService.currentRentalsList();
                 articlesList = articlesService.articlesAvailableList();
                 endDateSelected = null;
                 return "index.xhtml";
@@ -171,9 +172,16 @@ public class RentalBean implements Serializable {
         }
 
     }
-    public String deleteRental(){
-        rentalsService.removeRental(rentalSelected);
-        rentalsList = rentalsService.rentalsList();
+//    public String deleteRental(){
+//        rentalsService.removeRental(rentalSelected);
+//        rentalsList = rentalsService.rentalsList();
+//        articlesList = articlesService.articlesAvailableList();
+//        return "index.xhtml";
+//    }
+    public String endRental(){
+        //rentalsService.removeRental(rentalSelected);
+        rentalsService.endRental(rentalSelected);
+        rentalsList = rentalsService.currentRentalsList();
         articlesList = articlesService.articlesAvailableList();
         return "index.xhtml";
     }

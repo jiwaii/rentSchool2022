@@ -62,34 +62,4 @@ public class ArticlesService {
         Query query = em.createNamedQuery("Categories.findAll");
         return query.getResultList();
     }
-
-    public List<Articles> getAllArticles() {
-        Query query = em.createNamedQuery("articles.findAll", Articles.class);
-        return query.getResultList();
-    }
-
-    public void addArticle(Articles article) {
-        transaction.begin();
-        em.persist(article);
-        transaction.commit();
-    }
-
-    public void updateArticle(Articles article) {
-        log.log(Level.INFO, article.getCategoryByIdCategory().getCategoryName());
-        log.log(Level.INFO, article.getCategoryByIdCategory().getIdCategory());
-        transaction.begin();
-        em.merge(article);
-        transaction.commit();
-    }
-
-    public void deleteArticle(Articles article) {
-        //TO DO
-        Articles managedArticle = em.find(Articles.class, article.getIdArticle());
-        em.remove(managedArticle);
-    }
-
-    public List<Categories> listCategories(){
-        Query query = em.createNamedQuery("Categories.findAll");
-        return query.getResultList();
-    }
 }
