@@ -62,7 +62,4 @@ public class ArticlesService {
         Query query = em.createNamedQuery("Categories.findAll");
         return query.getResultList();
     }
-
-
-
 }

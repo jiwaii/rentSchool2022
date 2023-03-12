@@ -13,8 +13,9 @@ import java.util.Objects;
                 "WHERE (a.articleName like :pArticleSearch OR a.barcode like :pArticleSearch OR a.refSn like :pArticleSearch) " +
                 "AND a.state = be.jyl.enums.State.available "),
         //Retourne les articles qui ne sont pas en location basé sur la date de dateRetour de articleRental
-        @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles  a " +
-                "JOIN a.articlesRentalsByIdArticle ar WHERE ar.dateReturned != null")
+        @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles " +
+                "a WHERE a.idArticle NOT IN (SELECT ar.articlesByIdArticle.idArticle FROM ArticlesRentals ar WHERE ar.dateReturned IS NULL) "+
+                "AND a.state = be.jyl.enums.State.available")
 })
 @Entity
 public class Articles {
