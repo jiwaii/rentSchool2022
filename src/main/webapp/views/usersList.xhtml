@@ -43,10 +43,7 @@
                                                      styleClass="ui-button-success" style="margin-right: .5rem">
                                        <p:resetInput target=":dialogs:manage-user-content"/>
                                     </p:commandButton>
-                                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
-                                                or userSession.rolesByIdRole.roleName.trim() eq 'direction'}">
-
-
+                                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
                                        <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
                                                         action="#{userBean.addAccountToUserPage()}"
                                                         styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
@@ -97,7 +94,7 @@
                   </h:form>
 
                   <h:form id="dialogs">
-                     <p:dialog header="#{bundle['modal.title.update']}" showEffect="fade" modal="true"
+                     <p:dialog header="#{bundle['title.sheet']}" showEffect="fade" modal="true"
                                widgetVar="manageUserDialog"
                                responsive="true">
                         <p:outputPanel id="manage-user-content" class="ui-fluid">
@@ -130,7 +127,6 @@
                                  <p:inputText id="adress" value="#{userBean.userSelected.address}"
                                               required="true">
                                     <f:validateLength for="lastname" minimum="4"/>
-
                                  </p:inputText>
                               </div>
                               <div class="field">
@@ -154,6 +150,21 @@
                                                    itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
                                  </p:selectOneMenu>
                               </div>
+                              <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                                 <div class="field">
+                                    <p:outputLabel for="responsibleTypeDropdown" value="Role :"/><br/>
+                                    <p:selectOneMenu id="idRole" styleClass="form-select form-control"
+                                                     value="#{userBean.userSelected.rolesByIdRole}"
+                                                     converter="selectOneMenuConverter">
+                                       <p:ajax update="@this" process="@this"/>
+                                       <f:selectItems value="#{userBean.rolesList}"
+                                                      var="role"
+                                                      itemLabel="#{role.roleName}"
+                                                      itemValue="#{role}">
+                                       </f:selectItems>
+                                    </p:selectOneMenu>
+                                 </div>
+                              </c:if>
                            </p:outputPanel>
                         </p:outputPanel>
 

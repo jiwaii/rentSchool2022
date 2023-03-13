@@ -5,10 +5,14 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
+        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+
         <div class="container-fluid">
             <h:form>
                 <p:messages id="messages" showDetail="true" closable="true">
@@ -57,6 +61,14 @@
                 <h:commandButton type="submit" value="Submit"  action="#{userBean.updateAccountToUser}" class="btn btn-primary"/>
             </h:form>
         </div>
-    </ui:define>
+    </c:if>
+        <c:if test="#{  userSession.rolesByIdRole.roleName.trim() ne 'direction'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+            <div style="text-align: center">
+                <h1>#{bundle['title.AccessDenied']}</h1>
+                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px" />
+            </div>
+        </c:if>
+</ui:define>
 </ui:composition>
 </html>

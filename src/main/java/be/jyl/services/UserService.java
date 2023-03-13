@@ -55,6 +55,10 @@ public class UserService {
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
+    public List<Roles> listRoles(){
+        Query query = em.createNamedQuery("Roles.findAll");
+        return query.getResultList();
+    }
 
     /**
      * Insertion d'un nouvelle utilisateur

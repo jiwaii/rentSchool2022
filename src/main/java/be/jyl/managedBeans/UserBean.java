@@ -1,6 +1,7 @@
 package be.jyl.managedBeans;
 
 import be.jyl.entities.*;
+import be.jyl.enums.ResponsibleType;
 import be.jyl.services.AccountService;
 import be.jyl.services.UserService;
 import org.apache.log4j.Level;
@@ -24,6 +25,7 @@ import java.util.ResourceBundle;
 public class UserBean implements Serializable {
     private Logger log = Logger.getLogger(UserBean.class);
     private Users user;
+    private List<Roles> rolesList;
     private String userSearchText;
     private UserService userService = new UserService();
     private List<Cities> citiesList;
@@ -82,14 +84,16 @@ public class UserBean implements Serializable {
     }
     public String updateAccountToUser(){
         log.log(Level.INFO, "updateAccountToUser");
+
         if (!newAccount.getLogin().trim().isEmpty()
                 && !newAccount.getPassword().trim().isEmpty()
                 && userSelected != null){
+
+            userSelected.setResponsibleType(ResponsibleType.staff);
+            //userSelected.setRolesByIdRole();
             userService.insertAccountToUser(userSelected,newAccount);
             userSelected.setAccountsByIdAccount(newAccount);
-            log.log(Level.INFO, userSelected.getFirstname()+" " +
-                    " with login :"+userSelected.getAccountsByIdAccount().getLogin()+" " +
-                    "password : "+ userSelected.getAccountsByIdAccount().getPassword());
+            log.log(Level.INFO, userSelected.getFirstname()+" with login :"+userSelected.getAccountsByIdAccount().getLogin());
             return "usersList";
         }else {
             FacesContext.getCurrentInstance()
@@ -101,6 +105,8 @@ public class UserBean implements Serializable {
     }
     //Ouvrir la modal et initialiser les champs:
     public void openNewUser() {
+        this.rolesList = userService.listRoles();
+        log.log(Level.INFO,"Role list size : "+rolesList.size());
         this.userSelected = new Users();
         this.citiesList = userService.listCities();
         //setting the user to don't return null to the view wich cause a problem
@@ -130,6 +136,8 @@ public class UserBean implements Serializable {
     }
     public String addAccountToUserPage(){
         newAccount = new Accounts();
+        this.rolesList = userService.listRoles();
+        log.log(Level.INFO,"Role list size : "+rolesList.size());
         usersList = userService.listUserWithoutAccount();
         return "userLinkAccount";
     }
@@ -194,6 +202,8 @@ public class UserBean implements Serializable {
     }
 
     public Users getUserSelected() {
+        //pour tester :
+        rolesList = userService.listRoles();
         return userSelected;
     }
 
@@ -217,6 +227,13 @@ public class UserBean implements Serializable {
         this.newAccount = newAccount;
     }
 
+    public List<Roles> getRolesList() {
+        return rolesList;
+    }
 
-    //</editor-fold>
+    public void setRolesList(List<Roles> rolesList) {
+        this.rolesList = rolesList;
+    }
+
+//</editor-fold>
 }
