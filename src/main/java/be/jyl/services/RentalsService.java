@@ -25,6 +25,11 @@ public class RentalsService {
         Query query = em.createNamedQuery("Rentals.findAll");
         return query.getResultList();
     }
+    public List<Rentals> rentalsListBySearch(String search){
+        log.log(Level.INFO,"rentalsListBySearch");
+        Query query = em.createNamedQuery("Rentals.where").setParameter("pSearch",search);
+        return query.getResultList();
+    }
 
     //List des Rentals en cours
     public List<Rentals> currentRentalsList(){
