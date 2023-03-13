@@ -33,7 +33,7 @@
                             <div class="card mb-4 rounded-3 shadow-sm border-danger ">
                                 <div class="card-header py-3">Retard(s)</div>
                                 <div class="card-body">
-                                    "Comming soon"
+                                    #{remindersBean.lateRentalsList.size()}
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,6 @@
                 <p:dialog header="#{bundle['rentalPage.rentalInfo']}" widgetVar="productDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400px">
                     <p:outputPanel id="rentalDetail">
                         <p:column rendered="#{not empty rentalBean.rentalSelected}">
-
                             <table class="table-view table-striped" width="100%">
                                 <tr>
                                     <th>Nom &amp; Prénom</th>
@@ -115,9 +114,6 @@
 
                         </p:column>
                         <h:commandButton styleClass="button btn-success btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.endRental}"/>
-                        <h:commandButton styleClass="button btn-info btn-block" value="Allonger la location" type="submit" action="#{rentalBean.extendDateRental}"/>
-                        <h:commandButton styleClass="button btn-danger btn-block" value="signaler un probleme sur le matériel" type="submit" action="#{rentalBean.reportRentalIssue}"/>
-
                     </p:outputPanel>
                 </p:dialog>
             </h:form>

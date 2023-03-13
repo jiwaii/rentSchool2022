@@ -5,6 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 <f:view>
     <body>
@@ -18,22 +19,42 @@
             <!--#region LIENS NAVBAR -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <h:link class="nav-link" outcome="index.xhtml">#{bundle['header.navbar.currentLocationList']}</h:link>
-                    </li>
-                    <li class="nav-item">
-<!--                            <h:link class="nav-link" outcome="userAdd.xhtml" value="#{bundle['header.navbar.addUser']}"/>-->
-                        <h:form>
-                            <h:commandLink class="nav-link" action="#{userBean.listUserPage()}" value="#{bundle['header.navbar.users']}">
-                            </h:commandLink>
-                        </h:form>
-                    </li>
-                    <li class="nav-item">
-                        <h:link class="nav-link" outcome="rentalCreation.xhtml" value="#{bundle['header.navbar.makeLocation']}"/>
-                    </li>
-                    <li class="nav-item">
-                        <h:link class="nav-link" outcome="reminders.xhtml" value="remind"/>
-                    </li>
+
+                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'}">
+                        <li class="nav-item active">
+                            <h:link class="nav-link" outcome="index.xhtml">#{bundle['header.navbar.currentLocationList']}</h:link>
+                        </li>
+                        <li class="nav-item active">
+                            <h:link class="nav-link active" outcome="articles.xhtml" value="Articles"/>
+                        </li>
+                        <li class="nav-item active">
+                            <h:link class="nav-link active" outcome="categories.xhtml" value="Catégories"/>
+                        </li>
+                        <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                            <li class="nav-item active">
+                                <h:link class="nav-link active" outcome="rentalCreation.xhtml" value="#{bundle['header.navbar.makeLocation']}"/>
+                            </li>
+                            <li class="nav-item active">
+                                <h:link class="nav-link active" outcome="reminders.xhtml" value="Rappel"/>
+                            </li>
+                            <li class="nav-item active">
+                                <h:form>
+                                    <h:commandLink class="nav-link" action="#{userBean.listUserPage()}" value="#{bundle['header.navbar.users']}">
+                                    </h:commandLink>
+                                </h:form>
+                            </li>
+                        </c:if>
+                    </c:if>
+
+
+
+
+
                     <!--
                     <li class="nav-item">
                     <a class="nav-link disabled" href="#">Disabled</a>

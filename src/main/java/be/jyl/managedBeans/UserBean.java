@@ -55,9 +55,10 @@ public class UserBean implements Serializable {
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
         userService.insert(user);
+        user = new Users();
         usersList = listUsersForUserRoleSession();
         Collections.reverse(usersList);
-        user = new Users();
+
         return "usersList";
     }
 
