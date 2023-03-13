@@ -60,6 +60,7 @@ public class RentalBean implements Serializable {
         usersList = userService.listUsers(userSession);
         articlesList = articlesService.articlesAvailableList();
         minDate = new Date();
+
     }
     public List<Rentals> gRentalsList(){
         return rentalsService.currentRentalsList();
@@ -86,9 +87,10 @@ public class RentalBean implements Serializable {
         log.log(Level.INFO, "dtUserSelection() = "+userSelected.getLastname()+" "+userSelected.getFirstname());
 
     }
-    public void rentalListBySerach(){
-
+    public void rentalListBySearch(){
+        log.log(Level.INFO, "search is = "+rentalSearchText);
         rentalsList = rentalsService.rentalsListBySearch(rentalSearchText);
+        log.log(Level.INFO, "nobre de ligne: "+ rentalsList.size());
     }
 
     /**

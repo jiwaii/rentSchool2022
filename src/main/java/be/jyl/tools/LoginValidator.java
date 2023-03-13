@@ -21,7 +21,6 @@ public class LoginValidator implements Validator {
             log.log(Level.INFO, o.toString());
             log.log(Level.INFO, accountService.accountExist(o.toString()));
 
-
             throw new ValidatorException((new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Login déjà pris",null)));
         }

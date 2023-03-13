@@ -41,14 +41,14 @@
                     </div>
                 </div>
             </div>
-            <h:inputText id="inputSearchRental" value="#{rentalBean.rentalSearchText}" styleClass="form-control"
-                         a:placeholder="#{bundle['form.search']}"
-                         onkeypress="if (events.which == '13'){return false; }">
+            <h:form id="form">
+            <h:inputText id="inputSearchRental" value="#{rentalBean.rentalSearchText}"
+                         styleClass="form-control"
+                         a:placeholder="#{bundle['form.search']}">
                 <f:ajax event="keyup"
                         render="dt-rental"
-                        listener="#{rentalBean.rentalListBySerach}"/>
+                        listener="#{rentalBean.rentalListBySearch()}"/>
             </h:inputText>
-            <h:form id="form">
 
                 <p:dataTable id="dt-rental" value="#{rentalBean.rentalsList}" var="itemRental" styleClass="table table-striped">
                     <p:column>

@@ -27,7 +27,10 @@ public class RentalsService {
     }
     public List<Rentals> rentalsListBySearch(String search){
         log.log(Level.INFO,"rentalsListBySearch");
-        Query query = em.createNamedQuery("Rentals.where").setParameter("pSearch",search);
+        Query query = em.createNamedQuery("Rentals.where")
+                .setParameter("pSearch","%"+search+"%");
+        log.log(Level.INFO,"rentalsListBySearch = search is = "+search);
+        log.log(Level.INFO,"rentalsListBySearch = siez is = "+query.getResultList().size());
         return query.getResultList();
     }
 
