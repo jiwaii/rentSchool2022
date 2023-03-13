@@ -51,23 +51,23 @@
                         </c:if>
                     </c:if>
 
-
-
-
-
-                    <!--
-                    <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
-                    -->
                 </ul>
                 <!--#endregion -->
                 <!--#region COTE DROIT DU NAVBAR -->
-                <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
-
-                <h:form styleClass="form-inline">
-                    <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
-                </h:form>
+                <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                    <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
+                    <h:form styleClass="form-inline">
+                        <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                    </h:form>
+                </c:if>
+                <c:if test="#{userSession == null }">
+                    <h:form styleClass="form-inline">
+                        <h:commandButton value="Aller à la page de connexion" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                    </h:form>
+                </c:if>
                 <h:form>
                     <h:commandLink action="#{languageChanger.changeToEN}">
                         <h:graphicImage value="/pics/en.jpg" width="30px" height="20px"/>
