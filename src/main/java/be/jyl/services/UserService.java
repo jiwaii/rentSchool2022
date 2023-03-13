@@ -74,6 +74,12 @@ public class UserService {
         transaction.commit();
     }
     public void updateUser(Users user){
+        if (user.getRolesByIdRole() == null){
+            Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
+                    .setParameter("pRoleName","emprunteur");
+            Roles roleEmprunteur = (Roles) query.getSingleResult();
+            user.setRolesByIdRole(roleEmprunteur);
+        }
         if (!transaction.isActive()){
             transaction.begin();
             em.merge(user);

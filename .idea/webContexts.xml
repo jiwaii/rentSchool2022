@@ -6,6 +6,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/views/categories.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/views/index.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/views/reminders/reminders.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/views/reminders" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/views/usersList.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/views" />
       </map>
     </option>
   </component>

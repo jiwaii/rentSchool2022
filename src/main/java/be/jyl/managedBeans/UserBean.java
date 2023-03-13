@@ -1,8 +1,7 @@
 package be.jyl.managedBeans;
 
-import be.jyl.entities.Accounts;
-import be.jyl.entities.Cities;
-import be.jyl.entities.Users;
+import be.jyl.entities.*;
+import be.jyl.services.AccountService;
 import be.jyl.services.UserService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -38,6 +37,8 @@ public class UserBean implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
+        this.citiesList = userService.listCities();
+
         user = new Users();
     }
     /**-------------------------
@@ -97,6 +98,21 @@ public class UserBean implements Serializable {
             return "userLinkAccount";
         }
 
+    }
+    //Ouvrir la modal et initialiser les champs:
+    public void openNewUser() {
+        this.userSelected = new Users();
+        this.citiesList = userService.listCities();
+        //setting the user to don't return null to the view wich cause a problem
+        usersList = userService.listUserWithoutAccount();
+
+        log.log(Level.INFO, "userLis: " + usersList);
+    }
+    // Si loging existe déjà
+    public boolean loginExist(){
+        log.log(Level.INFO,"call : loginExist()");
+        AccountService accountService = new AccountService();
+        return accountService.accountExist("%"+newAccount.getLogin()+"%");
     }
 
     /**-----------------------------

@@ -39,4 +39,16 @@ public class AccountService {
             return user;
         }
     }
+    public boolean accountExist(String login){
+        Query query = em.createNamedQuery("Account.findWhereLogin",Accounts.class)
+                .setParameter("pLogin",login.trim().toLowerCase());
+
+        List<Accounts> accountsList = query.getResultList();
+        if (accountsList.size() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 }

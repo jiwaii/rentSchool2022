@@ -36,19 +36,20 @@
                            <div class="table-header">
                               <p:toolbar>
                                  <p:toolbarGroup align="right">
-                                    <h:commandButton value="#{bundle['header.navbar.addUser']}"
-                                                     action="#{userBean.addUserPage()}"
-                                                     styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
-                                    </h:commandButton>
+                                    <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
+                                                     actionListener="#{userBean.openNewUser()}"
+                                                     update=":dialogs:manage-user-content"
+                                                     oncomplete="PF('manageUserDialog').show()"
+                                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                                       <p:resetInput target=":dialogs:manage-user-content"/>
+                                    </p:commandButton>
                                     <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
                                                 or userSession.rolesByIdRole.roleName.trim() eq 'direction'}">
 
+
                                        <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
                                                         action="#{userBean.addAccountToUserPage()}"
-                                                        update=":dialogs:manage-user-content"
-                                                        oncomplete="PF('manageUserDialog').show()"
                                                         styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
-                                          <p:resetInput target=":dialogs:manage-user-content"/>
                                        </p:commandButton>
                                     </c:if>
                                  </p:toolbarGroup>
@@ -104,23 +105,33 @@
                               <div class="field">
                                  <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
                                  <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
-                                              required="true"/>
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+                                 </p:inputText>
                               </div>
 
                               <div class="field">
                                  <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
                                  <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
-                                              required="true"/>
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+                                 </p:inputText>
                               </div>
                               <div class="field">
                                  <p:outputLabel for="email">E-mail</p:outputLabel>
                                  <p:inputText id="email" value="#{userBean.userSelected.email}"
-                                              required="false"/>
+                                              required="false"
+                                              validatorMessage="email incorecte">
+                                    <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
+                                 </p:inputText>
                               </div>
                               <div class="field">
                                  <p:outputLabel for="adress">Addresse</p:outputLabel>
                                  <p:inputText id="adress" value="#{userBean.userSelected.address}"
-                                              required="false"/>
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+
+                                 </p:inputText>
                               </div>
                               <div class="field">
                                  <p:outputLabel for="city">Ville :</p:outputLabel>
@@ -130,7 +141,7 @@
                                     <p:ajax update="@this" process="@this"/>
                                     <f:selectItems value="#{userBean.citiesList}"
                                                    var="c"
-                                                   itemLabel="#{c.cityName}"
+                                                   itemLabel="#{c.cityName} - #{c.postalCode}"
                                                    itemValue="#{c}">
                                     </f:selectItems>
                                  </p:selectOneMenu>
