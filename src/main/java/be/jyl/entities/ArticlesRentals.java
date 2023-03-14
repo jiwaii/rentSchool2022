@@ -3,7 +3,12 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
-
+@NamedQueries(value = {
+        @NamedQuery(name = "Article.isCurrentlyRented",
+                query = "SELECT CASE WHEN (COUNT(ar) >0) THEN true ELSE false end from ArticlesRentals ar "
+                        + "where ar.articlesByIdArticle = :article "
+                        + "AND ar.dateReturned IS NULL")
+})
 @Entity
 @Table(name = "articles_rentals", schema = "rentschool2022")
 public class ArticlesRentals {

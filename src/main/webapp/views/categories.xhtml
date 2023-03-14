@@ -16,7 +16,7 @@
 
         <div class="layout-content">
             <h1>#{bundle['title.manageCategories']}</h1>
-            <div class="card crud">
+                <div class="card crud">
                 <h:form id="form">
                     <p:growl id="messages" showDetail="true"/>
 
@@ -27,7 +27,7 @@
                         <f:facet name="header">
                             <div class="table-header">
                                 <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-                        <p:inputText id="globalFilter" onkeyup="PF('dtCategories').filter()" placeholder="Search"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtCategories').filter()" placeholder="#{bundle['form.search']}"/>
                     </span>
                                 <p:toolbar>
                                     <p:toolbarGroup align="left"></p:toolbarGroup>
