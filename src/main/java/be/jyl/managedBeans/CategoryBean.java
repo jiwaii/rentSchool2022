@@ -3,6 +3,7 @@ package be.jyl.managedBeans;
 
 import be.jyl.services.CategoriesService;
 import be.jyl.entities.Categories;
+import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -14,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @Named
 @ViewScoped
@@ -27,6 +29,7 @@ public class CategoryBean implements Serializable {
     public void init() {
         categoriesService = new CategoriesService();
         categories = categoriesService.getAllCategories();
+
     }
 
     public void save(){
@@ -34,11 +37,13 @@ public class CategoryBean implements Serializable {
         if (selectedCategory.getIdCategory()==0) {
             categoriesService.addCategory(selectedCategory);
             //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.categoryAdded']"));
+            NotificationManager.addInfoMessage("notification.categoryAdded");
         } else {
             categoriesService.updateCategory(selectedCategory);
             //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.categoryUpdated']"));
+            FacesContext context = FacesContext.getCurrentInstance();
+            ResourceBundle bundle = context.getApplication().getResourceBundle(context, "msg");
+            NotificationManager.addInfoMessage("notification.categoryUpdated");
         }
         categories = categoriesService.getAllCategories();
         PrimeFaces.current().executeScript("PF('manageCategoryDialog').hide() ajax='false'");
@@ -68,4 +73,6 @@ public class CategoryBean implements Serializable {
     public void openNew() {
         this.selectedCategory = new Categories();
     }
+
+
 }

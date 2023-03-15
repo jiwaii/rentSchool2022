@@ -6,6 +6,7 @@ import be.jyl.entities.Categories;
 import be.jyl.enums.State;
 import be.jyl.services.ArticlesService;
 import be.jyl.services.CategoriesService;
+import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -40,12 +41,10 @@ public class ArticleBean implements Serializable {
     public void save() {
         if (selectedArticle.getIdArticle() == 0) {
             articlesService.addArticle(selectedArticle);
-            //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.articleAdded']"));
+            NotificationManager.addInfoMessage("notification.articleAdded");
         } else {
             articlesService.updateArticle(selectedArticle);
-            //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.articleUpdated']"));
+            NotificationManager.addInfoMessage("notification.articleUpdated");
         }
         //la liste article doit être rechargée
         articles = articlesService.getAllArticles();

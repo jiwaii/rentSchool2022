@@ -6,6 +6,7 @@ import be.jyl.entities.Users;
 import be.jyl.services.RemindersService;
 import be.jyl.services.RentalsService;
 import be.jyl.tools.Mailer;
+import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -56,6 +57,7 @@ public class RemindersBean implements Serializable {
         mailer.sendMailReminder(selectedRental, null);
         message = null;
         saveReminder();
+        NotificationManager.addInfoMessage("notification.reminderSent");
     }
 
     public void sendCustomReminderEmail() throws MessagingException {
@@ -65,6 +67,7 @@ public class RemindersBean implements Serializable {
         log.log(Level.INFO, "Sending reminder Mail for rental: " +selectedRental.getIdRental());
         mailer.sendCustomReminder(selectedRental, null, message);
         saveReminder();
+        NotificationManager.addInfoMessage("notification.reminderMessageSent");
     }
 
     public void saveReminder(){
