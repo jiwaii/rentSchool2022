@@ -55,6 +55,14 @@ public class UserService {
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
+    public List<Users>listUserWithAccount(String name){
+        Query query = em.createNamedQuery("User.findWithAccountWhereName").setParameter("pName","%"+name+"%");
+        return query.getResultList();
+    }
+    public List<Users>listUserWithAccount(){
+        Query query = em.createNamedQuery("User.findWithAccount");
+        return query.getResultList();
+    }
     public List<Roles> listRoles(){
         Query query = em.createNamedQuery("Roles.findAll");
         return query.getResultList();

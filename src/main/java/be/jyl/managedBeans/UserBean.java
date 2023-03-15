@@ -34,6 +34,9 @@ public class UserBean implements Serializable {
     private Users userSession;
     private Users userSelected;
     private Accounts newAccount;
+    private List<Users> usersAccountsList;
+    private String userAccountSearch;
+    private Users userAccountSelected;
 
     @PostConstruct
     public void init(){
@@ -81,6 +84,7 @@ public class UserBean implements Serializable {
         userService.updateUser(userSelected);
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+        usersList = userService.listUsers(userSession);
     }
     public String updateAccountToUser(){
         log.log(Level.INFO, "updateAccountToUser");
@@ -120,6 +124,11 @@ public class UserBean implements Serializable {
         AccountService accountService = new AccountService();
         return accountService.accountExist("%"+newAccount.getLogin()+"%");
     }
+    public boolean loginExistInUpdate(){
+        log.log(Level.INFO,"call : loginExistInUpdate()");
+        AccountService accountService = new AccountService();
+        return accountService.accountExist("%"+userAccountSelected.getAccountsByIdAccount().getLogin()+"%");
+    }
 
     /**-----------------------------
      * Navigation Pages
@@ -140,6 +149,10 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,"Role list size : "+rolesList.size());
         usersList = userService.listUserWithoutAccount();
         return "userLinkAccount";
+    }
+    public String listUserAccountsPage(){
+        usersAccountsList = userService.listUserWithAccount();
+        return "accountUserList";
     }
 
     /** Page pour lister les utilisateurs
@@ -163,6 +176,9 @@ public class UserBean implements Serializable {
     }
     public void searchUserBarToLinkAccount(){
         usersList = userService.listUserWithoutAccountByName(userSearchText);
+    }
+    public void usersAccountsLoad(){
+        usersAccountsList = userService.listUserWithAccount(userAccountSearch);
     }
 
     /** ------------------
@@ -235,5 +251,28 @@ public class UserBean implements Serializable {
         this.rolesList = rolesList;
     }
 
-//</editor-fold>
+    public List<Users> getUsersAccountsList() {
+        return usersAccountsList;
+    }
+
+    public void setUsersAccountsList(List<Users> usersAccountsList) {
+        this.usersAccountsList = usersAccountsList;
+    }
+
+    public String getUserAccountSearch() {
+        return userAccountSearch;
+    }
+
+    public void setUserAccountSearch(String userAccountSearch) {
+        this.userAccountSearch = userAccountSearch;
+    }
+
+    public Users getUserAccountSelected() {
+        return userAccountSelected;
+    }
+
+    public void setUserAccountSelected(Users userAccountSelected) {
+        this.userAccountSelected = userAccountSelected;
+    }
+    //</editor-fold>
 }
