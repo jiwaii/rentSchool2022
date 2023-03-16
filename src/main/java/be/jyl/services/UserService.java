@@ -98,6 +98,16 @@ public class UserService {
             transaction.commit();
         }
     }
+    public void updatePasswordService(Users user, String newPassword){
+        AccountService accountService = new AccountService();
+        String encodedPass = accountService.hashingPassword(newPassword);
+        user.getAccountsByIdAccount().setPassword(encodedPass);
+        if (!transaction.isActive()){
+            transaction.begin();
+            em.merge(user);
+            transaction.commit();
+        }
+    }
     public void insertAccountToUser(Users user, Accounts accounts){
         if (!transaction.isActive()){
             transaction.begin();

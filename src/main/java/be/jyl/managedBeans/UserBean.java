@@ -28,6 +28,7 @@ public class UserBean implements Serializable {
     private List<Roles> rolesList;
     private String userSearchText;
     private UserService userService = new UserService();
+    private AccountService accountService = new AccountService();
     private List<Cities> citiesList;
     private List<Users> usersList;
     private List<Users> filteredUser;
@@ -37,6 +38,7 @@ public class UserBean implements Serializable {
     private List<Users> usersAccountsList;
     private String userAccountSearch;
     private Users userAccountSelected;
+    private String newPassword;
 
     @PostConstruct
     public void init(){
@@ -86,6 +88,12 @@ public class UserBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
         usersList = userService.listUsers(userSession);
     }
+    public void updatePassword(){
+        userService.updatePasswordService(userAccountSelected, newPassword);
+        PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+        newPassword = "";
+    }
     public String updateAccountToUser(){
         log.log(Level.INFO, "updateAccountToUser");
 
@@ -94,7 +102,9 @@ public class UserBean implements Serializable {
                 && userSelected != null){
 
             userSelected.setResponsibleType(ResponsibleType.staff);
-            //userSelected.setRolesByIdRole();
+            String encordedPassword = userSelected.getAccountsByIdAccount().getPassword();
+            encordedPassword = accountService.hashingPassword(encordedPassword);
+            userSelected.getAccountsByIdAccount().setPassword(encordedPassword);
             userService.insertAccountToUser(userSelected,newAccount);
             userSelected.setAccountsByIdAccount(newAccount);
             log.log(Level.INFO, userSelected.getFirstname()+" with login :"+userSelected.getAccountsByIdAccount().getLogin());
@@ -152,6 +162,7 @@ public class UserBean implements Serializable {
     }
     public String listUserAccountsPage(){
         usersAccountsList = userService.listUserWithAccount();
+
         return "accountUserList";
     }
 
@@ -273,6 +284,14 @@ public class UserBean implements Serializable {
 
     public void setUserAccountSelected(Users userAccountSelected) {
         this.userAccountSelected = userAccountSelected;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
     //</editor-fold>
 }
