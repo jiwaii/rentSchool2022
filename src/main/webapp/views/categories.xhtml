@@ -18,7 +18,7 @@
             <h1>#{bundle['title.manageCategories']}</h1>
                 <div class="card crud">
                 <h:form id="form">
-                    <p:growl id="messages" showDetail="true"/>
+                    <p:growl id="messages" showDetail="false"/>
 
                     <p:dataTable id="dt-categories" widgetVar="dtCategories" var="category" value="#{categoryBean.categories}"
                                  reflow="true" styleClass="table"
@@ -46,9 +46,6 @@
                         </f:facet>
 
 
-                        <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{category.idCategory}">
-                            <h:outputText value="#{category.idCategory}"/>
-                        </p:column>
                         <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{category.categoryName}" filterBy="#{category.categoryName}">
                             <h:outputText value="#{category.categoryName}"/>
                         </p:column>

@@ -17,7 +17,7 @@
                 <h1>#{bundle['title.manageReminders']}</h1>
                 <div class="card crud">
                     <h:form id="form">
-                        <p:growl id="messages" showDetail="true"/>
+                        <p:growl id="messages" showDetail="false"/>
 
                         <p:dataTable id="dt-lateRentals" widgetVar="dtlateRentals" var="lateRentals"
                                      value="#{remindersBean.lateRentalsList}"
@@ -46,10 +46,6 @@
 
                             </f:facet>
 
-
-                            <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{lateRentals.idRental}">
-                                <h:outputText value="#{lateRentals.idRental}"/>
-                            </p:column>
                             <p:column headerText="#{bundle['tableHeader.firstname']}"
                                       sortBy="#{lateRentals.userRent.firstname}"
                                       filterBy="#{lateRentals.userRent.firstname}">
@@ -79,7 +75,7 @@
                             <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
                                 <p:commandButton icon="pi pi-send"
                                                  styleClass="mail-button rounded-button ui-button-success"
-                                                 process="@this" action="#{remindersBean.sendReminderEmail}">
+                                                 process="@this" action="#{remindersBean.sendReminderEmail}" ajax='false'>
                                     <f:setPropertyActionListener value="#{lateRentals}"
                                                                  target="#{remindersBean.selectedRental}"/>
                                 </p:commandButton>

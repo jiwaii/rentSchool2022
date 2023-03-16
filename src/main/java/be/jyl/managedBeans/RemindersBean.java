@@ -41,7 +41,6 @@ public class RemindersBean implements Serializable {
         rentalsService = new RentalsService();
         lateRentalsList = rentalsService.lateRentalsList();
         remindersService = new RemindersService();
-
     }
 
     public long getNumberOfDayLate(java.sql.Date endDate) {

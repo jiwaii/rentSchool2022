@@ -18,7 +18,7 @@
                 <h1>#{bundle['title.manageArticles']}</h1>
                 <div class="card crud">
                     <h:form id="form">
-                        <p:growl id="messages" showDetail="true"/>
+                        <p:growl id="messages" showDetail="false"/>
 
                         <p:dataTable id="dt-articles" widgetVar="dtArticles" var="article"
                                      value="#{articleBean.articles}"
@@ -47,10 +47,6 @@
                                 </div>
                             </f:facet>
 
-
-                            <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{article.idArticle}">
-                                <h:outputText value="#{article.idArticle}"/>
-                            </p:column>
                             <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{article.articleName}"
                                       filterBy="#{article.articleName}">
                                 <h:outputText value="#{article.articleName}"/>
@@ -89,6 +85,7 @@
                         <p:dialog header="#{bundle['header.navbar.articlesDetails']}" showEffect="fade" modal="true"
                                   widgetVar="manageArticleDialog"
                                   responsive="true">
+                            <p:growl id="messages-" showDetail="true"/>
                             <p:outputPanel id="manage-article-content" class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty articleBean.selectedArticle}">
                                     <div class="field">
@@ -114,12 +111,18 @@
                                     <div class="field">
                                         <p:outputLabel for="refSn">#{bundle['tableHeader.refSn']}</p:outputLabel>
                                         <p:inputText id="refSn" value="#{articleBean.selectedArticle.refSn}"
-                                                     required="true"/>
+                                                     required="true" label="Ref">
+                                            <f:validator validatorId="articleRefSnExistValidator" />
+                                            <f:attribute name="idArticle" value="#{articleBean.selectedArticle.idArticle}"/>
+                                            <f:ajax event="keyup" render="refSnMessage refSn messages-" process="@this"/>
+                                        </p:inputText>
                                     </div>
+                                    <p:message id="refSnMessage" for="refSn" display="tooltip"/>
+
                                     <div class="field">
                                         <p:outputLabel for="barcode">#{bundle['tableHeader.barcode']}</p:outputLabel>
                                         <p:inputText id="barcode" value="#{articleBean.selectedArticle.barcode}"
-                                                     required="false"/>
+                                                     required="false" validator="articleBarcodeExistValidator"/>
                                     </div>
                                     <div class="field">
                                         <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>

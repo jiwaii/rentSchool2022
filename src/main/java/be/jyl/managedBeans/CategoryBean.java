@@ -1,3 +1,6 @@
+/**
+ * It's a Java Bean class that manages the categories
+ */
 package be.jyl.managedBeans;
 
 
@@ -19,6 +22,9 @@ import java.util.ResourceBundle;
 
 @Named
 @ViewScoped
+/**
+ * A Java Bean class.
+ */
 public class CategoryBean implements Serializable {
     private Logger log = Logger.getLogger(CategoryBean.class);
     private CategoriesService categoriesService;
@@ -32,11 +38,11 @@ public class CategoryBean implements Serializable {
 
     }
 
+    // Saving the selected category.
     public void save(){
         log.log(Level.INFO,"Save: "+ selectedCategory.getIdCategory());
         if (selectedCategory.getIdCategory()==0) {
             categoriesService.addCategory(selectedCategory);
-            //Langue des facesMessage à rajouter
             NotificationManager.addInfoMessage("notification.categoryAdded");
         } else {
             categoriesService.updateCategory(selectedCategory);
