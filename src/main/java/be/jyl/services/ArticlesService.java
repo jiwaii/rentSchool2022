@@ -1,9 +1,7 @@
 package be.jyl.services;
 
+import be.jyl.entities.*;
 import be.jyl.entities.Articles;
-import be.jyl.entities.Articles;
-import be.jyl.entities.Categories;
-import be.jyl.entities.Cities;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -37,6 +35,10 @@ public class ArticlesService {
         Query query = em.createNamedQuery("articles.findAll", Articles.class);
         return query.getResultList();
     }
+    public boolean isCurrentlyRented(Articles article){
+        Query query = em.createNamedQuery("Article.isCurrentlyRented", ArticlesRentals.class).setParameter("article", article);
+        return (boolean) query.getSingleResult();
+    }
 
     public void addArticle(Articles article) {
         transaction.begin();
@@ -58,8 +60,4 @@ public class ArticlesService {
         em.remove(managedArticle);
     }
 
-    public List<Categories> listCategories(){
-        Query query = em.createNamedQuery("Categories.findAll");
-        return query.getResultList();
-    }
 }

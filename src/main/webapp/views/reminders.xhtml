@@ -8,112 +8,185 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
-  <ui:define name="content">
-    <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
+    <ui:define name="content">
+        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
                   or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
                   or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
 
-      <div class="layout-content">
-        <h1>#{bundle['title.manageReminders']}</h1>
-        <div class="card crud">
-          <h:form id="form">
-            <p:growl id="messages" showDetail="true"/>
+            <div class="layout-content">
+                <h1>#{bundle['title.manageReminders']}</h1>
+                <div class="card crud">
+                    <h:form id="form">
+                        <p:growl id="messages" showDetail="true"/>
 
-            <p:dataTable id="dt-lateRentals" widgetVar="dtlateRentals" var="lateRentals" value="#{remindersBean.lateRentalsList}"
-                         reflow="true" styleClass="table"
-                         rowKey="#{lateRentals.idRental}" paginator="true" rows="5" rowSelectMode="add"
-                         paginatorPosition="bottom">
-              <f:facet name="header">
-                <div class="table-header">
+                        <p:dataTable id="dt-lateRentals" widgetVar="dtlateRentals" var="lateRentals"
+                                     value="#{remindersBean.lateRentalsList}"
+                                     reflow="true" styleClass="table"
+                                     rowKey="#{lateRentals.idRental}" paginator="true" rows="5" rowSelectMode="add"
+                                     paginatorPosition="bottom">
+                            <f:facet name="header">
+                                <div class="table-header">
                                 <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-                        <p:inputText id="globalFilter" onkeyup="PF('dtlateRentals').filter()" placeholder="Search"/>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtlateRentals').filter()"
+                                     placeholder="#{bundle['form.search']}"/>
                     </span>
-                  <p:toolbar>
-                    <p:toolbarGroup align="left"></p:toolbarGroup>
-                    <p:toolbarGroup align="right">
-                      <p:commandButton value="#{bundle['header.navbar.addCategory']}" icon="pi pi-plus"
-                                       actionListener="#{categoryBean.openNew}"
-                                       update=":dialogs:manage-category-content"
-                                       oncomplete="PF('manageCategoryDialog').show()"
-                                       styleClass="ui-button-success" style="margin-right: .5rem">
-                        <p:resetInput target=":dialogs:manage-category-content"/>
-                      </p:commandButton>
-                    </p:toolbarGroup>
-                  </p:toolbar>
+                                    <p:toolbar>
+                                        <p:toolbarGroup align="left"></p:toolbarGroup>
+                                        <p:toolbarGroup align="right">
+                                            <p:commandButton value="#{bundle['button.history']}" icon="pi pi-book"
+                                                             actionListener="#{remindersBean.openHistory}"
+                                                             update=":dialogs-history:reminders-history-content"
+                                                             oncomplete="PF('remindersHistoryDialog').show()"
+                                                             styleClass="ui-button-info" style="margin-right: .5rem">
+                                                <p:resetInput target=":dialogs-history:reminders-history-content"/>
+                                            </p:commandButton>
+                                        </p:toolbarGroup>
+                                    </p:toolbar>
+                                </div>
+
+                            </f:facet>
+
+
+                            <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{lateRentals.idRental}">
+                                <h:outputText value="#{lateRentals.idRental}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.firstname']}"
+                                      sortBy="#{lateRentals.userRent.firstname}"
+                                      filterBy="#{lateRentals.userRent.firstname}">
+                                <h:outputText value="#{lateRentals.userRent.firstname}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.lastname']}"
+                                      sortBy="#{lateRentals.userRent.lastname}"
+                                      filterBy="#{lateRentals.userRent.lastname}">
+                                <h:outputText value="#{lateRentals.userRent.lastname}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.email']}" sortBy="#{lateRentals.userRent.email}"
+                                      filterBy="#{lateRentals.userRent.email}">
+                                <h:outputText value="#{lateRentals.userRent.email}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.articles']}">
+                                <ui:repeat value="#{lateRentals.rentalsArticlesByIdRental}" var="_article">
+                                    <h:outputText
+                                            value="#{_article.articlesByIdArticle.articleName} (#{_article.articlesByIdArticle.categoryByIdCategory.categoryName}) &lt;br /&gt;"
+                                            escape="false"/>
+                                </ui:repeat>
+                            </p:column>
+                            <p:column headerText="#{bundle['tableHeader.daysLate']}" sortBy="#{lateRentals.dateEnd}"
+                                      filterBy="#{lateRentals.dateEnd}">
+                                <h:outputText value="#{remindersBean.getNumberOfDayLate(lateRentals.dateEnd)}"/>
+                            </p:column>
+
+                            <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
+                                <p:commandButton icon="pi pi-send"
+                                                 styleClass="mail-button rounded-button ui-button-success"
+                                                 process="@this" action="#{remindersBean.sendReminderEmail}">
+                                    <f:setPropertyActionListener value="#{lateRentals}"
+                                                                 target="#{remindersBean.selectedRental}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="pi pi-envelope" update=":dialogs:send-message-content"
+                                                 oncomplete="PF('sendMessageDialog').show()"
+                                                 styleClass="message-button rounded-button ui-button-success"
+                                                 process="@this">
+                                    <f:setPropertyActionListener value="#{lateRentals}"
+                                                                 target="#{remindersBean.selectedRental}"/>
+                                </p:commandButton>
+                            </p:column>
+
+
+                        </p:dataTable>
+                    </h:form>
+
+                    <h:form id="dialogs">
+                        <p:dialog header="#{bundle['header.navbar.sendMessage']}" showEffect="fade" modal="true"
+                                  widgetVar="sendMessageDialog"
+                                  responsive="true">
+                            <p:outputPanel id="send-message-content" class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="field">
+                                        <p:outputLabel for="message">#{bundle['tableHeader.message']}</p:outputLabel>
+                                        <p:inputTextarea rows="10" cols="50" counter="display" maxlength="500"
+                                                         counterTemplate="{0} #{bundle['text.charactersRemaining']}"
+                                                         id="message" value="#{remindersBean.message}"
+                                                         required="true"/>
+                                        <h:outputText id="display" class="block"/>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+
+                            <f:facet name="footer">
+                                <p:commandButton value="SEND" icon="pi pi-send"
+                                                 actionListener="#{remindersBean.sendCustomReminderEmail()}"
+                                                 update="send-message-content" process="send-message-content @this"
+                                                 ajax='false'/>
+
+                                <p:commandButton value="Cancel" icon="pi pi-times"
+                                                 onclick="PF('sendMessageDialog').hide()"
+                                                 class="ui-button-secondary" type="button"/>
+                            </f:facet>
+                        </p:dialog>
+                    </h:form>
+                    <h:form id="dialogs-history">
+                        <p:dialog class="history-dialog" header="#{bundle['title.RemindersHistory']}" showEffect="fade" modal="true"
+                                  widgetVar="remindersHistoryDialog"
+                                  responsive="true">
+                            <p:outputPanel id="reminders-history-content" class="ui-fluid">
+                                <p:outputPanel>
+                                    <div class="card crud">
+                                        <p:dataTable id="dt-remindersHistory" widgetVar="dtremindersHistory"
+                                                     var="reminder" value="#{remindersBean.remindersList}"
+                                                     reflow="true" styleClass="table"
+                                                     rowKey="#{reminder.idReminder}" paginator="true" rows="5"
+                                                     rowSelectMode="add"
+                                                     paginatorPosition="bottom">
+                                            <f:facet name="header">
+                                                <div class="table-header">
+                                <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+                        <p:inputText id="globalFilter" onkeyup="PF('dtremindersHistory').filter()"
+                                     placeholder="#{bundle['form.search']}"/>
+                    </span>
+                                                </div>
+
+                                            </f:facet>
+                                            <p:column headerText="#{bundle['tableHeader.borrower']}"
+                                                      sortBy="#{reminder.rentalsByIdRental.userRent.lastname}"
+                                                      filterBy="#{reminder.rentalsByIdRental.userRent.firstname} #{reminder.rentalsByIdRental.userRent.lastname}">
+                                                <h:outputText
+                                                        value="#{reminder.rentalsByIdRental.userRent.lastname} #{reminder.rentalsByIdRental.userRent.firstname} "/>
+                                            </p:column>
+                                            <p:column headerText="#{bundle['tableHeader.rentalNumber']}"
+                                                      sortBy="#{reminder.rentalsByIdRental.idRental}"
+                                                      filterBy="#{reminder.rentalsByIdRental.idRental}">
+                                                <h:outputText value="#{reminder.rentalsByIdRental.idRental}"/>
+                                            </p:column>
+                                            <p:column headerText="#{bundle['tableHeader.sentOn']}"
+                                                      sortBy="#{reminder.reminderDate}">
+                                                <h:outputText value="#{reminder.reminderDate}"/>
+                                            </p:column>
+                                            <p:column headerText="#{bundle['tableHeader.sentBy']}"
+                                                      sortBy="#{reminder.usersByIdUser.lastname}">
+                                                <h:outputText
+                                                        value="#{reminder.usersByIdUser.lastname} #{reminder.usersByIdUser.firstname}"/>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:form>
+
+
                 </div>
-
-              </f:facet>
-
-
-              <p:column headerText="#{bundle['tableHeader.id']}" sortBy="#{lateRentals.idRental}">
-                <h:outputText value="#{lateRentals.idRental}"/>
-              </p:column>
-              <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{lateRentals.userRent.firstname}" filterBy="#{lateRentals.userRent.firstname}">
-                <h:outputText value="#{lateRentals.userRent.firstname}"/>
-              </p:column>
-              <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{lateRentals.userRent.lastname}" filterBy="#{lateRentals.userRent.lastname}">
-                <h:outputText value="#{lateRentals.userRent.lastname}"/>
-              </p:column>
-              <p:column headerText="#{bundle['tableHeader.name']}" sortBy="#{lateRentals.userRent.email}" filterBy="#{lateRentals.userRent.email}">
-                <h:outputText value="#{lateRentals.userRent.email}"/>
-              </p:column>
-              <p:column headerText="articles loués">
-                <ui:repeat value="#{lateRentals.rentalsArticlesByIdRental}" var="_article">
-                  <h:outputText value="#{_article.articlesByIdArticle.articleName} (#{_article.articlesByIdArticle.categoryByIdCategory.categoryName}) &lt;br /&gt;" escape="false"/>
-                </ui:repeat>
-              </p:column>
-              <p:column headerText="nombre de jours en retard" sortBy="#{lateRentals.dateEnd}" filterBy="#{lateRentals.dateEnd}">
-                <h:outputText value="#{remindersBean.getNumberOfDayLate(lateRentals.dateEnd)}"/>
-              </p:column>
-
-              <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
-                <p:commandButton icon="pi pi-envelope" update=":dialogs:manage-category-content"
-                                 oncomplete="PF('manageCategoryDialog').show()"
-                                 styleClass="edit-button rounded-button ui-button-success" process="@this">
-                  <f:setPropertyActionListener value="#{category}"
-                                               target="#{categoryBean.selectedCategory}"/>
-                  <p:resetInput target=":dialogs:manage-category-content"/>
-                </p:commandButton>
-              </p:column>
-
-            </p:dataTable>
-          </h:form>
-
-          <h:form id="dialogs">
-            <p:dialog header="#{bundle['header.navbar.categoriesDetails']}" showEffect="fade" modal="true"
-                      widgetVar="manageCategoryDialog"
-                      responsive="true">
-              <p:outputPanel id="manage-category-content" class="ui-fluid">
-                <p:outputPanel rendered="#{not empty categoryBean.selectedCategory}">
-                  <div class="field">
-                    <p:outputLabel for="name">#{bundle['tableHeader.name']}</p:outputLabel>
-                    <p:inputText id="name" value="#{categoryBean.selectedCategory.categoryName}"
-                                 required="true"/>
-                  </div>
-                </p:outputPanel>
-              </p:outputPanel>
-
-              <f:facet name="footer">
-                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{categoryBean.save}"
-                                 update="manage-category-content" process="manage-category-content @this"
-                                 ajax='false'/>
-                <p:commandButton value="Cancel" icon="pi pi-times"
-                                 onclick="PF('manageCategoryDialog').hide()"
-                                 class="ui-button-secondary" type="button"/>
-              </f:facet>
-            </p:dialog>
-          </h:form>
-        </div>
-      </div>
-    </c:if>
-    <c:if test="#{  userSession.rolesByIdRole.roleName.trim() ne 'direction'
+            </div>
+        </c:if>
+        <c:if test="#{  userSession.rolesByIdRole.roleName.trim() ne 'direction'
                     and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
                     and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
-      <div style="text-align: center">
-        <h1>#{bundle['title.AccessDenied']}</h1>
-        <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px" />
-      </div>
-    </c:if>
-  </ui:define>
+            <div style="text-align: center">
+                <h1>#{bundle['title.AccessDenied']}</h1>
+                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
+            </div>
+        </c:if>
+    </ui:define>
 </ui:composition>
 </html>

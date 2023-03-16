@@ -31,7 +31,7 @@
 
                                 <span class="filter-container ui-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" onkeyup="PF('dtArticles').filter()" placeholder="Search"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtArticles').filter()" placeholder="#{bundle['form.search']}"/>
                                 </span>
                                     <p:toolbar>
                                         <p:toolbarGroup align="right">
@@ -122,11 +122,11 @@
                                                      required="false"/>
                                     </div>
                                     <div class="field">
-                                            <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>
-                                            <p:selectOneRadio id="state" value="#{articleBean.selectedArticle.state}"
-                                                              layout="responsive" columns="2" required="true">
-                                                <f:selectItems value="#{articleBean.statesList}"/>
-                                            </p:selectOneRadio>
+                                        <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>
+                                        <p:selectOneRadio id="state" value="#{articleBean.selectedArticle.state}"
+                                                          layout="responsive" columns="2" required="true" disabled="#{articleBean.isCurrentlyRented()}">
+                                            <f:selectItems value="#{articleBean.statesList}" />
+                                        </p:selectOneRadio>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>

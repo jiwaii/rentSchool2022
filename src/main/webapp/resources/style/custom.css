@@ -112,6 +112,8 @@ input[type=number]::-webkit-inner-spin-button {
     border-radius: 0;
 }
 
+.layout-content .card .
+
 .layout-content .card {
     background: var(--surface-e);
     padding: 0rem 2rem;
@@ -155,6 +157,16 @@ input[type=number]::-webkit-inner-spin-button {
 .crud .edit-button.ui-button {
     margin-right: .5rem
 }
+
+.crud .mail-button.ui-button {
+    margin-right: .5rem
+}
+
+.crud .mail-button.ui-button {
+    margin-right: .5rem
+}
+
+
 
 @media (max-width: 640px) {
     .table > .ui-datatable-tablewrapper > table > thead > tr > th:nth-child(2) .ui-column-title,

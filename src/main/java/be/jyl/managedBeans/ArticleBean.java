@@ -5,6 +5,8 @@ import be.jyl.entities.Articles;
 import be.jyl.entities.Categories;
 import be.jyl.enums.State;
 import be.jyl.services.ArticlesService;
+import be.jyl.services.CategoriesService;
+import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ArticleBean implements Serializable {
     private Logger log = Logger.getLogger(ArticleBean.class);
     private ArticlesService articlesService;
+    private CategoriesService categoriesService;
     private List<Articles> articles;
     private Articles selectedArticle;
     private List<Categories> categoriesList;
@@ -31,18 +34,17 @@ public class ArticleBean implements Serializable {
     @PostConstruct
     public void init() {
         articlesService = new ArticlesService();
+        categoriesService = new CategoriesService();
         articles = articlesService.getAllArticles();
     }
 
     public void save() {
         if (selectedArticle.getIdArticle() == 0) {
             articlesService.addArticle(selectedArticle);
-            //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.articleAdded']"));
+            NotificationManager.addInfoMessage("notification.articleAdded");
         } else {
             articlesService.updateArticle(selectedArticle);
-            //Langue des facesMessage à rajouter
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("#{bundle['notification.articleUpdated']"));
+            NotificationManager.addInfoMessage("notification.articleUpdated");
         }
         //la liste article doit être rechargée
         articles = articlesService.getAllArticles();
@@ -66,7 +68,7 @@ public class ArticleBean implements Serializable {
 
     public void setSelectedArticle(Articles selectedArticle) {
         this.selectedArticle = selectedArticle;
-        categoriesList = articlesService.listCategories();
+        categoriesList = categoriesService.getAllCategories();
     }
 
     public List<Articles> getArticles() {
@@ -77,8 +79,12 @@ public class ArticleBean implements Serializable {
         this.selectedArticle = new Articles();
         //setting the category to don't return null to the view wich cause a problem
         this.selectedArticle.setCategoryByIdCategory(new Categories());
-        categoriesList = articlesService.listCategories();
+        categoriesList = categoriesService.getAllCategories();
         log.log(Level.INFO, "catlist: " + categoriesList);
+    }
+
+    public boolean isCurrentlyRented(){
+        return articlesService.isCurrentlyRented(selectedArticle);
     }
 
     public State[] getStatesList() {

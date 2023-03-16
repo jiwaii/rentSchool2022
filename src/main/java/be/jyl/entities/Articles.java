@@ -16,6 +16,7 @@ import java.util.Objects;
         @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles " +
                 "a WHERE a.idArticle NOT IN (SELECT ar.articlesByIdArticle.idArticle FROM ArticlesRentals ar WHERE ar.dateReturned IS NULL) "+
                 "AND a.state = be.jyl.enums.State.available")
+
 })
 @Entity
 public class Articles {
