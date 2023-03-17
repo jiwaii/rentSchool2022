@@ -50,12 +50,16 @@ public class ArticleBean implements Serializable {
         articles = articlesService.getAllArticles();
         PrimeFaces.current().executeScript("PF('manageArticleDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-articles");
-
     }
 
-    public void delete(Articles article) {
-        articlesService.deleteArticle(article);
-        articles.remove(article);
+    public void delete() {
+        if (articlesService.isArticleUsed(selectedArticle)) {
+            NotificationManager.addErrorMessage("notification.articleDeleteImpossible");
+        } else {
+            articlesService.deleteArticle(selectedArticle);
+            articles.remove(selectedArticle);
+            NotificationManager.addErrorMessage("notification.articleDeleteSucces");
+        }
     }
 
     public void clearSelection() {
@@ -85,6 +89,10 @@ public class ArticleBean implements Serializable {
 
     public boolean isCurrentlyRented(){
         return articlesService.isCurrentlyRented(selectedArticle);
+    }
+
+    public boolean isArticleUsed(Articles article) {
+        return articlesService.isArticleUsed(article);
     }
 
     public State[] getStatesList() {

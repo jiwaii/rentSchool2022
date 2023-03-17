@@ -31,11 +31,13 @@
 
                                 <span class="filter-container ui-input-icon-left">
                                     <i class="pi pi-search"></i>
-                                    <p:inputText id="globalFilter" onkeyup="PF('dtArticles').filter()" placeholder="#{bundle['form.search']}"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('dtArticles').filter()"
+                                                 placeholder="#{bundle['form.search']}"/>
                                 </span>
                                     <p:toolbar>
                                         <p:toolbarGroup align="right">
-                                            <p:commandButton value="#{bundle['header.navbar.addArticle']}" icon="pi pi-plus"
+                                            <p:commandButton value="#{bundle['header.navbar.addArticle']}"
+                                                             icon="pi pi-plus"
                                                              actionListener="#{articleBean.openNew}"
                                                              update=":dialogs:manage-article-content"
                                                              oncomplete="PF('manageArticleDialog').show()"
@@ -70,12 +72,21 @@
                             <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
                                 <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-article-content"
                                                  oncomplete="PF('manageArticleDialog').show()"
-                                                 styleClass="edit-button rounded-button ui-button-success"
+                                                 styleClass="edit-button rounded-button ui-button-info"
                                                  process="@this">
                                     <f:setPropertyActionListener value="#{article}"
                                                                  target="#{articleBean.selectedArticle}"/>
                                     <p:resetInput target=":dialogs:manage-article-content"/>
                                 </p:commandButton>
+                                <p:commandButton class="ui-button-danger rounded-button" icon="pi pi-trash"
+                                                 process="@this"
+                                                 oncomplete="PF('deleteArticleDialog').show()"
+                                                 rendered="#{!articleBean.isArticleUsed(article)}">
+                                    <f:setPropertyActionListener value="#{article}"
+                                                                 target="#{articleBean.selectedArticle}"/>
+                                    <p:resetInput target=":dialogs:manage-article-content"/>
+                                </p:commandButton>
+
                             </p:column>
 
                         </p:dataTable>
@@ -85,7 +96,7 @@
                         <p:dialog header="#{bundle['header.navbar.articlesDetails']}" showEffect="fade" modal="true"
                                   widgetVar="manageArticleDialog"
                                   responsive="true">
-                            <p:growl id="messages-" showDetail="true"/>
+                            <p:growl id="messagesValidator" showDetail="true" sticky="true"/>
                             <p:outputPanel id="manage-article-content" class="ui-fluid">
                                 <p:outputPanel rendered="#{not empty articleBean.selectedArticle}">
                                     <div class="field">
@@ -94,7 +105,8 @@
                                                      required="true"/>
                                     </div>
                                     <div class="field">
-                                        <p:outputLabel for="idCategory">#{bundle['tableHeader.category']}</p:outputLabel>
+                                        <p:outputLabel
+                                                for="idCategory">#{bundle['tableHeader.category']}</p:outputLabel>
 
                                         <p:selectOneMenu id="idCategory" styleClass="form-select form-control"
                                                          value="#{articleBean.selectedArticle.categoryByIdCategory}"
@@ -112,9 +124,11 @@
                                         <p:outputLabel for="refSn">#{bundle['tableHeader.refSn']}</p:outputLabel>
                                         <p:inputText id="refSn" value="#{articleBean.selectedArticle.refSn}"
                                                      required="true" label="Ref">
-                                            <f:validator validatorId="articleRefSnExistValidator" />
-                                            <f:attribute name="idArticle" value="#{articleBean.selectedArticle.idArticle}"/>
-                                            <f:ajax event="keyup" render="refSnMessage refSn messages-" process="@this"/>
+                                            <f:validator validatorId="articleRefSnExistValidator"/>
+                                            <f:attribute name="idArticle"
+                                                         value="#{articleBean.selectedArticle.idArticle}"/>
+                                            <f:ajax event="keyup" render="refSnMessage refSn messagesValidator"
+                                                    process="@this"/>
                                         </p:inputText>
                                     </div>
                                     <p:message id="refSnMessage" for="refSn" display="tooltip"/>
@@ -122,27 +136,47 @@
                                     <div class="field">
                                         <p:outputLabel for="barcode">#{bundle['tableHeader.barcode']}</p:outputLabel>
                                         <p:inputText id="barcode" value="#{articleBean.selectedArticle.barcode}"
-                                                     required="false" validator="articleBarcodeExistValidator"/>
+                                                     required="false" validator="articleBarcodeExistValidator">
+                                            <f:validator validatorId="articleBarcodeExistValidator"/>
+                                            <f:attribute name="idArticle"
+                                                         value="#{articleBean.selectedArticle.idArticle}"/>
+                                            <f:ajax event="keyup" render="barcpdeMessage barcode messagesValidator"
+                                                    process="@this"/>
+                                        </p:inputText>
                                     </div>
+                                    <p:message id="barcodeMessage" for="barcode" display="tooltip"/>
                                     <div class="field">
                                         <p:outputLabel for="state">#{bundle['tableHeader.state']}</p:outputLabel>
                                         <p:selectOneRadio id="state" value="#{articleBean.selectedArticle.state}"
-                                                          layout="responsive" columns="2" required="true" disabled="#{articleBean.isCurrentlyRented()}">
-                                            <f:selectItems value="#{articleBean.statesList}" />
+                                                          layout="responsive" columns="2" required="true"
+                                                          disabled="#{articleBean.isCurrentlyRented()}">
+                                            <f:selectItems value="#{articleBean.statesList}"/>
                                         </p:selectOneRadio>
                                     </div>
                                 </p:outputPanel>
                             </p:outputPanel>
 
                             <f:facet name="footer">
-                                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{articleBean.save}"
+                                <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check" actionListener="#{articleBean.save}"
                                                  update="manage-article-content"
                                                  process="manage-article-content @this"/>
-                                <p:commandButton value="Cancel" icon="pi pi-times"
+                                <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
                                                  onclick="PF('manageArticleDialog').hide()"
                                                  class="ui-button-secondary" type="button"/>
                             </f:facet>
                         </p:dialog>
+                    </h:form>
+                    <h:form>
+                        <p:confirmDialog widgetVar="deleteArticleDialog" showEffect="fade" width="300"
+                                         message="#{bundle['text.validateArticleDelete']}"
+                                         header="#{bundle['text.confirmation']}" severity="warn">
+                            <p:commandButton value="#{bundle['button.yes']}" icon="pi pi-check"
+                                             actionListener="#{articleBean.delete()}"
+                                             process="manage-article-content @this" oncomplete="PF('deleteArticleDialog').hide()" ajax="false"/>
+                            <p:commandButton value="#{bundle['button.no']}" type="button"
+                                             styleClass="ui-button-secondary" icon="pi pi-times"
+                                             onclick="PF('deleteArticleDialog').hide()"/>
+                        </p:confirmDialog>
                     </h:form>
                 </div>
             </div>
@@ -153,7 +187,7 @@
                     and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
             <div style="text-align: center">
                 <h1>#{bundle['title.AccessDenied']}</h1>
-                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px" />
+                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
             </div>
         </c:if>
     </ui:define>

@@ -1,5 +1,6 @@
 package be.jyl.services;
 
+import be.jyl.entities.Articles;
 import be.jyl.entities.Categories;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Logger;
@@ -50,13 +51,21 @@ public class CategoriesService {
 
     public void deleteCategory(Categories category) {
         try{
-            Categories managedCategory = em.find(Categories.class, category.getIdCategory());
-            em.remove(managedCategory);
+            transaction.begin();
+            em.merge(category);
+            em.remove(category);
             transaction.commit();
         }catch (Exception e){
             transaction.rollback();
             log.error("Error while deleting category: " + category.getCategoryName(), e);
         }
+    }
+
+    public boolean isCategoryUsed(Categories category) {
+        Query query = em.createNamedQuery("Category.isUsedInArticles", Long.class)
+                .setParameter("categoryId", category.getIdCategory());
+        Long count = (Long) query.getSingleResult();
+        return count > 0;
     }
 
 }

@@ -4,6 +4,7 @@
 package be.jyl.managedBeans;
 
 
+import be.jyl.entities.Articles;
 import be.jyl.services.CategoriesService;
 import be.jyl.entities.Categories;
 import be.jyl.tools.NotificationManager;
@@ -55,9 +56,18 @@ public class CategoryBean implements Serializable {
         PrimeFaces.current().executeScript("PF('manageCategoryDialog').hide() ajax='false'");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-categories");
     }
-    public void delete(Categories category) {
-        categoriesService.deleteCategory(category);
-        categories.remove(category);
+    public void delete() {
+        if (categoriesService.isCategoryUsed(selectedCategory)) {
+            NotificationManager.addErrorMessage("notification.categoryDeleteImpossible");
+        } else {
+            categoriesService.deleteCategory(selectedCategory);
+            categories.remove(selectedCategory);
+            NotificationManager.addErrorMessage("notification.categoryDeleteSucces");
+        }
+    }
+
+    public boolean isCategoryUsed(Categories category) {
+        return categoriesService.isCategoryUsed(category);
     }
 
     public void clearSelection() {

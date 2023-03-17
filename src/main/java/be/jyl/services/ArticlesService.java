@@ -41,27 +41,25 @@ public class ArticlesService {
 
     }
 
-    public List<Articles> findByRefSn(String refSn){
+    public Articles findByRefSn(String refSn){
         try{
             log.log(Level.INFO,"articlesFindByRefSn()");
             Query query = em.createNamedQuery("articles.findByRefSn")
                     .setParameter("refSn", refSn);
-            log.log(Level.INFO,query.getResultList());
-            return query.getResultList();
+            log.log(Level.INFO,query.getSingleResult());
+            return (Articles) query.getSingleResult();
         }catch (Exception e){
-            log.error("Error while finding article by refSn", e);
             return null;
         }
     }
 
-    public List<Articles> findByBarcode(String barcode){
+    public Articles findByBarcode(String barcode){
         try{
             log.log(Level.INFO,"articlesFindByBarcode()");
             Query query = em.createNamedQuery("articles.findByBarcode")
                     .setParameter("barcode", barcode);
-            return query.getResultList();
+            return (Articles) query.getSingleResult();
         }catch (Exception e){
-            log.error("Error while finding article by barcode", e);
             return null;
         }
     }
@@ -88,15 +86,11 @@ public class ArticlesService {
 
     }
 
-    public boolean existsInRentals(Articles article){
-        try{
-            Query query = em.createNamedQuery("articles.existsInRentals", ArticlesRentals.class).setParameter("article", article);
-            return (boolean) query.getSingleResult();
-        }catch (Exception e){
-            log.error("Error while getting if article is in rentals", e);
-            return false;
-        }
-
+    public boolean isArticleUsed(Articles article) {
+        Query query = em.createNamedQuery("articles.isUsedInArticlesRentals", Long.class)
+                .setParameter("articleId", article.getIdArticle());
+        Long count = (Long) query.getSingleResult();
+        return count > 0;
     }
 
     public void addArticle(Articles article) {
@@ -125,8 +119,9 @@ public class ArticlesService {
 
     public void deleteArticle(Articles article) {
         try{
-            Articles managedArticle = em.find(Articles.class, article.getIdArticle());
-            em.remove(managedArticle);
+            transaction.begin();
+            em.merge(article);
+            em.remove(article);
             transaction.commit();
         }catch (Exception e){
             transaction.rollback();

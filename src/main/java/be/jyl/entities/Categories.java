@@ -11,7 +11,8 @@ import java.util.Objects;
         @NamedQuery(
                 name = "Category.findById",
                 query = "SELECT c FROM Categories c WHERE c.idCategory = :idCategory"
-        )
+        ),
+        @NamedQuery(name = "Category.isUsedInArticles", query = "SELECT COUNT(a) FROM Articles a WHERE a.categoryByIdCategory.idCategory = :categoryId")
 })
 public class Categories {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

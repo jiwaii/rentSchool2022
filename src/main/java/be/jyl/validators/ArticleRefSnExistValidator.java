@@ -30,20 +30,11 @@ public class ArticleRefSnExistValidator implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        Boolean selectedArticleHaveSameId = null;
         String refSn = (String) value;
-        Long selectIdArticle = (Long) component.getAttributes().get("idArticle");
-        List<Articles> articles;
-        articles = articlesService.findByRefSn(refSn);
+        Integer selectIdArticle = (Integer) component.getAttributes().get("idArticle");
+        Articles article = articlesService.findByRefSn(refSn);
 
-        for(Articles article : articles) {
-            if(article.getIdArticle()==selectIdArticle){
-                selectedArticleHaveSameId = true;
-            }
-            else selectedArticleHaveSameId = false;
-        }
-        if(!articles.isEmpty() && !selectedArticleHaveSameId){
-            log.log(Level.INFO,"IN");
+        if(article!=null && selectIdArticle!=article.getIdArticle()){
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", REFSN_EXIST));
         }
 

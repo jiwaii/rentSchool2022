@@ -32,9 +32,6 @@ public class RemindersService {
             Date actualDate = Date.valueOf(LocalDate.now());
             transaction.begin();
             reminder.setReminderDate(actualDate);
-            log.log(Level.INFO, "userid " +reminder.getIdReminder());
-            log.log(Level.INFO, "message " +reminder.getMessage());
-            log.log(Level.INFO, "rentalid " +reminder.getRentalsByIdRental().getIdRental());
             em.persist(reminder);
             transaction.commit();
         }catch (Exception e){
