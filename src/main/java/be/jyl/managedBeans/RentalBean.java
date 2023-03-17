@@ -9,6 +9,7 @@ import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.UserService;
 import be.jyl.tools.DateConverter;
+import com.mysql.cj.xdevapi.CreateIndexParams;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
@@ -25,7 +27,7 @@ import java.text.ParseException;
 import java.util.*;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
@@ -179,12 +181,15 @@ public class RentalBean implements Serializable {
         }
 
     }
-//    public String deleteRental(){
-//        rentalsService.removeRental(rentalSelected);
-//        rentalsList = rentalsService.rentalsList();
-//        articlesList = articlesService.articlesAvailableList();
-//        return "index.xhtml";
-//    }
+    public String goIndex(){
+        rentalsList = rentalsService.currentRentalsList();
+        for (Rentals r:rentalsList
+             ) {
+           log.log(Level.INFO,r.getUserRent().getFirstname()+
+                   "  "+r.getUserRent().getLastname());
+        }
+        return "index.xhtml";
+    }
     public String endRental(){
         //rentalsService.removeRental(rentalSelected);
         rentalsService.endRental(rentalSelected);

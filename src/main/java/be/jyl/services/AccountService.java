@@ -9,6 +9,10 @@ import org.apache.log4j.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class AccountService {
@@ -50,5 +54,17 @@ public class AccountService {
         else {
             return true;
         }
+    }
+    public String hashingPassword(String rawPassword){
+        String encoded;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(rawPassword.getBytes(StandardCharsets.UTF_8));
+            encoded = DatatypeConverter.printHexBinary(hash);
+            log.log(Level.INFO,"Password encoded is : "+encoded);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return encoded;
     }
 }

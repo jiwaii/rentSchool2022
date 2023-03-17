@@ -20,7 +20,11 @@ import java.util.Objects;
 
         @NamedQuery(name = "User.findAllNoAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null"),
         @NamedQuery(name = "User.findWhereNoAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null " +
-                "AND (u.firstname like :pFirstname or u.lastname like :pLastname)")
+                "AND (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+        @NamedQuery(name = "User.findWithAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount != null "),
+        @NamedQuery(name = "User.findWithAccountWhereName", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount != null " +
+                "AND (u.firstname like :pName or u.lastname like :pName or u.accountsByIdAccount.login like :pName)")
+
 
 
 
