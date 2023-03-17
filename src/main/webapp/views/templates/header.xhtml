@@ -30,20 +30,20 @@
 
                            </h:form>
                         </li>
-                        <li class="nav-item active">
-                            <h:link class="nav-link active" outcome="articles.xhtml" value="Articles"/>
+                        <li class="nav-item">
+                            <h:link class="nav-link" outcome="articles.xhtml" value="#{bundle['header.navbar.articles']}"/>
                         </li>
                         <li class="nav-item active">
-                            <h:link class="nav-link active" outcome="categories.xhtml" value="Catégories"/>
+                            <h:link class="nav-link" outcome="categories.xhtml" value="#{bundle['header.navbar.categories']}"/>
                         </li>
                         <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
                     or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
                     or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
                             <li class="nav-item active">
-                                <h:link class="nav-link active" outcome="rentalCreation.xhtml" value="#{bundle['header.navbar.makeLocation']}"/>
+                                <h:link class="nav-link" outcome="rentalCreation.xhtml" value="#{bundle['header.navbar.makeLocation']}"/>
                             </li>
                             <li class="nav-item active">
-                                <h:link class="nav-link active" outcome="reminders.xhtml" value="Rappel"/>
+                                <h:link class="nav-link" outcome="reminders.xhtml" value="#{bundle['header.navbar.reminders']}"/>
                             </li>
                             <li class="nav-item active">
                                 <h:form>
