@@ -117,9 +117,9 @@ public class UserBean implements Serializable {
                 && userSelected != null){
 
             userSelected.setResponsibleType(ResponsibleType.staff);
-            String encordedPassword = userSelected.getAccountsByIdAccount().getPassword();
+            String encordedPassword = newAccount.getPassword();
             encordedPassword = accountService.hashingPassword(encordedPassword);
-            userSelected.getAccountsByIdAccount().setPassword(encordedPassword);
+            newAccount.setPassword(encordedPassword);
             userService.insertAccountToUser(userSelected,newAccount);
             userSelected.setAccountsByIdAccount(newAccount);
             log.log(Level.INFO, userSelected.getFirstname()+" with login :"+userSelected.getAccountsByIdAccount().getLogin());

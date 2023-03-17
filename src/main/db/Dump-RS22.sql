@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 13 mars 2023 à 18:57
+-- Généré le : ven. 17 mars 2023 à 22:02
 -- Version du serveur : 8.0.31
 -- Version de PHP : 8.0.26
 
@@ -34,17 +34,18 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_account`),
   UNIQUE KEY `id_account` (`id_account`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `accounts`
 --
 
 INSERT INTO `accounts` (`id_account`, `login`, `password`) VALUES
-(1, 'jiwaii', 'test123'),
-(2, 'admin', 'admin'),
-(3, 'secretariat01', 'secretariat'),
-(9, 'gimli', 'gimli');
+(1, 'jiwaii', '576000F6C5019C254E269A3401D18F4F74E1391F66503DC47A6C55DA3BC55D83'),
+(2, 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918'),
+(3, 'secretariat01', 'D06C9F4E882B5525D3AE14ABE87C60ADE605C9F8FFBDF34A1EFB54D01F6BAEC7'),
+(9, 'gimli', '54AF2A2960E582263C45971CDD40DA4AE31EDE1DB5395629D910F056479DE12D'),
+(10, 'dorju', 'test123');
 
 -- --------------------------------------------------------
 
@@ -59,9 +60,11 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `articleName` varchar(100) NOT NULL,
   `ref_sn` varchar(100) DEFAULT NULL,
   `barcode` varchar(100) DEFAULT NULL,
-  `state` enum('available','rental','disabled','lost') NOT NULL,
+  `state` enum('available','disabled','lost') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_article`),
   UNIQUE KEY `id_article` (`id_article`),
+  UNIQUE KEY `ref_sn` (`ref_sn`),
+  UNIQUE KEY `barcode` (`barcode`),
   KEY `Articles_FK` (`id_category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -70,10 +73,10 @@ CREATE TABLE IF NOT EXISTS `articles` (
 --
 
 INSERT INTO `articles` (`id_article`, `id_category`, `articleName`, `ref_sn`, `barcode`, `state`) VALUES
-(1, 1, 'hp probook 445 G7', 'C7RJ', NULL, 'rental'),
+(1, 1, 'hp probook 445 G7', 'C7RJ', NULL, 'available'),
 (2, 1, 'HP Probook G7', '4DE7', NULL, 'available'),
-(3, 1, 'Projecteur Epson', '', NULL, 'rental'),
-(4, 4, 'Tp-Link Borne Wifi', 'WF0909123123', '', 'available'),
+(3, 1, 'Projecteur Epson', 'PE12-02', NULL, 'available'),
+(4, 4, 'Tp-Link Borne Wifi', 'WF0909123123', NULL, 'available'),
 (5, 4, 'TP-Link 423', '586HH', '000220202', 'available');
 
 -- --------------------------------------------------------
@@ -93,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `articles_rentals` (
   UNIQUE KEY `id_Articles_Rentals` (`id_Articles_Rentals`),
   KEY `Articles_Rentals_FKRental` (`id_rental`),
   KEY `Articles_Rentals_FK` (`id_article`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `articles_rentals`
@@ -102,7 +105,8 @@ CREATE TABLE IF NOT EXISTS `articles_rentals` (
 INSERT INTO `articles_rentals` (`id_article`, `id_rental`, `qty`, `id_Articles_Rentals`, `dateReturned`) VALUES
 (3, 39, 1, 37, '2023-03-12'),
 (1, 43, 1, 41, NULL),
-(4, 44, 1, 42, NULL);
+(4, 44, 1, 42, NULL),
+(5, 45, 1, 43, '2023-03-17');
 
 -- --------------------------------------------------------
 
@@ -116,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `categoryName` varchar(100) NOT NULL,
   PRIMARY KEY (`id_category`),
   UNIQUE KEY `id_category` (`id_category`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `categories`
@@ -126,7 +130,8 @@ INSERT INTO `categories` (`id_category`, `categoryName`) VALUES
 (1, 'ordinateur portable'),
 (2, 'câble'),
 (3, 'projecteur video'),
-(4, 'Borne Wifi');
+(4, 'Borne Wifi'),
+(5, 'TROL');
 
 -- --------------------------------------------------------
 
@@ -2965,7 +2970,7 @@ CREATE TABLE IF NOT EXISTS `reminders` (
   `id_user` int NOT NULL,
   `id_rental` int NOT NULL,
   `reminderDate` date NOT NULL,
-  `message` varchar(250) NOT NULL,
+  `message` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id_reminder`),
   UNIQUE KEY `id_reminder` (`id_reminder`),
   KEY `Reminders_FK` (`id_user`),
@@ -2989,7 +2994,7 @@ CREATE TABLE IF NOT EXISTS `rentals` (
   UNIQUE KEY `id_rental` (`id_rental`),
   KEY `fk_userRent_idx` (`id_userRent`),
   KEY `fk_user_idx` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `rentals`
@@ -2998,7 +3003,8 @@ CREATE TABLE IF NOT EXISTS `rentals` (
 INSERT INTO `rentals` (`id_rental`, `id_user`, `dateBegin`, `dateEnd`, `id_userRent`) VALUES
 (39, 4, '2023-03-11', '2023-03-30', 17),
 (43, 4, '2023-03-11', '2023-03-03', 16),
-(44, 4, '2023-03-13', '2023-03-31', 12);
+(44, 4, '2023-03-13', '2023-03-31', 12),
+(45, 4, '2023-03-14', '2023-03-31', 17);
 
 -- --------------------------------------------------------
 
@@ -3073,7 +3079,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `fk_Accounts_idx` (`id_account`),
   KEY `fk_Roles_idx` (`id_role`),
   KEY `Users_FK` (`id_city`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`
@@ -3082,14 +3088,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id_user`, `id_role`, `address`, `email`, `responsibleType`, `firstname`, `lastname`, `barcode`, `id_city`, `id_account`) VALUES
 (2, 4, 'rue des admins', 'jeanyves.laurent@promsocatc.net', 'staff', 'jean-yves', 'laurent', 'IS00001', 220, 1),
 (4, 1, '', '', 'staff', 'admin', 'root', 'IS00000', 220, 2),
-(10, 5, 'rue des dudes', 'john.due@atc.be', 'student', 'John', 'Due', NULL, 220, NULL),
 (11, 3, '42, rue des écluses', 'secretariat01@email.be', 'staff', 'Secrétaire', '01', NULL, 220, 3),
 (12, 5, 'Chaussée du mordor 33', 'gandalf.legris@email.be', 'student', 'Gandalf', 'Le Gris', NULL, 293, NULL),
-(15, 5, 'place d\'Erebor 62', 'gimli.deglóin@email.be', 'staff', 'Gimli', 'de glóin', NULL, 220, 9),
-(16, 5, 'rue de la comté 12', 'frodon.Sacquet@email.be', 'student', 'Frodon', 'Sacquet', NULL, 220, NULL),
-(17, 5, 'place de Minas Tirith 2', 'Boromir@email.be', 'teacher', 'Boromir', 'De Denethor', NULL, 293, NULL),
-(33, 5, 'testaddresse', 'testd@jj.be', 'student', 'Julien', 'Doré', NULL, 220, NULL),
-(39, 5, '34 rue des fous', 'totot@hsh.be', 'student', 'toto', 'malin', NULL, 610, NULL);
+(15, 4, 'place d\'Erebor 62', 'gimli.degloin@email.be', 'staff', 'Gimli', 'de glóin', NULL, 220, 9),
+(16, 5, 'rue de la comté 12', 'frodon.Sacquet@email.be', 'student', 'frodon', 'Sacquet', NULL, 220, NULL),
+(17, 5, 'place de Minas Tirith 2', 'Boromire@email.be', 'teacher', 'Boromir', 'De Denethor', NULL, 293, NULL),
+(33, 5, '99 , Rue de l\'Or', 'DoreJu@mail.be', 'student', 'Julien', 'Doré', NULL, 220, 10);
 
 --
 -- Contraintes pour les tables déchargées

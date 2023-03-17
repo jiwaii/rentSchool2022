@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:p="http://primefaces.org/ui">
+>
 <f:view>
     <body>
     <ui:composition>
@@ -25,29 +25,38 @@
                     or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
                     or userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'}">
                         <li class="nav-item active">
-                           <h:form>
-                            <h:commandLink class="nav-link" action="#{rentalBean.goIndex}">#{bundle['header.navbar.currentLocationList']}</h:commandLink>
+                            <h:form>
+                                <h:commandLink class="nav-link"
+                                               action="#{rentalBean.goIndex}">#{bundle['header.navbar.currentLocationList']}</h:commandLink>
 
-                           </h:form>
+                            </h:form>
                         </li>
-                        <li class="nav-item">
-                            <h:link class="nav-link" outcome="articles.xhtml" value="#{bundle['header.navbar.articles']}"/>
-                        </li>
-                        <li class="nav-item active">
-                            <h:link class="nav-link" outcome="categories.xhtml" value="#{bundle['header.navbar.categories']}"/>
-                        </li>
+                        <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                            <li class="nav-item">
+                                <h:link class="nav-link" outcome="articles.xhtml"
+                                        value="#{bundle['header.navbar.articles']}"/>
+                            </li>
+                            <li class="nav-item active">
+                                <h:link class="nav-link" outcome="categories.xhtml"
+                                        value="#{bundle['header.navbar.categories']}"/>
+                            </li>
+                        </c:if>
                         <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
                     or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
                     or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
                             <li class="nav-item active">
-                                <h:link class="nav-link" outcome="rentalCreation.xhtml" value="#{bundle['header.navbar.makeLocation']}"/>
+                                <h:link class="nav-link" outcome="rentalCreation.xhtml"
+                                        value="#{bundle['header.navbar.makeLocation']}"/>
                             </li>
                             <li class="nav-item active">
-                                <h:link class="nav-link" outcome="reminders.xhtml" value="#{bundle['header.navbar.reminders']}"/>
+                                <h:link class="nav-link" outcome="reminders.xhtml"
+                                        value="#{bundle['header.navbar.reminders']}"/>
                             </li>
                             <li class="nav-item active">
                                 <h:form>
-                                    <h:commandLink class="nav-link" action="#{userBean.listUserPage()}" value="#{bundle['header.navbar.users']}">
+                                    <h:commandLink class="nav-link" action="#{userBean.listUserPage()}"
+                                                   value="#{bundle['header.navbar.users']}">
                                     </h:commandLink>
                                 </h:form>
                             </li>
@@ -61,14 +70,20 @@
                     or userSession.rolesByIdRole.roleName.trim() eq 'direction'
                     or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
                     or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
-                    <h:outputText styleClass="navbar-brand" value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
+                    <h:outputText styleClass="navbar-brand"
+                                  value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
+                </c:if>
+                <c:if test="#{userSession!=null}">
                     <h:form styleClass="form-inline">
-                        <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                        <h:commandButton value="#{bundle['header.logout']}" styleClass="btn my-2 my-sm-0" type="submit"
+                                         action="#{userConnectionBean.disconnect}"/>
                     </h:form>
                 </c:if>
+
                 <c:if test="#{userSession == null }">
                     <h:form styleClass="form-inline">
-                        <h:commandButton value="Aller à la page de connexion" styleClass="btn my-2 my-sm-0" type="submit" action="#{userConnectionBean.disconnect}"/>
+                        <h:commandButton value="Aller à la page de connexion" styleClass="btn my-2 my-sm-0"
+                                         type="submit" action="#{userConnectionBean.disconnect}"/>
                     </h:form>
                 </c:if>
                 <h:form>
