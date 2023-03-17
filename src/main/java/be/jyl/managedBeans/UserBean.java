@@ -4,6 +4,7 @@ import be.jyl.entities.*;
 import be.jyl.enums.ResponsibleType;
 import be.jyl.services.AccountService;
 import be.jyl.services.UserService;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -19,6 +20,8 @@ import java.util.Collections;
 import java.util.EventListener;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Named
 @SessionScoped
@@ -81,12 +84,24 @@ public class UserBean implements Serializable {
      * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
      * @return list Users
      */
-    public void update(){
+    public String update(){
         log.log(Level.INFO,"update()");
-        userService.updateUser(userSelected);
-        PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+        Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        Matcher matcher = pattern.matcher(userSelected.getEmail());
+        log.log(Level.INFO,matcher.matches());
+        if (matcher.matches()){
+            userService.updateUser(userSelected);
+            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+            usersList = userService.listUsers(userSession);
+        }
+        else {
+            PrimeFaces.current().ajax().update("form:messages", "");
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
+        }
         usersList = userService.listUsers(userSession);
+        return "usersList";
+
     }
     public void updatePassword(){
         userService.updatePasswordService(userAccountSelected, newPassword);

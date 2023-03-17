@@ -16,7 +16,7 @@
                     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center-group-item">
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                                <div class="card-header py-3">Locations en cours</div>
+                                <div class="card-header py-3">#{bundle['tableHeader.currentRental']}</div>
                                 <div class="card-body">
                                     #{rentalBean.rentalsList.size()}
                                 </div>
@@ -24,7 +24,7 @@
                         </div>
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-success">
-                                <div class="card-header py-3 border-primary">matériels disponibles</div>
+                                <div class="card-header py-3 border-primary">#{bundle["tableHeader.hardwareAvailable"]}</div>
                                 <div class="card-body">
                                     #{rentalBean.articlesList.size()}
                                 </div>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-danger ">
-                                <div class="card-header py-3">Retard(s)</div>
+                                <div class="card-header py-3">#{bundle['tableHeader.delays']}</div>
                                 <div class="card-body">
                                     #{remindersBean.lateRentalsList.size()}
                                 </div>
