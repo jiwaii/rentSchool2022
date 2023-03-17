@@ -5,17 +5,15 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
+@NamedQueries(value = {
+        @NamedQuery(name = "Reminders.findAll",query = "select r From Reminders r order by r.idReminder DESC")
+})
+
 public class Reminders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_reminder", nullable = false)
     private int idReminder;
-    @Basic
-    @Column(name = "id_user", nullable = false)
-    private int idUser;
-    @Basic
-    @Column(name = "id_rental", nullable = false)
-    private int idRental;
     @Basic
     @Column(name = "reminderDate", nullable = false)
     private Date reminderDate;
@@ -23,10 +21,10 @@ public class Reminders {
     @Column(name = "message", nullable = false, length = 250)
     private String message;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_user", referencedColumnName = "id_user")
+    @JoinColumn(name = "id_user")
     private Users usersByIdUser;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_rental", referencedColumnName = "id_rental")
+    @JoinColumn(name = "id_rental")
     private Rentals rentalsByIdRental;
 
     public int getIdReminder() {
@@ -35,22 +33,6 @@ public class Reminders {
 
     public void setIdReminder(int idReminder) {
         this.idReminder = idReminder;
-    }
-
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    public int getIdRental() {
-        return idRental;
-    }
-
-    public void setIdRental(int idRental) {
-        this.idRental = idRental;
     }
 
     public Date getReminderDate() {
@@ -74,12 +56,12 @@ public class Reminders {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reminders reminders = (Reminders) o;
-        return idReminder == reminders.idReminder && idUser == reminders.idUser && idRental == reminders.idRental && Objects.equals(reminderDate, reminders.reminderDate) && Objects.equals(message, reminders.message);
+        return idReminder == reminders.idReminder && usersByIdUser.getIdUser() == usersByIdUser.getIdUser() && rentalsByIdRental.getIdRental() == rentalsByIdRental.getIdRental() && Objects.equals(reminderDate, reminders.reminderDate) && Objects.equals(message, reminders.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idReminder, idUser, idRental, reminderDate, message);
+        return Objects.hash(idReminder, usersByIdUser, rentalsByIdRental, reminderDate, message);
     }
 
     public Users getUsersByIdUser() {

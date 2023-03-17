@@ -6,59 +6,196 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:c="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/mainPage.xhtml">
    <ui:define name="content">
       <f:view>
-      <div class="container py-3">
-         <h2 class="h2">#{bundle['header.navbar.users']}</h2>
-         <div class="row">
-            <div class="col col-lg-9">
-               <!-- SEARCH BAR in TABLE USER -->
-               <h:form id="userSearch">
-                  <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
-                     <f:ajax event="keyup"
-                             render="usersTable"
-                             listener="#{userBean.searchUserBar}"/>
-                  </h:inputText>
-               </h:form>
-               <!-- #TABLE USERS -->
-               <h:dataTable id="usersTable" value="#{userBean.usersList}" var="user" styleClass="table table-striped table-hover">
-                  <h:column>
-                     <f:facet name="header">#{bundle['tableHeader.lastname']} </f:facet>
-                     #{user.lastname}
-                  </h:column>
-                  <h:column>
-                     <f:facet name="header">#{bundle['tableHeader.firstname']} </f:facet>
-                     #{user.firstname}
-                  </h:column>
-                  <h:column>
-                     <f:facet name="header">Email</f:facet>
-                     #{user.email}
-                  </h:column>
-                  <h:column>
-                     <f:facet name="header">Type</f:facet>
-                     #{user.responsibleType}
-                  </h:column>
-<!--                  <h:column rendered="#{empty userSession.rolesByIdRole.roleName eq 'secretariat'}">-->
-                  <h:column>
-                  <f:facet name="header">role</f:facet>
-                     #{user.rolesByIdRole.roleName}
-                  </h:column>
-                  <h:column>
-                     <f:facet name="header">Option</f:facet>
-                  </h:column>
-               </h:dataTable>
+         <p:messages closable="true" showDetail="true"/>
+
+         <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+
+            <div class="container py-3">
+               <h1 class="h2">#{bundle['header.navbar.users']}</h1>
+               <div class="card crud">
+                  <h:form id="form">
+                     <p:growl id="messages" showDetail="true"/>
+                     <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
+                        <f:ajax event="keyup"
+                                render="dt-users"
+                                listener="#{userBean.searchUserBar}"/>
+                     </h:inputText>
+                     <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
+                                  value="#{userBean.usersList}"
+                                  filteredValue="#{userBean.filteredUser}"
+                                  reflow="true" paginator="true" paginatorPosition="bottom"
+                                  rowKey="#{user.idUser}" rows="5" rowSelectMode="add"
+                                  styleClass="table table-striped table-hover">
+                        <f:facet name="header">
+                           <div class="table-header">
+                              <p:toolbar>
+                                 <p:toolbarGroup align="right">
+                                    <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
+                                                     actionListener="#{userBean.openNewUser()}"
+                                                     update=":dialogs:manage-user-content"
+                                                     oncomplete="PF('manageUserDialog').show()"
+                                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                                       <p:resetInput target=":dialogs:manage-user-content"/>
+                                    </p:commandButton>
+                                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
+                                                        action="#{userBean.addAccountToUserPage()}"
+                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
+                                       </p:commandButton>
+                                       <p:commandButton value="Comptes" icon="pi pi-plus"
+                                                        action="#{userBean.listUserAccountsPage()}"
+                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
+                                       </p:commandButton>
+                                    </c:if>
+                                 </p:toolbarGroup>
+                              </p:toolbar>
+                           </div>
+                        </f:facet>
+
+                        //COLUMN
+                        <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{user.lastname}">
+                           <h:outputText value="#{user.lastname}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{user.firstname}"
+                                  filterBy="#{user.firstname}">
+                           <h:outputText value="#{user.firstname}"/>
+                        </p:column>
+                        <p:column headerText="E-mail" sortBy="#{user.email}"
+                                  filterBy="#{user.email}">
+                           <h:outputText value="#{user.email}"/>
+                        </p:column>
+                        <p:column headerText="Type" sortBy="#{user.responsibleType}"
+                                  filterBy="#{user.responsibleType}">
+                           <h:outputText value="#{user.responsibleType}"/>
+                        </p:column>
+                        <p:column headerText="Role" sortBy="#{user.rolesByIdRole.roleName}"
+                                  filterBy="#{user.rolesByIdRole.roleName}">
+                           <h:outputText value="#{user.rolesByIdRole.roleName}"/>
+                        </p:column>
+                        <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
+                        <!--                               filterBy="#{user.rolesByIdRole.roleName}">-->
+                        <!--                        <h:outputText value="#{user.rolesByIdRole.roleName}"/>-->
+                        <!--                     </p:column>-->
+                        <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
+                           <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
+                                            oncomplete="PF('manageUserDialog').show()"
+                                            styleClass="edit-button rounded-button ui-button-primary"
+                                            process="@this">
+                              <f:setPropertyActionListener value="#{user}"
+                                                           target="#{userBean.userSelected}"/>
+                              <p:resetInput target=":dialogs:manage-user-content"/>
+                           </p:commandButton>
+
+                        </p:column>
+
+                     </p:dataTable>
+                  </h:form>
+                  <h:form id="dialogs">
+                     <p:dialog header="#{bundle['title.sheet']}" showEffect="fade" modal="true"
+                               widgetVar="manageUserDialog"
+                               responsive="true">
+
+                        <p:outputPanel id="manage-user-content" class="ui-fluid">
+                           <p:outputPanel rendered="#{not empty userBean.userSelected}">
+                              <div class="field">
+                                 <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
+                                 <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+                                 </p:inputText>
+                              </div>
+
+                              <div class="field">
+                                 <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
+                                 <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+                                 </p:inputText>
+                              </div>
+                              <div class="field">
+                                 <p:outputLabel for="email">E-mail</p:outputLabel>
+                                 <p:inputText id="email" value="#{userBean.userSelected.email}"
+                                              required="false"
+                                              validatorMessage="email incorecte">
+                                    <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
+                                 </p:inputText>
+                              </div>
+                              <div class="field">
+                                 <p:outputLabel for="adress">Addresse</p:outputLabel>
+                                 <p:inputText id="adress" value="#{userBean.userSelected.address}"
+                                              required="true">
+                                    <f:validateLength for="lastname" minimum="4"/>
+                                 </p:inputText>
+                              </div>
+                              <div class="field">
+                                 <p:outputLabel for="city">Ville :</p:outputLabel>
+                                 <p:selectOneMenu id="city" styleClass="form-select form-control"
+                                                  value="#{userBean.userSelected.citiesByIdCity}"
+                                                  converter="selectOneMenuConverter">
+                                    <p:ajax update="@this" process="@this"/>
+                                    <f:selectItems value="#{userBean.citiesList}"
+                                                   var="c"
+                                                   itemLabel="#{c.cityName} - #{c.postalCode}"
+                                                   itemValue="#{c}">
+                                    </f:selectItems>
+                                 </p:selectOneMenu>
+                              </div>
+                              <div class="field">
+                                 <p:importEnum type="be.jyl.enums.ResponsibleType"/>
+                                 <p:outputLabel for="responsibleTypeDropdown" value="Responsible type :"/><br/>
+                                 <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.userSelected.responsibleType}">
+                                    <f:selectItems value="#{ResponsibleType.ALL_VALUES}"
+                                                   itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
+                                 </p:selectOneMenu>
+                              </div>
+                              <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                                 <div class="field">
+                                    <p:outputLabel for="responsibleTypeDropdown" value="Role :"/><br/>
+                                    <p:selectOneMenu id="idRole" styleClass="form-select form-control"
+                                                     value="#{userBean.userSelected.rolesByIdRole}"
+                                                     converter="selectOneMenuConverter">
+                                       <p:ajax update="@this" process="@this"/>
+                                       <f:selectItems value="#{userBean.rolesList}"
+                                                      var="role"
+                                                      itemLabel="#{role.roleName}"
+                                                      itemValue="#{role}">
+                                       </f:selectItems>
+                                    </p:selectOneMenu>
+                                 </div>
+                              </c:if>
+                           </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                           <p:commandButton value="Save" icon="pi pi-check" action="#{userBean.update}"
+                                            update="manage-user-content"
+                                            process="manage-user-content @this"/>
+                           <p:commandButton value="Cancel" icon="pi pi-times"
+                                            onclick="PF('manageUserDialog').hide()"
+                                            class="ui-button-secondary" type="button"/>
+                        </f:facet>
+                     </p:dialog>
+                  </h:form>
+               </div>
             </div>
-            <div class="col">
-               <h:form>
-                  <h:commandButton styleClass="btn btn-success" action="#{userBean.addUserPage()}" value="#{bundle['header.navbar.addUser']}"/>
-               </h:form>
+         </c:if>
+         <c:if test="#{userSession.rolesByIdRole.roleName.trim() ne 'direction'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+            <div style="text-align: center">
+               <h1>#{bundle['title.AccessDenied']}</h1>
+               <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
             </div>
-         </div>
-      </div>
+         </c:if>
+
       </f:view>
    </ui:define>
 </ui:composition>

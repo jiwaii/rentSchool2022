@@ -13,8 +13,12 @@ import java.util.Objects;
                 "WHERE (a.articleName like :pArticleSearch OR a.barcode like :pArticleSearch OR a.refSn like :pArticleSearch) " +
                 "AND a.state = be.jyl.enums.State.available "),
         //Retourne les articles qui ne sont pas en location basé sur la date de dateRetour de articleRental
-        @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles  a " +
-                "JOIN a.articlesRentalsByIdArticle ar WHERE ar.dateReturned != null")
+        @NamedQuery(name = "articles.availableBasedOnDateReturn", query = "SELECT a FROM Articles " +
+                "a WHERE a.idArticle NOT IN (SELECT ar.articlesByIdArticle.idArticle FROM ArticlesRentals ar WHERE ar.dateReturned IS NULL) "+
+                "AND a.state = be.jyl.enums.State.available"),
+        @NamedQuery(name="articles.findByRefSn", query="SELECT a FROM Articles a WHERE a.refSn = :refSn"),
+        @NamedQuery(name="articles.findByBarcode", query="SELECT a FROM Articles a WHERE a.barcode = :barcode"),
+        @NamedQuery(name = "articles.isUsedInArticlesRentals", query = "SELECT COUNT(ar) FROM ArticlesRentals ar WHERE ar.articlesByIdArticle.idArticle = :articleId")
 })
 @Entity
 public class Articles {
@@ -26,7 +30,7 @@ public class Articles {
     @Column(name = "articleName", nullable = false, length = 100)
     private String articleName;
     @Basic
-    @Column(name = "ref_sn", nullable = true, length = 100)
+    @Column(name = "ref_sn", nullable = false, length = 100)
     private String refSn;
     @Basic
     @Column(name = "barcode", nullable = true, length = 100)
@@ -81,6 +85,10 @@ public class Articles {
         this.state = state;
     }
 
+    public boolean isInArticlesRentals() {
+        return !this.articlesRentalsByIdArticle.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,5 +116,12 @@ public class Articles {
 
     public void setArticlesRentalsByIdArticle(Collection<ArticlesRentals> articlesRentalsByIdArticle) {
         this.articlesRentalsByIdArticle = articlesRentalsByIdArticle;
+    }
+    @PrePersist
+    @PreUpdate
+    private void validate() {
+        if (barcode != null && barcode.trim().isEmpty()) {
+            barcode = null;
+        }
     }
 }

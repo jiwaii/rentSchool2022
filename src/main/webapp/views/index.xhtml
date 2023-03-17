@@ -5,9 +5,15 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
+        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
+                    or userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'}">
         <!--       <h:outputText value="#{user.firstname}"/>-->
         <div class="p-3">
             <div class="row justify-content-md-center">
@@ -15,7 +21,7 @@
                     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center-group-item">
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-primary">
-                                <div class="card-header py-3">Locations en cours</div>
+                                <div class="card-header py-3">#{bundle['tableHeader.currentRental']}</div>
                                 <div class="card-body">
                                     #{rentalBean.rentalsList.size()}
                                 </div>
@@ -23,7 +29,7 @@
                         </div>
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-success">
-                                <div class="card-header py-3 border-primary">matériels disponibles</div>
+                                <div class="card-header py-3 border-primary">#{bundle["tableHeader.hardwareAvailable"]}</div>
                                 <div class="card-body">
                                     #{rentalBean.articlesList.size()}
                                 </div>
@@ -31,9 +37,9 @@
                         </div>
                         <div class="col text-center">
                             <div class="card mb-4 rounded-3 shadow-sm border-danger ">
-                                <div class="card-header py-3">Retard(s)</div>
+                                <div class="card-header py-3">#{bundle['tableHeader.delays']}</div>
                                 <div class="card-body">
-                                    "Comming soon"
+                                    #{remindersBean.lateRentalsList.size()}
                                 </div>
                             </div>
                         </div>
@@ -41,8 +47,15 @@
                 </div>
             </div>
             <h:form id="form">
+            <h:inputText id="inputSearchRental" value="#{rentalBean.rentalSearchText}"
+                         styleClass="form-control"
+                         a:placeholder="#{bundle['form.search']}">
+                <f:ajax event="keyup"
+                        render="dt-rental"
+                        listener="#{rentalBean.rentalListBySearch()}"/>
+            </h:inputText>
 
-                <p:dataTable value="#{rentalBean.rentalsList}" var="itemRental" styleClass="table table-striped">
+                <p:dataTable id="dt-rental" value="#{rentalBean.rentalsList}" var="itemRental" styleClass="table table-striped">
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
                         #{itemRental.userRent.lastname}
@@ -63,11 +76,14 @@
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.createdBy']}</f:facet>
-                        #{itemRental.user.firstname}
+                        <h:outputText value="#{itemRental.user.firstname}"/>
+
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.rentalDateEnd']}</f:facet>
-                        #{itemRental.dateEnd}
+                        <h:outputText value="#{itemRental.dateEnd}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputText>
                     </p:column>
                     <p:column style="width: 3rem;text-align: center">
                         <p:commandButton update=":form:rentalDetail" oncomplete="PF('productDialog').show()"
@@ -81,7 +97,6 @@
                 <p:dialog header="#{bundle['rentalPage.rentalInfo']}" widgetVar="productDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400px">
                     <p:outputPanel id="rentalDetail">
                         <p:column rendered="#{not empty rentalBean.rentalSelected}">
-
                             <table class="table-view table-striped" width="100%">
                                 <tr>
                                     <th>Nom &amp; Prénom</th>
@@ -111,14 +126,21 @@
                             </table>
 
                         </p:column>
-                        <h:commandButton styleClass="button btn-success btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.deleteRental}"/>
-                        <h:commandButton styleClass="button btn-info btn-block" value="Allonger la location" type="submit" action="#{rentalBean.extendDateRental}"/>
-                        <h:commandButton styleClass="button btn-danger btn-block" value="signaler un probleme sur le matériel" type="submit" action="#{rentalBean.reportRentalIssue}"/>
-
+                        <h:commandButton styleClass="button btn-success btn-lg btn-block" value="Fin de la location" type="submit" action="#{rentalBean.endRental}"/>
                     </p:outputPanel>
                 </p:dialog>
             </h:form>
         </div>
+        </c:if>
+        <c:if test="#{userSession.rolesByIdRole.roleName.trim() ne 'gestionnaire de stock'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'direction'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
+                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+            <div style="text-align: center">
+                <h1>#{bundle['title.AccessDenied']}</h1>
+                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
+            </div>
+        </c:if>
     </ui:define>
 </ui:composition>
 </html>

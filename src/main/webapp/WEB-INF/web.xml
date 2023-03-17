@@ -19,7 +19,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            500
         </session-timeout>
     </session-config>
     <welcome-file-list>
@@ -27,6 +27,10 @@
     </welcome-file-list>
     <context-param>
         <param-name>facelets.SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
         <param-value>true</param-value>
     </context-param>
 </web-app>

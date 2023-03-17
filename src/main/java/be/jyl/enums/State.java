@@ -2,7 +2,6 @@ package be.jyl.enums;
 
 public enum State {
     available ("available"),
-    rental("rental"),
     disabled("disabled"),
     lost("lost");
 

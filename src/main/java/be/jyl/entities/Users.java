@@ -6,15 +6,28 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 @NamedQueries( value = {
-        @NamedQuery(name = "Users.findAll",query = "SELECT c FROM Users c order by c.idUser desc "),
-        @NamedQuery(name = "Users.findWhere",query = "select c from Users c " +
-                "WHERE (c.firstname like :pFirstname or c.lastname like :pLastname)"),
+        @NamedQuery(name = "Users.findAll",query = "SELECT u FROM Users u order by u.idUser desc "),
+        @NamedQuery(name = "Users.findWhere",query = "select u from Users u " +
+                "WHERE (u.firstname like :pFirstname or u.lastname like :pLastname)"),
         //Requetes pour le role secrétariat
         @NamedQuery(name = "Users.findProfsStudentsOnly",query = "SELECT c FROM Users c " +
                 "WHERE c.rolesByIdRole.roleName != 'administrateur' OR c.rolesByIdRole.roleName = 'emprunteur'   "),
         @NamedQuery(name = "Users.findWhereProfStudentOnly",query = "SELECT c FROM Users c " +
                 "Where (c.firstname like :pFirstname or c.lastname like :pLastname) " +
-                "AND (c.rolesByIdRole.roleName != 'administrateur' OR c.rolesByIdRole.roleName = 'emprunteur') ")
+                "AND (c.rolesByIdRole.roleName != 'administrateur' OR c.rolesByIdRole.roleName = 'emprunteur') "),
+        @NamedQuery(name = "User.login", query = "SELECT u FROM Users u " +
+                "WHERE u.accountsByIdAccount.login = :pLogin and u.accountsByIdAccount.password = :pPassword"),
+
+        @NamedQuery(name = "User.findAllNoAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null"),
+        @NamedQuery(name = "User.findWhereNoAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null " +
+                "AND (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+        @NamedQuery(name = "User.findWithAccount", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount != null "),
+        @NamedQuery(name = "User.findWithAccountWhereName", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount != null " +
+                "AND (u.firstname like :pName or u.lastname like :pName or u.accountsByIdAccount.login like :pName)")
+
+
+
+
 })
 @Entity
 @Table(name = "users")
@@ -45,22 +58,23 @@ public class Users {
     @Basic
     @Column(name = "barcode", nullable = true, length = 100)
     private String barcode;
-    @Basic
-    @Column(name = "id_city", nullable = false)
-    private int idCity;
-    @Basic
-    @Column(name = "id_account", nullable = true)
-    private Integer idAccount;
+//    @Basic
+//    @Column(name = "id_city", nullable = false)
+//    private int idCity;
+//    @Basic
+//    @Column(name = "id_account", nullable = true)
+//    private Integer idAccount;
     @OneToMany(mappedBy = "usersByIdUser")
     private Collection<Reminders> remindersByIdUser;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role")
     private Roles rolesByIdRole;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_city", referencedColumnName = "id_city")
+    @JoinColumn(name = "id_city")
     private Cities citiesByIdCity;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_account", referencedColumnName = "id_account")
+    @JoinColumn(name = "id_account")
     private Accounts accountsByIdAccount;
 
 
@@ -128,33 +142,33 @@ public class Users {
         this.barcode = barcode;
     }
 
-    public int getIdCity() {
-        return idCity;
-    }
+//    public int getIdCity() {
+//        return idCity;
+//    }
+//
+//    public void setIdCity(int idCity) {
+//        this.idCity = idCity;
+//    }
 
-    public void setIdCity(int idCity) {
-        this.idCity = idCity;
-    }
-
-    public Integer getIdAccount() {
-        return idAccount;
-    }
-
-    public void setIdAccount(Integer idAccount) {
-        this.idAccount = idAccount;
-    }
+//    public Integer getIdAccount() {
+//        return idAccount;
+//    }
+//
+//    public void setIdAccount(Integer idAccount) {
+//        this.idAccount = idAccount;
+//    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return idUser == users.idUser && idCity == users.idCity && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode) && Objects.equals(idAccount, users.idAccount);
+        return idUser == users.idUser  && Objects.equals(address, users.address) && Objects.equals(email, users.email) && Objects.equals(responsibleType, users.responsibleType) && Objects.equals(firstname, users.firstname) && Objects.equals(lastname, users.lastname) && Objects.equals(barcode, users.barcode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUser, address, email, responsibleType, firstname, lastname, barcode, idCity, idAccount);
+        return Objects.hash(idUser, address, email, responsibleType, firstname, lastname, barcode);
     }
 
     public Collection<Reminders> getRemindersByIdUser() {

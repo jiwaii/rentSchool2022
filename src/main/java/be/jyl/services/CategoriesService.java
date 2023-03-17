@@ -1,5 +1,6 @@
 package be.jyl.services;
 
+import be.jyl.entities.Articles;
 import be.jyl.entities.Categories;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Logger;
@@ -9,33 +10,62 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
 
-// TODO : TRY CATCH
+
 public class CategoriesService {
     private Logger log = Logger.getLogger(RentalsService.class);
     private EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
 
     public List<Categories> getAllCategories() {
-        Query query = em.createNamedQuery("Categories.findAll");
-        return query.getResultList();
+        try{
+            Query query = em.createNamedQuery("Categories.findAll");
+            return query.getResultList();
+        }catch (Exception e){
+            log.error("Error while getting all categories", e);
+            return null;
+        }
     }
 
     public void addCategory(Categories category) {
-        transaction.begin();
-        em.persist(category);
-        transaction.commit();
+        try{
+            transaction.begin();
+            em.persist(category);
+            transaction.commit();
+        } catch (Exception e){
+            transaction.rollback();
+            log.error("Error while adding category: " + category.getCategoryName(), e);
+        }
+
     }
 
     public void updateCategory(Categories category) {
-        transaction.begin();
-        em.merge(category);
-        transaction.commit();
+        try{
+            transaction.begin();
+            em.merge(category);
+            transaction.commit();
+        }catch (Exception e){
+            transaction.rollback();
+            log.error("Error while updating category: " + category.getCategoryName(), e);
+        }
     }
 
     public void deleteCategory(Categories category) {
-        //TO DO
-        Categories managedCategory = em.find(Categories.class, category.getIdCategory());
-        em.remove(managedCategory);
+        try{
+            transaction.begin();
+            em.merge(category);
+            em.remove(category);
+            transaction.commit();
+        }catch (Exception e){
+            transaction.rollback();
+            log.error("Error while deleting category: " + category.getCategoryName(), e);
+        }
+    }
+
+    public boolean isCategoryUsed(Categories category) {
+        Query query = em.createNamedQuery("Category.isUsedInArticles", Long.class)
+                .setParameter("categoryId", category.getIdCategory());
+        Long count = (Long) query.getSingleResult();
+        return count > 0;
     }
 
 }

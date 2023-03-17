@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="templates/mainPage.xhtml">
+   <ui:define name="content">
+      <f:view>
+         <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+
+            <div class="container py-3">
+               <h1 class="h2">#{bundle['title.AccountsUser']}</h1>
+               <div class="card crud">
+                  <h:form id="form">
+                     <p:growl id="messages" showDetail="true"/>
+                     <h:inputText id="inputSearch" value="#{userBean.userAccountSearch}"
+                                  styleClass="form-control" a:placeholder="#{bundle['form.search']}" >
+                        <f:ajax event="keyup"
+                                render="dt-users"
+                                listener="#{userBean.usersAccountsLoad()}"/>
+                     </h:inputText>
+                     <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
+                                  value="#{userBean.usersAccountsList}"
+                                  filteredValue="#{userBean.filteredUser}"
+                                  reflow="true" paginator="true" paginatorPosition="bottom"
+                                  rowKey="#{user.idUser}" rows="5" rowSelectMode="add"
+                                  styleClass="table table-striped table-hover">
+                        <f:facet name="header">
+                           <div class="table-header">
+                              <p:toolbar>
+                                 <p:toolbarGroup align="right">
+                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
+                                                        action="#{userBean.addAccountToUserPage()}"
+                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
+                                       </p:commandButton>
+                                 </p:toolbarGroup>
+                              </p:toolbar>
+                           </div>
+                        </f:facet>
+
+                        //COLUMN
+                        <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{user.lastname}">
+                           <h:outputText value="#{user.lastname}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{user.firstname}"
+                                  filterBy="#{user.firstname}">
+                           <h:outputText value="#{user.firstname}"/>
+                        </p:column>
+                        <p:column headerText="Login" sortBy="#{user.accountsByIdAccount.login}"
+                                  filterBy="#{user.accountsByIdAccount.login}">
+                           <h:outputText value="#{user.accountsByIdAccount.login}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle['tableHeader.role']}" sortBy="#{user.rolesByIdRole.roleName}"
+                                  filterBy="#{user.rolesByIdRole.roleName}">
+                           <h:outputText value="#{user.rolesByIdRole.roleName}"/>
+                        </p:column>
+                        <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
+                        <!--                               filterBy="#{user.rolesByIdRole.roleName}">-->
+                        <!--                        <h:outputText value="#{user.rolesByIdRole.roleName}"/>-->
+                        <!--                     </p:column>-->
+                        <p:column headerText="#{bundle['tableHeader.resetPassword']}" exportable="false">
+                           <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
+                                            oncomplete="PF('manageUserDialog').show()"
+                                            styleClass="edit-button rounded-button ui-button-primary"
+                                            process="@this">
+                              <f:setPropertyActionListener value="#{user}"
+                                                           target="#{userBean.userAccountSelected}"/>
+                              <p:resetInput target=":dialogs:manage-user-content"/>
+                           </p:commandButton>
+                        </p:column>
+                     </p:dataTable>
+                  </h:form>
+
+                  <h:form id="dialogs">
+                     <p:dialog header="#{userBean.userAccountSelected.firstname} #{userBean.userAccountSelected.lastname}" showEffect="fade" modal="true"
+                               widgetVar="manageUserDialog"
+                               responsive="true">
+                        <p:outputPanel id="manage-user-content" class="ui-fluid">
+                           <p:outputPanel rendered="#{not empty userBean.userAccountSelected}">
+<!--                              <div class="field">-->
+<!--                                 <p:outputLabel for="login">Login</p:outputLabel>-->
+<!--                                 <p:inputText type="text" id="login"-->
+<!--                                              value="#{userBean.userAccountSelected.accountsByIdAccount.login}" requiredMessage="Login obligatoire"-->
+<!--                                              required="true" disabled="true">-->
+<!--                                    <f:ajax event="keyup"-->
+<!--                                            render="loginMessage"-->
+<!--                                            listener="#{userBean.loginExistInUpdate()}"/>-->
+<!--                                    <f:validator validatorId="loginValidator"/>-->
+<!--                                    <f:validateLength for="login" minimum="4"/>-->
+<!--                                 </p:inputText>-->
+<!--                                 <h:message id="loginMessage" for="login" style="color: red"/>-->
+
+<!--                              </div>-->
+                              <div class="field">
+                                 <p:outputLabel for="password">Password</p:outputLabel>
+                                 <p:inputText type="" id="password" value="#{userBean.newPassword}"
+                                              required="true">
+                                    <f:validateLength for="password" minimum="4"/>
+                                 </p:inputText>
+                              </div>
+                           </p:outputPanel>
+                        </p:outputPanel>
+
+                        <f:facet name="footer">
+                           <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check" actionListener="#{userBean.updatePassword()}"
+                                            update="manage-user-content"
+                                            process="manage-user-content @this"/>
+                           <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
+                                            onclick="PF('manageUserDialog').hide()"
+                                            class="ui-button-secondary" type="button"/>
+                        </f:facet>
+                     </p:dialog>
+                  </h:form>
+               </div>
+            </div>
+         </c:if>
+         <c:if test="#{userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+            <div style="text-align: center">
+               <h1>#{bundle['title.AccessDenied']}</h1>
+               <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
+            </div>
+         </c:if>
+
+      </f:view>
+   </ui:define>
+</ui:composition>
+</html>

@@ -5,7 +5,13 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.Objects;
 @NamedQueries(value = {
-        @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r")
+        @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r"),
+        @NamedQuery(name = "Rentals.where",query = "select r From Rentals r " +
+                "JOIN r.rentalsArticlesByIdRental ar WHERE ar.dateReturned IS NULL " +
+                "AND  (r.userRent.lastname like :pSearch or r.userRent.firstname like :pSearch) "),
+
+        @NamedQuery(name = "Rentals.findCurrentRentals", query = "SELECT r FROM Rentals r JOIN r.rentalsArticlesByIdRental ar WHERE ar.dateReturned IS NULL"),
+        @NamedQuery(name = "Rentals.findLateRentals", query = "SELECT r FROM Rentals r JOIN r.rentalsArticlesByIdRental ar WHERE r.dateEnd < :today AND ar.dateReturned IS NULL")
 })
 @Entity
 public class Rentals {
@@ -36,7 +42,6 @@ public class Rentals {
 
     @OneToMany(mappedBy = "rentalsByIdRental", cascade = CascadeType.PERSIST)
     private Collection<ArticlesRentals> rentalsArticlesByIdRental;
-
 
 
     public int getIdRental() {

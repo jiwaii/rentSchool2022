@@ -61,13 +61,18 @@
                     </div>
                     <div class="form-group">
                         <h:outputLabel value="Ville" styleClass="form-label"/>
-                        <h:selectOneMenu id="villeSelection" styleClass="form-control" value="#{userBean.user.idCity}" required="true">
+                        <p:outputLabel for="city">Ville :</p:outputLabel>
+                        <p:selectOneMenu id="city" styleClass="form-select form-control"
+                                         value="#{userBean.user.citiesByIdCity}"
+                                         converter="selectOneMenuConverter">
+                            <p:ajax update="@this" process="@this"/>
                             <f:selectItems value="#{userBean.citiesList}"
-                                           var="city"
-                                           itemLabel="#{city.postalCode } #{city.cityName}"
-                                           itemValue="#{city.idCity}">
+                                           var="c"
+                                           itemLabel="#{c.cityName}"
+                                           itemValue="#{c}">
                             </f:selectItems>
-                        </h:selectOneMenu>
+                        </p:selectOneMenu>
+                        <h:message for="city" style="color: red" />
                     </div>
                 </div>
                 <h:commandButton styleClass="btn btn-primary" value="#{bundle['button.submit']}" action="#{userBean.addNewUser}"/>

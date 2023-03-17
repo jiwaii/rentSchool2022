@@ -9,6 +9,7 @@ import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.UserService;
 import be.jyl.tools.DateConverter;
+import com.mysql.cj.xdevapi.CreateIndexParams;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
@@ -25,7 +27,7 @@ import java.text.ParseException;
 import java.util.*;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
@@ -33,6 +35,7 @@ public class RentalBean implements Serializable {
     private ArticlesService articlesService = new ArticlesService();
     private List<Rentals> rentalsList;
     private Rentals rentalSelected;
+    private String rentalSearchText;
     private Users userSelected ;
     private Users userSession;
     private List<Users> usersList;
@@ -59,9 +62,10 @@ public class RentalBean implements Serializable {
         usersList = userService.listUsers(userSession);
         articlesList = articlesService.articlesAvailableList();
         minDate = new Date();
+
     }
     public List<Rentals> gRentalsList(){
-        return rentalsService.rentalsList();
+        return rentalsService.currentRentalsList();
     }
 
     /**
@@ -84,6 +88,11 @@ public class RentalBean implements Serializable {
         userSelected = (Users)selectEvent.getObject();
         log.log(Level.INFO, "dtUserSelection() = "+userSelected.getLastname()+" "+userSelected.getFirstname());
 
+    }
+    public void rentalListBySearch(){
+        log.log(Level.INFO, "search is = "+rentalSearchText);
+        rentalsList = rentalsService.rentalsListBySearch(rentalSearchText);
+        log.log(Level.INFO, "nobre de ligne: "+ rentalsList.size());
     }
 
     /**
@@ -143,7 +152,8 @@ public class RentalBean implements Serializable {
                 newRental.setDateBegin(dateNow);
                 newRental.setDateEnd(dateEnd);
 
-                articleSelected.setState(State.rental); // mettre à jour l'article en status loué
+                //pas besoin de changer l'état de l'article
+                //articleSelected.setState(State.rental); // mettre à jour l'article en status loué
 
                 ArticlesRentals articlesRentals = new ArticlesRentals();
                 articlesRentals.setQty(1);
@@ -155,9 +165,9 @@ public class RentalBean implements Serializable {
 
                 newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
-                rentalsService.persistNewRental(newRental,articleSelected);
+                rentalsService.persistNewRental(newRental);
                 //mise à jour de la liste location et article disponible pour l'utilisateur :
-                rentalsList = rentalsService.rentalsList();
+                rentalsList = rentalsService.currentRentalsList();
                 articlesList = articlesService.articlesAvailableList();
                 endDateSelected = null;
                 return "index.xhtml";
@@ -171,9 +181,19 @@ public class RentalBean implements Serializable {
         }
 
     }
-    public String deleteRental(){
-        rentalsService.removeRental(rentalSelected);
-        rentalsList = rentalsService.rentalsList();
+    public String goIndex(){
+        rentalsList = rentalsService.currentRentalsList();
+        for (Rentals r:rentalsList
+             ) {
+           log.log(Level.INFO,r.getUserRent().getFirstname()+
+                   "  "+r.getUserRent().getLastname());
+        }
+        return "index.xhtml";
+    }
+    public String endRental(){
+        //rentalsService.removeRental(rentalSelected);
+        rentalsService.endRental(rentalSelected);
+        rentalsList = rentalsService.currentRentalsList();
         articlesList = articlesService.articlesAvailableList();
         return "index.xhtml";
     }
@@ -281,5 +301,13 @@ public class RentalBean implements Serializable {
 
     public void setMinDate(Date minDate) {
         this.minDate = minDate;
+    }
+
+    public String getRentalSearchText() {
+        return rentalSearchText;
+    }
+
+    public void setRentalSearchText(String rentalSearchText) {
+        this.rentalSearchText = rentalSearchText;
     }
 }
