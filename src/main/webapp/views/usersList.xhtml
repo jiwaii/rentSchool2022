@@ -22,7 +22,7 @@
                <h1 class="h2">#{bundle['header.navbar.users']}</h1>
                <div class="card crud">
                   <h:form id="form">
-                     <p:growl id="messages" showDetail="true"/>
+                     <p:growl id="messages" showDetail="false"/>
                      <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
                         <f:ajax event="keyup"
                                 render="dt-users"
@@ -108,32 +108,39 @@
                               <div class="field">
                                  <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
                                  <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
-                                              required="true">
+                                              required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
+                                 <h:message id="firstnameMessage" for="firstname" style="color: red"/>
+
                               </div>
 
                               <div class="field">
                                  <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
                                  <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
-                                              required="true">
+                                              required="true" requiredMessage="Le nom doit avoir minimum 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
+                                 <h:message id="lastnameMessage" for="lastname" style="color: red"/>
+
                               </div>
                               <div class="field">
                                  <p:outputLabel for="email">E-mail</p:outputLabel>
                                  <p:inputText id="email" value="#{userBean.userSelected.email}"
                                               required="false"
-                                              validatorMessage="email incorecte">
+                                              validatorMessage="email incorecte" requiredMessage="L'email est incorecte ">
                                     <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
                                  </p:inputText>
+                                 <h:message id="emailMessage" for="email" style="color: red"/>
+
                               </div>
                               <div class="field">
                                  <p:outputLabel for="adress">Addresse</p:outputLabel>
                                  <p:inputText id="adress" value="#{userBean.userSelected.address}"
-                                              required="true">
+                                              required="true" requiredMessage="L'adresse ne doit pas être en dessous de 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
+                                 <h:message id="adressMessage" for="adress" style="color: red"/>
                               </div>
                               <div class="field">
                                  <p:outputLabel for="city">Ville :</p:outputLabel>

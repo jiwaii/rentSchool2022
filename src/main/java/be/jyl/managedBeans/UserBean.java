@@ -4,6 +4,7 @@ import be.jyl.entities.*;
 import be.jyl.enums.ResponsibleType;
 import be.jyl.services.AccountService;
 import be.jyl.services.UserService;
+import be.jyl.tools.NotificationManager;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -94,12 +95,15 @@ public class UserBean implements Serializable {
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
             usersList = userService.listUsers(userSession);
+            NotificationManager.addInfoMessage("notification.users.useradded");
         }
         else {
             PrimeFaces.current().ajax().update("form:messages", "");
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
+            NotificationManager.addErrorMessage("notification.users.error");
         }
         usersList = userService.listUsers(userSession);
+
         return "usersList";
 
     }
