@@ -127,6 +127,8 @@ public class UserBean implements Serializable {
             userService.insertAccountToUser(userSelected,newAccount);
             userSelected.setAccountsByIdAccount(newAccount);
             log.log(Level.INFO, userSelected.getFirstname()+" with login :"+userSelected.getAccountsByIdAccount().getLogin());
+            usersList = userService.listUsers(userSession);
+            NotificationManager.addInfoMessage("notification.users.accountLinked");
             return "usersList";
         }else {
             FacesContext.getCurrentInstance()
