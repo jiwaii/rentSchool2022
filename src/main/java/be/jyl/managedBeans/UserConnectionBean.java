@@ -33,12 +33,20 @@ public class UserConnectionBean implements Serializable {
         password = accountService.hashingPassword(password);
         Users myUser = accountService.getConnectionLogin(login,password);
         if (myUser != null){
+            if (myUser.getRolesByIdRole().getRoleName().equals("emprunteur")){
+                myUser = null;
+                FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"votre compte \"emprunteur\" n'est pas autorisé de se connecté"));
+                return "fail";
+            }
+            else{
             FacesContext context = FacesContext.getCurrentInstance();
             log.log(Level.INFO, "user is :"+ myUser.getFirstname());
 //            context.getExternalContext().getSessionMap().put("accountSession",myUser);
             context.getExternalContext().getSessionMap().put("userSession",myUser);
             log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myUser.getAccountsByIdAccount().getLogin() +" With id: "+ myUser.getAccountsByIdAccount().getLogin());
             return "success";
+
+            }
          }
          else {
              FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Login ou password incorecte"));

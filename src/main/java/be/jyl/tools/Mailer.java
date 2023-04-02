@@ -30,7 +30,7 @@ public class Mailer {
 
 
         String mailAccount = "rentschoolsystem@gmail.com";
-        String password = "ugdqisktljnvuwgw";
+        String password = "ckabuqdkilalkfbq";
         String recipient = rentals.getUserRent().getEmail();
 
 
