@@ -8,7 +8,7 @@ import java.util.Objects;
         @NamedQuery(name = "Rentals.findAll",query = "select r From Rentals r"),
         @NamedQuery(name = "Rentals.where",query = "select r From Rentals r " +
                 "JOIN r.rentalsArticlesByIdRental ar WHERE ar.dateReturned IS NULL " +
-                "AND  (r.userRent.lastname like :pSearch or r.userRent.firstname like :pSearch) "),
+                "AND  (r.borrower.lastname like :pSearch or r.borrower.firstname like :pSearch) "),
 
         @NamedQuery(name = "Rentals.findCurrentRentals", query = "SELECT r FROM Rentals r JOIN r.rentalsArticlesByIdRental ar WHERE ar.dateReturned IS NULL"),
         @NamedQuery(name = "Rentals.findLateRentals", query = "SELECT r FROM Rentals r JOIN r.rentalsArticlesByIdRental ar WHERE r.dateEnd < :today AND ar.dateReturned IS NULL")
@@ -29,8 +29,8 @@ public class Rentals {
     @Column(name = "dateEnd", nullable = false)
     private Date dateEnd;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_userRent")
-    private Users userRent;
+    @JoinColumn(name = "id_borrower")
+    private Borrowers borrower;
 
     public Collection<ArticlesRentals> getRentalsArticlesByIdRental() {
         return rentalsArticlesByIdRental;
@@ -76,12 +76,12 @@ public class Rentals {
         this.dateEnd = dateEnd;
     }
 
-    public Users getUserRent() {
-        return userRent;
+    public Borrowers getBorrower() {
+        return borrower;
     }
 
-    public void setUserRent(Users userRent) {
-        this.userRent = userRent;
+    public void setBorrower(Borrowers userRent) {
+        this.borrower = borrower;
     }
 
     @Override
@@ -89,12 +89,12 @@ public class Rentals {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rentals rentals = (Rentals) o;
-        return idRental == rentals.idRental && user == rentals.user && userRent == rentals.userRent && Objects.equals(dateBegin, rentals.dateBegin) && Objects.equals(dateEnd, rentals.dateEnd);
+        return idRental == rentals.idRental && user == rentals.user && borrower == rentals.borrower && Objects.equals(dateBegin, rentals.dateBegin) && Objects.equals(dateEnd, rentals.dateEnd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idRental, user, dateBegin, dateEnd, userRent);
+        return Objects.hash(idRental, user, dateBegin, dateEnd, borrower);
     }
 
 }

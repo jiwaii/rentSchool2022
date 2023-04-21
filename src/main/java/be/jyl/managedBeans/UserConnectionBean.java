@@ -1,24 +1,15 @@
 package be.jyl.managedBeans;
 
-import be.jyl.entities.Accounts;
-import be.jyl.entities.Users;
 import be.jyl.services.AccountService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.DatatypeConverter;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Collection;
-import java.util.List;
 
 @Named
 @ViewScoped

@@ -1,11 +1,8 @@
 package be.jyl.services;
 
-import be.jyl.entities.Accounts;
 import be.jyl.entities.Cities;
 import be.jyl.entities.Roles;
-import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;

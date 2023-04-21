@@ -6,7 +6,6 @@
     <persistence-unit name="rentSchool2022"  transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>java:comp/env/jdbc/rentSchool2022</jta-data-source>
-    <class>be.jyl.entities.Accounts</class>
     <class>be.jyl.entities.Articles</class>
     <class>be.jyl.entities.ArticlesRentals</class>
     <class>be.jyl.entities.Categories</class>
@@ -17,7 +16,10 @@
     <class>be.jyl.entities.Rentals</class>
     <class>be.jyl.entities.Roles</class>
     <class>be.jyl.entities.RolesPermissions</class>
-    <class>be.jyl.entities.Users</class>
+        <class>be.jyl.entities.Borrowers</class>
+        <class>be.jyl.entities.Users</class>
+
+
 
         <!--        <properties>-->
 <!--            <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/rentSchool2022"/>-->
