@@ -24,7 +24,7 @@
                                         listener="#{rentalBean.usersListByName}"/>
                             </h:inputText>
                             <br/>
-                            <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
+                            <p:dataTable id="userRadioTD" value="#{rentalBean.borrowersList}" var="user"
                                          selection="#{rentalBean.borrowerSelected}"
                                          rowKey="#{user.idUser}"
                                          styleClass="table table-striped table-hover" >
