@@ -3,9 +3,9 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Objects;
 @NamedQueries( value = {
-        @NamedQuery(name = "Users.findAll",query = "SELECT u FROM Users u order by u.id desc "),
-        @NamedQuery(name = "Users.findWhere",query = "select u from Users u " +
-                "WHERE (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+        @NamedQuery(name = "Users.all",query = "SELECT u FROM Users u order by u.id desc "),
+        @NamedQuery(name = "Users.where",query = "select u from Users u " +
+                "WHERE (u.firstname like :pName or u.lastname like :pName)"),
         //Requetes pour le role secrétariat
         @NamedQuery(name = "Users.findProfsStudentsOnly",query = "SELECT c FROM Users c " +
                 "WHERE c.role.roleName != 'administrateur' OR c.role.roleName = 'emprunteur'   "),

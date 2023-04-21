@@ -37,13 +37,13 @@
                                  value="#{userBean.newUser.password}" requiredMessage="le mot de passe est obligatoire"/>
                     <h:message for="inputPassword1" style="color: red"/>
                 </div>
-                <h:inputText id="inputSearchUser" value="#{userBean.userSearchText}" a:placeholder="#{bundle['form.search']}" >
+                <h:inputText id="inputSearchUser" value="#{userBean.borrowerSearchText}" a:placeholder="#{bundle['form.search']}" >
                     <f:ajax event="keyup"
                             render="userRadioTD"
-                            listener="#{userBean.searchUserBarToLinkAccount}"/>
+                            listener="#{userBean.inputSearchBorrowerToUser}"/>
                 </h:inputText>
                 <br/>
-                <p:dataTable id="userRadioTD" value="#{userBean.usersList}" var="user"
+                <p:dataTable id="userRadioTD" value="#{userBean.listBorrowers}" var="user"
                              selection="#{userBean.borrowerSelected}"
                              rowKey="#{user.idUser}"
                              styleClass="table table-striped table-hover" >

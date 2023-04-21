@@ -19,14 +19,14 @@
                <div class="card crud">
                   <h:form id="form">
                      <p:growl id="messages" showDetail="true"/>
-                     <h:inputText id="inputSearch" value="#{userBean.userAccountSearch}"
+                     <h:inputText id="inputSearch" value="#{userBean.userSearch}"
                                   styleClass="form-control" a:placeholder="#{bundle['form.search']}" >
                         <f:ajax event="keyup"
                                 render="dt-users"
-                                listener="#{userBean.usersAccountsLoad()}"/>
+                                listener="#{userBean.usersLoad()}"/>
                      </h:inputText>
                      <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
-                                  value="#{userBean.usersAccountsList}"
+                                  value="#{userBean.usersList}"
                                   filteredValue="#{userBean.filteredUser}"
                                   reflow="true" paginator="true" paginatorPosition="bottom"
                                   rowKey="#{user.idUser}" rows="5" rowSelectMode="add"

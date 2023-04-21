@@ -27,17 +27,17 @@ public class UserBean implements Serializable {
     private Logger log = Logger.getLogger(UserBean.class);
     private Users user;
     private List<Roles> rolesList;
-    private String userSearchText;
+    private String borrowerSearchText;
     private UsersService usersService = new UsersService();
     private BorrowersService borrowerService = new BorrowersService();
     private List<Cities> citiesList;
-    private List<Users> usersList;
+    private List<Users> listBorrowers;
     private List<Users> filteredUser;
     private Users userSession;
     private Borrowers borrowerSelected;
     private Users newUser;
-    private List<Users> usersAccountsList;
-    private String userAccountSearch;
+    private List<Users> usersList;
+    private String userSearch;
     private Users userSelected;
     private String newPassword;
 
@@ -61,18 +61,18 @@ public class UserBean implements Serializable {
 //        user.setCitiesByIdCity(userCity);
         usersService.createUser(user);
         user = new Users();
-        usersList = listUsersForUserRoleSession();
-        Collections.reverse(usersList);
+        listBorrowers = usersService.listUsers();
+        Collections.reverse(listBorrowers);
 
         return "usersList";
     }
 
-    private List<Users> listUsersForUserRoleSession(){
-        return usersService.listUsers(userSession);
-    }
-    private List<Users> listUsersForUserRoleSessionByName(String searchText){
-        return usersService.listUserByName(searchText,userSession);
-    }
+//    private List<Users> listUsersForUserRoleSession(){
+//        return usersService.listUsers(userSession);
+//    }
+//    private List<Users> listUsersForUserRoleSessionByName(String searchText){
+//        return usersService.lis(searchText);
+//    }
     /**
      * Renvois la liste d'utilisateurs dépendant du rôle
      * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
@@ -87,7 +87,7 @@ public class UserBean implements Serializable {
             usersService.updateUser(userSelected);
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            usersList = usersService.listUsers(userSession);
+            listBorrowers = usersService.listUsers();
             NotificationManager.addInfoMessage("notification.users.useradded");
         }
         else {
@@ -95,7 +95,7 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
             NotificationManager.addErrorMessage("notification.users.error");
         }
-        usersList = usersService.listUsers(userSession);
+        listBorrowers = usersService.listUsers();
 
         return "usersList";
 
@@ -119,7 +119,7 @@ public class UserBean implements Serializable {
             newUser.setPassword(encordedPassword);
             usersService.createUserFromBorrower(borrowerSelected, newUser);
             log.log(Level.INFO, newUser.getFirstname()+" with login :"+ newUser.getLogin());
-            usersList = usersService.listUsers(userSession);
+            listBorrowers = usersService.listUsers();
             NotificationManager.addInfoMessage("notification.users.accountLinked");
             return "usersList";
         }else {
@@ -137,9 +137,9 @@ public class UserBean implements Serializable {
         this.borrowerSelected = new Users();
         this.citiesList = usersService.listCities();
         //setting the user to don't return null to the view wich cause a problem
-        usersList = usersService.listBorrowers();
+        listBorrowers = usersService.listBorrowers();
 
-        log.log(Level.INFO, "userLis: " + usersList);
+        log.log(Level.INFO, "userLis: " + listBorrowers);
     }
     // Si loging existe déjà
     public boolean loginExist(){
@@ -169,11 +169,11 @@ public class UserBean implements Serializable {
         newUser = new Users();
         this.rolesList = usersService.listRoles();
         log.log(Level.INFO,"Role list size : "+rolesList.size());
-        usersList = usersService.listBorrowers();
+        listBorrowers = usersService.listBorrowers();
         return "userLinkAccount";
     }
     public String listUserAccountsPage(){
-        usersAccountsList = usersService.listUser();
+        usersList = usersService.listUsers();
 
         return "accountUserList";
     }
@@ -184,7 +184,7 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String listUserPage(){
-        usersList = listUsersForUserRoleSession();
+        listBorrowers = usersService.listUsers();
         return "usersList";
     }
 
@@ -192,16 +192,15 @@ public class UserBean implements Serializable {
         borrowerSelected = (Users) selectEvent.getObject();
         log.log(Level.INFO, borrowerSelected.getFirstname()+" Selected");
     }
-    public void searchUserBar(){
-        log.log(Level.INFO,"UserBean.searchUserBar called !");
-        log.log(Level.INFO,"UserBean.userSeachText is = " + userSearchText);
-        usersList = listUsersForUserRoleSessionByName(userSearchText);
+    public void inputSearchBorrower(){
+        log.log(Level.INFO,"inputSearchBorrower() : UserBean.userSeachText is = "+ borrowerSearchText);
+        listBorrowers = usersService.listBorrowers(borrowerSearchText);
     }
-    public void searchUserBarToLinkAccount(){
-        usersList = usersService.listBorrowersByName(userSearchText);
+    public void inputSearchBorrowerToUser(){
+        listBorrowers = usersService.listBorrowers(borrowerSearchText);
     }
-    public void usersAccountsLoad(){
-        usersAccountsList = usersService.listUser(userAccountSearch);
+    public void usersLoad(){
+        usersList = usersService.listUsers(userSearch);
     }
 
     /** ------------------
@@ -224,20 +223,20 @@ public class UserBean implements Serializable {
         this.citiesList = citiesList;
     }
 
-    public List<Users> getUsersList() {
-        return usersList;
+    public List<Users> getListBorrowers() {
+        return listBorrowers;
     }
 
-    public void setUsersList(List<Users> usersList) {
-        this.usersList = usersList;
+    public void setListBorrowers(List<Users> listBorrowers) {
+        this.listBorrowers = listBorrowers;
     }
 
-    public String getUserSearchText() {
-        return userSearchText;
+    public String getBorrowerSearchText() {
+        return borrowerSearchText;
     }
 
-    public void setUserSearchText(String userSearchText) {
-        this.userSearchText = userSearchText;
+    public void setBorrowerSearchText(String borrowerSearchText) {
+        this.borrowerSearchText = borrowerSearchText;
     }
 
     public Borrowers getBorrowerSelected() {
@@ -274,20 +273,20 @@ public class UserBean implements Serializable {
         this.rolesList = rolesList;
     }
 
-    public List<Users> getUsersAccountsList() {
-        return usersAccountsList;
+    public List<Users> getUsersList() {
+        return usersList;
     }
 
-    public void setUsersAccountsList(List<Users> usersAccountsList) {
-        this.usersAccountsList = usersAccountsList;
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
     }
 
-    public String getUserAccountSearch() {
-        return userAccountSearch;
+    public String getUserSearch() {
+        return userSearch;
     }
 
-    public void setUserAccountSearch(String userAccountSearch) {
-        this.userAccountSearch = userAccountSearch;
+    public void setUserSearch(String userSearch) {
+        this.userSearch = userSearch;
     }
 
     public Users getUserSelected() {

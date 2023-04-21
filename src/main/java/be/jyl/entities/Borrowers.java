@@ -4,8 +4,13 @@ import be.jyl.enums.ResponsibleType;
 
 import javax.persistence.*;
 import java.util.Objects;
+@NamedQueries( value = {
 
-@Entity
+@NamedQuery(name = "Borrowers.all", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null"),
+@NamedQuery(name = "Borrowers.where", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null " +
+        "AND (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+})
+        @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Borrowers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

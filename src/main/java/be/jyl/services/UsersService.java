@@ -27,44 +27,22 @@ public class UsersService {
      * ----------------------------------
      */
 
-    private List<Users> listUsers(){
-        Query query = em.createNamedQuery("Users.findProfsStudentsOnly");
-        return query.getResultList();
-    }
-    private List<Users> listUsersForAdmin(){
-        Query query = em.createNamedQuery("Users.findAll");
-        return query.getResultList();
-    }
-    private List<Users> listUserByName(String name){
-
-        Query query = em.createNamedQuery("Users.findWhereProfStudentOnly")
-                .setParameter("pFirstname","%"+name+"%")
-                .setParameter("pLastname","%"+name+"%");
-        return query.getResultList();
-    }
-    private List<Users> listUserByNamForAdmin(String name){
-
-        Query query = em.createNamedQuery("Users.findWhere")
-                .setParameter("pFirstname","%"+name+"%")
-                .setParameter("pLastname","%"+name+"%");
-        return query.getResultList();
-    }
     public List<Users> listBorrowers(){
-        Query query = em.createNamedQuery("User.findAllNoAccount");
+        Query query = em.createNamedQuery("Borrowers.all");
         return query.getResultList();
     }
-    public List<Users> listBorrowersByName(String name){
-        Query query = em.createNamedQuery("User.findWhereNoAccount")
+    public List<Users> listBorrowers(String name){
+        Query query = em.createNamedQuery("Borrowers.where")
                 .setParameter("pFirstname","%"+name+"%")
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
-    public List<Users> listUser(String name){
-        Query query = em.createNamedQuery("User.findWithAccountWhereName").setParameter("pName","%"+name+"%");
+    public List<Users> listUsers(){
+        Query query = em.createNamedQuery("Users.all");
         return query.getResultList();
     }
-    public List<Users> listUser(){
-        Query query = em.createNamedQuery("User.findWithAccount");
+    public List<Users> listUsers(String name){
+        Query query = em.createNamedQuery("Users.where").setParameter("pName","%"+name+"%");
         return query.getResultList();
     }
     public List<Roles> listRoles(){
@@ -86,20 +64,20 @@ public class UsersService {
     public void deleteUser(Users users){
 
     }
-    /**
-     * Renvois la liste d'utilisateurs dépendant du rôle
-     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
-     * @param userSession : pour connaitre quel roles il s'agit
-     * @return
-     */
-    public List<Users> listUsers(Users userSession){
-        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
-            return listUsersForAdmin() ;
-        }
-        else {
-            return listUsers();
-        }
-    }
+//    /**
+//     * Renvois la liste d'utilisateurs dépendant du rôle
+//     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
+//     * @param userSession : pour connaitre quel roles il s'agit
+//     * @return
+//     */
+//    public List<Users> listUsers(Users userSession){
+//        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
+//            return listUsersForAdmin() ;
+//        }
+//        else {
+//            return listUsers();
+//        }
+//    }
     public void createUserFromBorrower(Borrowers borrower,Users user){
 
         user = (Users)borrower;
@@ -110,20 +88,20 @@ public class UsersService {
     }
 
 
-    /**
-     * Idem que listUsers avec recherche par nom ou prenom
-     * @param name
-     * @param userSession
-     * @return
-     */
-    public List<Users> listUserByName(String name, Users userSession){
-        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
-            return listUserByNamForAdmin(name) ;
-        }
-        else {
-            return listUserByName(name);
-        }
-    }
+//    /**
+//     * Idem que listUsers avec recherche par nom ou prenom
+//     * @param name
+//     * @param userSession
+//     * @return
+//     */
+//    public List<Users> listUserByName(String name, Users userSession){
+//        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
+//            return listUsersForAdmin(name) ;
+//        }
+//        else {
+//            return listUserByName(name);
+//        }
+//    }
 
     public Users getConnectionLogin(String pLogin, String pPassword){
         log.log(Level.INFO,"getConnectionLogin ( )");

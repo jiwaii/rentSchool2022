@@ -23,13 +23,13 @@
                <div class="card crud">
                   <h:form id="form">
                      <p:growl id="messages" showDetail="false"/>
-                     <h:inputText id="inputSearch" value="#{userBean.userSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
+                     <h:inputText id="inputSearch" value="#{userBean.borrowerSearchText}" styleClass="form-control" a:placeholder="Rechercher" >
                         <f:ajax event="keyup"
                                 render="dt-users"
-                                listener="#{userBean.searchUserBar}"/>
+                                listener="#{userBean.inputSearchBorrower}"/>
                      </h:inputText>
                      <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
-                                  value="#{userBean.usersList}"
+                                  value="#{userBean.listBorrowers}"
                                   filteredValue="#{userBean.filteredUser}"
                                   reflow="true" paginator="true" paginatorPosition="bottom"
                                   rowKey="#{user.idUser}" rows="5" rowSelectMode="add"

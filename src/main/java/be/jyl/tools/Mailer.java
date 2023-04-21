@@ -31,7 +31,7 @@ public class Mailer {
 
         String mailAccount = "rentschoolsystem@gmail.com";
         String password = "ckabuqdkilalkfbq";
-        String recipient = rentals.getUserRent().getEmail();
+        String recipient = rentals.getBorrower().getEmail();
 
 
         log.log(Level.INFO, "Setting mail session.");
@@ -43,7 +43,7 @@ public class Mailer {
         });
         log.log(Level.INFO, "Setting mail content.");
         String subject = "RAPPEL: Retard Location";
-        text = "Bonjour "+rentals.getUserRent().getFirstname()+",\r\n" +
+        text = "Bonjour "+rentals.getBorrower().getFirstname()+",\r\n" +
                 "\r\n" +
                 "Nous tenons à vous rappeler que vous n'avez toujours pas rendu le matériel que vous avez loué:\r\n";
 
@@ -73,7 +73,7 @@ public class Mailer {
 
         String mailAccount = "rentschoolsystem@gmail.com";
         String password = "ugdqisktljnvuwgw";
-        String recipient = rentals.getUserRent().getEmail();
+        String recipient = rentals.getBorrower().getEmail();
 
 
         log.log(Level.INFO, "Setting mail session.");

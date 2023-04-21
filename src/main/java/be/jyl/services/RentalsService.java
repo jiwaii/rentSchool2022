@@ -61,7 +61,7 @@ public class RentalsService {
         if (!transaction.isActive()) {
             transaction.begin();
             log.log(Level.INFO, "removeRental : transaction begin");
-            log.log(Level.INFO, "rental selected : " + rental.getUserRent().getFirstname());
+            log.log(Level.INFO, "rental selected : " + rental.getBorrower().getFirstname());
             Collection<ArticlesRentals> articlesRentalsCollection = rental.getRentalsArticlesByIdRental();
             for (ArticlesRentals articlesRentalsItem : articlesRentalsCollection) {
                 articlesRentalsItem.getArticlesByIdArticle().setState(State.available);
@@ -80,7 +80,7 @@ public class RentalsService {
         if (!transaction.isActive()) {
             transaction.begin();
             log.log(Level.INFO, "endRental : transaction begin");
-            log.log(Level.INFO, "rental selected : " + rental.getUserRent().getFirstname());
+            log.log(Level.INFO, "rental selected : " + rental.getBorrower().getFirstname());
             Collection<ArticlesRentals> articlesRentalsCollection = rental.getRentalsArticlesByIdRental();
             for (ArticlesRentals articlesRentalsItem : articlesRentalsCollection) {
                 Articles article = articlesRentalsItem.getArticlesByIdArticle();
