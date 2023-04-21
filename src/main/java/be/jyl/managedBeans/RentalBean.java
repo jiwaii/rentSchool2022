@@ -50,7 +50,7 @@ public class RentalBean implements Serializable {
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         log.log(Level.INFO,userSession.getRole().getRoleName().toString());
         //List d'utilisateur dépendant du role
-        usersList = userService.listUsers(userSession);
+        usersList = userService.listUsers();
         articlesList = articlesService.articlesAvailableList();
         minDate = new Date();
 
