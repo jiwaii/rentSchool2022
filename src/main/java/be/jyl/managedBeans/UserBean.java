@@ -29,7 +29,7 @@ public class UserBean implements Serializable {
     private List<Roles> rolesList;
     private String userSearchText;
     private UsersService usersService = new UsersService();
-    private BorrowersService userService = new BorrowersService();
+    private BorrowersService borrowerService = new BorrowersService();
     private List<Cities> citiesList;
     private List<Users> usersList;
     private List<Users> filteredUser;
@@ -59,7 +59,7 @@ public class UserBean implements Serializable {
 
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
-        usersService.insert(user);
+        usersService.createUser(user);
         user = new Users();
         usersList = listUsersForUserRoleSession();
         Collections.reverse(usersList);
@@ -101,7 +101,7 @@ public class UserBean implements Serializable {
 
     }
     public void updatePassword(){
-        usersService.updatePasswordService(userSelected, newPassword);
+        // TODO réinitialisation password
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
         newPassword = "";
@@ -118,7 +118,7 @@ public class UserBean implements Serializable {
             encordedPassword = usersService.hashingPassword(encordedPassword);
             newUser.setPassword(encordedPassword);
             usersService.createUserFromBorrower(borrowerSelected, newUser);
-            log.log(Level.INFO, borrowerSelected.getFirstname()+" with login :"+ borrowerSelected.getAccountsByIdAccount().getLogin());
+            log.log(Level.INFO, newUser.getFirstname()+" with login :"+ newUser.getLogin());
             usersList = usersService.listUsers(userSession);
             NotificationManager.addInfoMessage("notification.users.accountLinked");
             return "usersList";
@@ -144,13 +144,12 @@ public class UserBean implements Serializable {
     // Si loging existe déjà
     public boolean loginExist(){
         log.log(Level.INFO,"call : loginExist()");
-        BorrowersService accountService = new BorrowersService();
-        return accountService.accountExist("%"+ newUser.getLogin()+"%");
+        return usersService.userExist("%"+ newUser.getLogin()+"%");
     }
     public boolean loginExistInUpdate(){
         log.log(Level.INFO,"call : loginExistInUpdate()");
-        BorrowersService accountService = new BorrowersService();
-        return accountService.accountExist("%"+ userSelected.getAccountsByIdAccount().getLogin()+"%");
+
+        return usersService.userExist("%"+ userSelected.getLogin()+"%");
     }
 
     /**-----------------------------
@@ -167,7 +166,7 @@ public class UserBean implements Serializable {
         return "userAdd";
     }
     public String addAccountToUserPage(){
-        newUser = new Accounts();
+        newUser = new Users();
         this.rolesList = usersService.listRoles();
         log.log(Level.INFO,"Role list size : "+rolesList.size());
         usersList = usersService.listBorrowers();
@@ -241,13 +240,13 @@ public class UserBean implements Serializable {
         this.userSearchText = userSearchText;
     }
 
-    public Users getBorrowerSelected() {
+    public Borrowers getBorrowerSelected() {
         //pour tester :
         rolesList = usersService.listRoles();
         return borrowerSelected;
     }
 
-    public void setBorrowerSelected(Users borrowerSelected) {
+    public void setBorrowerSelected(Borrowers borrowerSelected) {
         this.borrowerSelected = borrowerSelected;
     }
 
@@ -259,11 +258,11 @@ public class UserBean implements Serializable {
         this.filteredUser = filteredUser;
     }
 
-    public Accounts getNewUser() {
+    public Users getNewUser() {
         return newUser;
     }
 
-    public void setNewUser(Accounts newUser) {
+    public void setNewUser(Users newUser) {
         this.newUser = newUser;
     }
 

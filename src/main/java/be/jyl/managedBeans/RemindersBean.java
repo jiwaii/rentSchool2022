@@ -2,6 +2,7 @@ package be.jyl.managedBeans;
 
 import be.jyl.entities.Reminders;
 import be.jyl.entities.Rentals;
+import be.jyl.entities.Users;
 import be.jyl.services.RemindersService;
 import be.jyl.services.RentalsService;
 import be.jyl.tools.Mailer;

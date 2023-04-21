@@ -2,6 +2,7 @@ package be.jyl.managedBeans;
 
 import be.jyl.entities.Users;
 import be.jyl.services.BorrowersService;
+import be.jyl.services.UsersService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -21,9 +22,9 @@ public class UserConnectionBean implements Serializable {
 
     public String connectionLogin(){
         /** Test Login and password */
-        BorrowersService accountService = new BorrowersService();
-        password = accountService.hashingPassword(password);
-        Users myUser = accountService.getConnectionLogin(login,password);
+        UsersService userService = new UsersService();
+        password = userService.hashingPassword(password);
+        Users myUser = userService.getConnectionLogin(login,password);
         if (myUser != null){
             if (myUser.getRole().getRoleName().equals("emprunteur")){
                 myUser = null;

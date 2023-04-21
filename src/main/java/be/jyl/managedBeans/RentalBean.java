@@ -214,7 +214,7 @@ public class RentalBean implements Serializable {
     }
 
 
-    public Users getBorrowerSelected() {
+    public Borrowers getBorrowerSelected() {
         return borrowerSelected;
     }
 
