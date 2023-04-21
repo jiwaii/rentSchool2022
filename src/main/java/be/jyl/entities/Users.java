@@ -2,7 +2,22 @@ package be.jyl.entities;
 
 import javax.persistence.*;
 import java.util.Objects;
+@NamedQueries( value = {
+        @NamedQuery(name = "Users.findAll",query = "SELECT u FROM Users u order by u.id desc "),
+        @NamedQuery(name = "Users.findWhere",query = "select u from Users u " +
+                "WHERE (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+        //Requetes pour le role secrétariat
+        @NamedQuery(name = "Users.findProfsStudentsOnly",query = "SELECT c FROM Users c " +
+                "WHERE c.role.roleName != 'administrateur' OR c.role.roleName = 'emprunteur'   "),
+        @NamedQuery(name = "Users.findWhereProfStudentOnly",query = "SELECT c FROM Users c " +
+                "Where (c.firstname like :pFirstname or c.lastname like :pLastname) " +
+                "AND (c.role.roleName != 'administrateur' OR c.role.roleName = 'emprunteur') "),
+        @NamedQuery(name = "User.login", query = "SELECT u FROM Users u " +
+                "WHERE u.login = :pLogin and u.password = :pPassword"),
+        @NamedQuery(name = "User.login",query = "select  a from Users a where a.login = :pLogin and a.password= :pPassword"),
+        @NamedQuery(name = "User.findWhereLogin",query = "select a from Users a where lower(a.login) = :pLogin")
 
+})
 @Entity
 public class Users extends Borrowers{
 //    @Basic
