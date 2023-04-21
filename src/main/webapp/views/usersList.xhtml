@@ -90,7 +90,7 @@
                                             styleClass="edit-button rounded-button ui-button-primary"
                                             process="@this">
                               <f:setPropertyActionListener value="#{user}"
-                                                           target="#{userBean.userSelected}"/>
+                                                           target="#{userBean.borrowerSelected}"/>
                               <p:resetInput target=":dialogs:manage-user-content"/>
                            </p:commandButton>
 
@@ -104,10 +104,10 @@
                                responsive="true">
 
                         <p:outputPanel id="manage-user-content" class="ui-fluid">
-                           <p:outputPanel rendered="#{not empty userBean.userSelected}">
+                           <p:outputPanel rendered="#{not empty userBean.borrowerSelected}">
                               <div class="field">
                                  <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
-                                 <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
+                                 <p:inputText id="firstname" value="#{userBean.borrowerSelected.firstname}"
                                               required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
@@ -117,7 +117,7 @@
 
                               <div class="field">
                                  <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
-                                 <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
+                                 <p:inputText id="lastname" value="#{userBean.borrowerSelected.lastname}"
                                               required="true" requiredMessage="Le nom doit avoir minimum 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
@@ -126,7 +126,7 @@
                               </div>
                               <div class="field">
                                  <p:outputLabel for="email">E-mail</p:outputLabel>
-                                 <p:inputText id="email" value="#{userBean.userSelected.email}"
+                                 <p:inputText id="email" value="#{userBean.borrowerSelected.email}"
                                               required="false"
                                               validatorMessage="email incorecte" requiredMessage="L'email est incorecte ">
                                     <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
@@ -136,7 +136,7 @@
                               </div>
                               <div class="field">
                                  <p:outputLabel for="adress">Addresse</p:outputLabel>
-                                 <p:inputText id="adress" value="#{userBean.userSelected.address}"
+                                 <p:inputText id="adress" value="#{userBean.borrowerSelected.address}"
                                               required="true" requiredMessage="L'adresse ne doit pas être en dessous de 4 caractères">
                                     <f:validateLength for="lastname" minimum="4"/>
                                  </p:inputText>
@@ -145,7 +145,7 @@
                               <div class="field">
                                  <p:outputLabel for="city">Ville :</p:outputLabel>
                                  <p:selectOneMenu id="city" styleClass="form-select form-control"
-                                                  value="#{userBean.userSelected.citiesByIdCity}"
+                                                  value="#{userBean.borrowerSelected.citiesByIdCity}"
                                                   converter="selectOneMenuConverter">
                                     <p:ajax update="@this" process="@this"/>
                                     <f:selectItems value="#{userBean.citiesList}"
@@ -158,7 +158,7 @@
                               <div class="field">
                                  <p:importEnum type="be.jyl.enums.ResponsibleType"/>
                                  <p:outputLabel for="responsibleTypeDropdown" value="Responsible type :"/><br/>
-                                 <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.userSelected.responsibleType}">
+                                 <p:selectOneMenu id="responsibleTypeDropdown" value="#{userBean.borrowerSelected.responsibleType}">
                                     <f:selectItems value="#{ResponsibleType.ALL_VALUES}"
                                                    itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
                                  </p:selectOneMenu>
@@ -167,7 +167,7 @@
                                  <div class="field">
                                     <p:outputLabel for="responsibleTypeDropdown" value="Role :"/><br/>
                                     <p:selectOneMenu id="idRole" styleClass="form-select form-control"
-                                                     value="#{userBean.userSelected.rolesByIdRole}"
+                                                     value="#{userBean.borrowerSelected.rolesByIdRole}"
                                                      converter="selectOneMenuConverter">
                                        <p:ajax update="@this" process="@this"/>
                                        <f:selectItems value="#{userBean.rolesList}"

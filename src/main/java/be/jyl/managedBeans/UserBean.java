@@ -2,10 +2,9 @@ package be.jyl.managedBeans;
 
 import be.jyl.entities.*;
 import be.jyl.enums.ResponsibleType;
-import be.jyl.services.AccountService;
-import be.jyl.services.UserService;
+import be.jyl.services.BorrowersService;
+import be.jyl.services.UsersService;
 import be.jyl.tools.NotificationManager;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.PrimeFaces;
@@ -18,9 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,42 +28,38 @@ public class UserBean implements Serializable {
     private Users user;
     private List<Roles> rolesList;
     private String userSearchText;
-    private UserService userService = new UserService();
-    private AccountService accountService = new AccountService();
+    private UsersService usersService = new UsersService();
+    private BorrowersService userService = new BorrowersService();
     private List<Cities> citiesList;
     private List<Users> usersList;
     private List<Users> filteredUser;
     private Users userSession;
-    private Users userSelected;
-    private Accounts newAccount;
+    private Borrowers borrowerSelected;
+    private Users newUser;
     private List<Users> usersAccountsList;
     private String userAccountSearch;
-    private Users userAccountSelected;
+    private Users userSelected;
     private String newPassword;
 
     @PostConstruct
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
-        this.citiesList = userService.listCities();
+        this.citiesList = usersService.listCities();
 
         user = new Users();
     }
     /**-------------------------
      * @jiwaii CRUDs
     --------------------------*/
-    public String addNewUser(){
+    public String addBorrower(){
         //<editor-fold desc="logs Info New User">
         log.log(Level.INFO,"UserBean.addNewUser()");
-        log.log(Level.INFO,"___NEW USER___ ");
-        log.log(Level.INFO,"Firstname : "+ user.getFirstname());
-        log.log(Level.INFO,"Lastname : "+ user.getLastname());
-        log.log(Level.INFO,"ResponsibleType : "+ user.getResponsibleType());
-        log.log(Level.INFO,"Address : "+ user.getAddress());
-        log.log(Level.INFO,"IdCity : "+ user.getCitiesByIdCity().getCityName());
+        log.log(Level.INFO,"___NEW Borrower___ ");
+
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
-        userService.insert(user);
+        usersService.insert(user);
         user = new Users();
         usersList = listUsersForUserRoleSession();
         Collections.reverse(usersList);
@@ -75,10 +68,10 @@ public class UserBean implements Serializable {
     }
 
     private List<Users> listUsersForUserRoleSession(){
-        return userService.listUsers(userSession);
+        return usersService.listUsers(userSession);
     }
     private List<Users> listUsersForUserRoleSessionByName(String searchText){
-        return userService.listUserByName(searchText,userSession);
+        return usersService.listUserByName(searchText,userSession);
     }
     /**
      * Renvois la liste d'utilisateurs dépendant du rôle
@@ -88,13 +81,13 @@ public class UserBean implements Serializable {
     public String update(){
         log.log(Level.INFO,"update()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-        Matcher matcher = pattern.matcher(userSelected.getEmail());
+        Matcher matcher = pattern.matcher(borrowerSelected.getEmail());
         log.log(Level.INFO,matcher.matches());
         if (matcher.matches()){
-            userService.updateUser(userSelected);
+            usersService.updateUser(userSelected);
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            usersList = userService.listUsers(userSession);
+            usersList = usersService.listUsers(userSession);
             NotificationManager.addInfoMessage("notification.users.useradded");
         }
         else {
@@ -102,13 +95,13 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
             NotificationManager.addErrorMessage("notification.users.error");
         }
-        usersList = userService.listUsers(userSession);
+        usersList = usersService.listUsers(userSession);
 
         return "usersList";
 
     }
     public void updatePassword(){
-        userService.updatePasswordService(userAccountSelected, newPassword);
+        usersService.updatePasswordService(userSelected, newPassword);
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
         newPassword = "";
@@ -116,18 +109,17 @@ public class UserBean implements Serializable {
     public String updateAccountToUser(){
         log.log(Level.INFO, "updateAccountToUser");
 
-        if (!newAccount.getLogin().trim().isEmpty()
-                && !newAccount.getPassword().trim().isEmpty()
-                && userSelected != null){
+        if (!newUser.getLogin().trim().isEmpty()
+                && !newUser.getPassword().trim().isEmpty()
+                && borrowerSelected != null){
 
-            userSelected.setResponsibleType(ResponsibleType.staff);
-            String encordedPassword = newAccount.getPassword();
-            encordedPassword = accountService.hashingPassword(encordedPassword);
-            newAccount.setPassword(encordedPassword);
-            userService.insertAccountToUser(userSelected,newAccount);
-            userSelected.setAccountsByIdAccount(newAccount);
-            log.log(Level.INFO, userSelected.getFirstname()+" with login :"+userSelected.getAccountsByIdAccount().getLogin());
-            usersList = userService.listUsers(userSession);
+            borrowerSelected.setResponsibleType(ResponsibleType.staff);
+            String encordedPassword = newUser.getPassword();
+            encordedPassword = usersService.hashingPassword(encordedPassword);
+            newUser.setPassword(encordedPassword);
+            usersService.createUserFromBorrower(borrowerSelected, newUser);
+            log.log(Level.INFO, borrowerSelected.getFirstname()+" with login :"+ borrowerSelected.getAccountsByIdAccount().getLogin());
+            usersList = usersService.listUsers(userSession);
             NotificationManager.addInfoMessage("notification.users.accountLinked");
             return "usersList";
         }else {
@@ -140,25 +132,25 @@ public class UserBean implements Serializable {
     }
     //Ouvrir la modal et initialiser les champs:
     public void openNewUser() {
-        this.rolesList = userService.listRoles();
+        this.rolesList = usersService.listRoles();
         log.log(Level.INFO,"Role list size : "+rolesList.size());
-        this.userSelected = new Users();
-        this.citiesList = userService.listCities();
+        this.borrowerSelected = new Users();
+        this.citiesList = usersService.listCities();
         //setting the user to don't return null to the view wich cause a problem
-        usersList = userService.listUserWithoutAccount();
+        usersList = usersService.listBorrowers();
 
         log.log(Level.INFO, "userLis: " + usersList);
     }
     // Si loging existe déjà
     public boolean loginExist(){
         log.log(Level.INFO,"call : loginExist()");
-        AccountService accountService = new AccountService();
-        return accountService.accountExist("%"+newAccount.getLogin()+"%");
+        BorrowersService accountService = new BorrowersService();
+        return accountService.accountExist("%"+ newUser.getLogin()+"%");
     }
     public boolean loginExistInUpdate(){
         log.log(Level.INFO,"call : loginExistInUpdate()");
-        AccountService accountService = new AccountService();
-        return accountService.accountExist("%"+userAccountSelected.getAccountsByIdAccount().getLogin()+"%");
+        BorrowersService accountService = new BorrowersService();
+        return accountService.accountExist("%"+ userSelected.getAccountsByIdAccount().getLogin()+"%");
     }
 
     /**-----------------------------
@@ -171,18 +163,18 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String addUserPage(){
-        citiesList = userService.listCities();
+        citiesList = usersService.listCities();
         return "userAdd";
     }
     public String addAccountToUserPage(){
-        newAccount = new Accounts();
-        this.rolesList = userService.listRoles();
+        newUser = new Accounts();
+        this.rolesList = usersService.listRoles();
         log.log(Level.INFO,"Role list size : "+rolesList.size());
-        usersList = userService.listUserWithoutAccount();
+        usersList = usersService.listBorrowers();
         return "userLinkAccount";
     }
     public String listUserAccountsPage(){
-        usersAccountsList = userService.listUserWithAccount();
+        usersAccountsList = usersService.listUser();
 
         return "accountUserList";
     }
@@ -198,8 +190,8 @@ public class UserBean implements Serializable {
     }
 
     public void dtUserSelection(SelectEvent selectEvent){
-        userSelected = (Users) selectEvent.getObject();
-        log.log(Level.INFO,userSelected.getFirstname()+" Selected");
+        borrowerSelected = (Users) selectEvent.getObject();
+        log.log(Level.INFO, borrowerSelected.getFirstname()+" Selected");
     }
     public void searchUserBar(){
         log.log(Level.INFO,"UserBean.searchUserBar called !");
@@ -207,10 +199,10 @@ public class UserBean implements Serializable {
         usersList = listUsersForUserRoleSessionByName(userSearchText);
     }
     public void searchUserBarToLinkAccount(){
-        usersList = userService.listUserWithoutAccountByName(userSearchText);
+        usersList = usersService.listBorrowersByName(userSearchText);
     }
     public void usersAccountsLoad(){
-        usersAccountsList = userService.listUserWithAccount(userAccountSearch);
+        usersAccountsList = usersService.listUser(userAccountSearch);
     }
 
     /** ------------------
@@ -249,14 +241,14 @@ public class UserBean implements Serializable {
         this.userSearchText = userSearchText;
     }
 
-    public Users getUserSelected() {
+    public Users getBorrowerSelected() {
         //pour tester :
-        rolesList = userService.listRoles();
-        return userSelected;
+        rolesList = usersService.listRoles();
+        return borrowerSelected;
     }
 
-    public void setUserSelected(Users userSelected) {
-        this.userSelected = userSelected;
+    public void setBorrowerSelected(Users borrowerSelected) {
+        this.borrowerSelected = borrowerSelected;
     }
 
     public List<Users> getFilteredUser() {
@@ -267,12 +259,12 @@ public class UserBean implements Serializable {
         this.filteredUser = filteredUser;
     }
 
-    public Accounts getNewAccount() {
-        return newAccount;
+    public Accounts getNewUser() {
+        return newUser;
     }
 
-    public void setNewAccount(Accounts newAccount) {
-        this.newAccount = newAccount;
+    public void setNewUser(Accounts newUser) {
+        this.newUser = newUser;
     }
 
     public List<Roles> getRolesList() {
@@ -299,12 +291,12 @@ public class UserBean implements Serializable {
         this.userAccountSearch = userAccountSearch;
     }
 
-    public Users getUserAccountSelected() {
-        return userAccountSelected;
+    public Users getUserSelected() {
+        return userSelected;
     }
 
-    public void setUserAccountSelected(Users userAccountSelected) {
-        this.userAccountSelected = userAccountSelected;
+    public void setUserSelected(Users userSelected) {
+        this.userSelected = userSelected;
     }
 
     public String getNewPassword() {

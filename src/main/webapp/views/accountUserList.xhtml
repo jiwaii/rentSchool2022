@@ -70,7 +70,7 @@
                                             styleClass="edit-button rounded-button ui-button-primary"
                                             process="@this">
                               <f:setPropertyActionListener value="#{user}"
-                                                           target="#{userBean.userAccountSelected}"/>
+                                                           target="#{userBean.userSelected}"/>
                               <p:resetInput target=":dialogs:manage-user-content"/>
                            </p:commandButton>
                         </p:column>
@@ -78,11 +78,11 @@
                   </h:form>
 
                   <h:form id="dialogs">
-                     <p:dialog header="#{userBean.userAccountSelected.firstname} #{userBean.userAccountSelected.lastname}" showEffect="fade" modal="true"
+                     <p:dialog header="#{userBean.userSelected.firstname} #{userBean.userSelected.lastname}" showEffect="fade" modal="true"
                                widgetVar="manageUserDialog"
                                responsive="true">
                         <p:outputPanel id="manage-user-content" class="ui-fluid">
-                           <p:outputPanel rendered="#{not empty userBean.userAccountSelected}">
+                           <p:outputPanel rendered="#{not empty userBean.userSelected}">
 <!--                              <div class="field">-->
 <!--                                 <p:outputLabel for="login">Login</p:outputLabel>-->
 <!--                                 <p:inputText type="text" id="login"-->

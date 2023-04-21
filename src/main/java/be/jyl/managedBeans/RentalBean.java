@@ -1,11 +1,9 @@
 package be.jyl.managedBeans;
 
-import be.jyl.entities.Articles;
-import be.jyl.entities.ArticlesRentals;
-import be.jyl.entities.Rentals;
+import be.jyl.entities.*;
 import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
-import be.jyl.services.UserService;
+import be.jyl.services.UsersService;
 import be.jyl.tools.DateConverter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -24,12 +22,12 @@ import java.util.*;
 public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
-    private UserService userService = new UserService();
+    private UsersService userService = new UsersService();
     private ArticlesService articlesService = new ArticlesService();
     private List<Rentals> rentalsList;
     private Rentals rentalSelected;
     private String rentalSearchText;
-    private Users userSelected ;
+    private Borrowers borrowerSelected;
     private Users userSession;
     private List<Users> usersList;
     private List<Articles> articlesMultipleSelected;
@@ -50,7 +48,7 @@ public class RentalBean implements Serializable {
         rentalsList = gRentalsList();
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
-        log.log(Level.INFO,userSession.getRolesByIdRole().getRoleName().toString());
+        log.log(Level.INFO,userSession.getRole().getRoleName().toString());
         //List d'utilisateur dépendant du role
         usersList = userService.listUsers(userSession);
         articlesList = articlesService.articlesAvailableList();
@@ -78,8 +76,8 @@ public class RentalBean implements Serializable {
      * @param selectEvent
      */
     public void dtUserSelection(SelectEvent selectEvent){
-        userSelected = (Users)selectEvent.getObject();
-        log.log(Level.INFO, "dtUserSelection() = "+userSelected.getLastname()+" "+userSelected.getFirstname());
+        borrowerSelected = (Users)selectEvent.getObject();
+        log.log(Level.INFO, "dtUserSelection() = "+ borrowerSelected.getLastname()+" "+ borrowerSelected.getFirstname());
 
     }
     public void rentalListBySearch(){
@@ -120,7 +118,7 @@ public class RentalBean implements Serializable {
     public String submitNewRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
         if (userSession != null){
-            if (userSelected != null && articleSelected != null && endDateSelected != null){
+            if (borrowerSelected != null && articleSelected != null && endDateSelected != null){
 
                 // Variable imperatives pour créer la location :
                 java.sql.Date dateNow ;
@@ -141,7 +139,7 @@ public class RentalBean implements Serializable {
                 log.log(Level.INFO,"Start config entities");
                 Rentals newRental = new Rentals();
                 newRental.setUser(userSession);
-                newRental.setUserRent(userSelected);
+                newRental.setBorrower(borrowerSelected);
                 newRental.setDateBegin(dateNow);
                 newRental.setDateEnd(dateEnd);
 
@@ -178,8 +176,8 @@ public class RentalBean implements Serializable {
         rentalsList = rentalsService.currentRentalsList();
         for (Rentals r:rentalsList
              ) {
-           log.log(Level.INFO,r.getUserRent().getFirstname()+
-                   "  "+r.getUserRent().getLastname());
+           log.log(Level.INFO,r.getBorrower().getFirstname()+
+                   "  "+r.getBorrower().getLastname());
         }
         return "index.xhtml";
     }
@@ -216,12 +214,12 @@ public class RentalBean implements Serializable {
     }
 
 
-    public Users getUserSelected() {
-        return userSelected;
+    public Users getBorrowerSelected() {
+        return borrowerSelected;
     }
 
-    public void setUserSelected(Users userSelected) {
-        this.userSelected = userSelected;
+    public void setBorrowerSelected(Users borrowerSelected) {
+        this.borrowerSelected = borrowerSelected;
     }
 
     public List<Users> getUsersList() {

@@ -25,7 +25,7 @@
                             </h:inputText>
                             <br/>
                             <p:dataTable id="userRadioTD" value="#{rentalBean.usersList}" var="user"
-                                         selection="#{rentalBean.userSelected}"
+                                         selection="#{rentalBean.borrowerSelected}"
                                          rowKey="#{user.idUser}"
                                          styleClass="table table-striped table-hover" >
                                 <p:ajax event="rowSelect"

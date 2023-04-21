@@ -16,7 +16,7 @@ public class Users extends Borrowers{
     private String password;
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_role",referencedColumnName = "id_role")
-    private Roles idRole;
+    private Roles role;
 //    @ManyToOne
 //    @PrimaryKeyJoinColumn(name = "id_borrower", referencedColumnName = "")
 //    private Borrowers borrowersByIdBorrower;
@@ -45,12 +45,12 @@ public class Users extends Borrowers{
         this.password = password;
     }
 
-    public Roles getIdRole() {
-        return idRole;
+    public Roles getRole() {
+        return role;
     }
 
-    public void setIdRole(Roles idRole) {
-        this.idRole = idRole;
+    public void setRole(Roles role) {
+        this.role = role;
     }
 
     @Override
@@ -58,12 +58,12 @@ public class Users extends Borrowers{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Users users = (Users) o;
-        return  idRole == users.idRole && Objects.equals(login, users.login) && Objects.equals(password, users.password);
+        return  role == users.role && Objects.equals(login, users.login) && Objects.equals(password, users.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, password, idRole);
+        return Objects.hash(login, password, role);
     }
 
 //    public Borrowers getBorrowersByIdBorrower() {

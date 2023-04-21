@@ -145,24 +145,24 @@
 
                                             </f:facet>
                                             <p:column headerText="#{bundle['tableHeader.borrower']}"
-                                                      sortBy="#{reminder.rentalsByIdRental.userRent.lastname}"
-                                                      filterBy="#{reminder.rentalsByIdRental.userRent.firstname} #{reminder.rentalsByIdRental.userRent.lastname}">
+                                                      sortBy="#{reminder.rental.userRent.lastname}"
+                                                      filterBy="#{reminder.rental.userRent.firstname} #{reminder.rental.userRent.lastname}">
                                                 <h:outputText
-                                                        value="#{reminder.rentalsByIdRental.userRent.lastname} #{reminder.rentalsByIdRental.userRent.firstname} "/>
+                                                        value="#{reminder.rental.userRent.lastname} #{reminder.rental.userRent.firstname} "/>
                                             </p:column>
                                             <p:column headerText="#{bundle['tableHeader.rentalNumber']}"
-                                                      sortBy="#{reminder.rentalsByIdRental.idRental}"
-                                                      filterBy="#{reminder.rentalsByIdRental.idRental}">
-                                                <h:outputText value="#{reminder.rentalsByIdRental.idRental}"/>
+                                                      sortBy="#{reminder.rental.idRental}"
+                                                      filterBy="#{reminder.rental.idRental}">
+                                                <h:outputText value="#{reminder.rental.idRental}"/>
                                             </p:column>
                                             <p:column headerText="#{bundle['tableHeader.sentOn']}"
                                                       sortBy="#{reminder.reminderDate}">
                                                 <h:outputText value="#{reminder.reminderDate}"/>
                                             </p:column>
                                             <p:column headerText="#{bundle['tableHeader.sentBy']}"
-                                                      sortBy="#{reminder.usersByIdUser.lastname}">
+                                                      sortBy="#{reminder.user.lastname}">
                                                 <h:outputText
-                                                        value="#{reminder.usersByIdUser.lastname} #{reminder.usersByIdUser.firstname}"/>
+                                                        value="#{reminder.user.lastname} #{reminder.user.firstname}"/>
                                             </p:column>
 
                                         </p:dataTable>

@@ -22,10 +22,10 @@ public class Reminders {
     private String message;
     @ManyToOne
     @JoinColumn(name = "id_user")
-    private Users usersByIdUser;
+    private Users user;
     @ManyToOne
     @JoinColumn(name = "id_rental")
-    private Rentals rentalsByIdRental;
+    private Rentals rental;
 
     public int getIdReminder() {
         return idReminder;
@@ -56,27 +56,27 @@ public class Reminders {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reminders reminders = (Reminders) o;
-        return idReminder == reminders.idReminder && usersByIdUser.getIdUser() == usersByIdUser.getIdUser() && rentalsByIdRental.getIdRental() == rentalsByIdRental.getIdRental() && Objects.equals(reminderDate, reminders.reminderDate) && Objects.equals(message, reminders.message);
+        return idReminder == reminders.idReminder && user.getId() == user.getId() && rental.getIdRental() == rental.getIdRental() && Objects.equals(reminderDate, reminders.reminderDate) && Objects.equals(message, reminders.message);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idReminder, usersByIdUser, rentalsByIdRental, reminderDate, message);
+        return Objects.hash(idReminder, user, rental, reminderDate, message);
     }
 
-    public Users getUsersByIdUser() {
-        return usersByIdUser;
+    public Users getUser() {
+        return user;
     }
 
-    public void setUsersByIdUser(Users usersByIdUser) {
-        this.usersByIdUser = usersByIdUser;
+    public void setUser(Users user) {
+        this.user = user;
     }
 
-    public Rentals getRentalsByIdRental() {
-        return rentalsByIdRental;
+    public Rentals getRental() {
+        return rental;
     }
 
-    public void setRentalsByIdRental(Rentals rentalsByIdRental) {
-        this.rentalsByIdRental = rentalsByIdRental;
+    public void setRental(Rentals rental) {
+        this.rental = rental;
     }
 }

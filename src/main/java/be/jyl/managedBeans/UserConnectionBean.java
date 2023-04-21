@@ -1,6 +1,7 @@
 package be.jyl.managedBeans;
 
-import be.jyl.services.AccountService;
+import be.jyl.entities.Users;
+import be.jyl.services.BorrowersService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -20,11 +21,11 @@ public class UserConnectionBean implements Serializable {
 
     public String connectionLogin(){
         /** Test Login and password */
-        AccountService accountService = new AccountService();
+        BorrowersService accountService = new BorrowersService();
         password = accountService.hashingPassword(password);
         Users myUser = accountService.getConnectionLogin(login,password);
         if (myUser != null){
-            if (myUser.getRolesByIdRole().getRoleName().equals("emprunteur")){
+            if (myUser.getRole().getRoleName().equals("emprunteur")){
                 myUser = null;
                 FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"votre compte \"emprunteur\" n'est pas autorisé de se connecté"));
                 return "fail";
@@ -34,7 +35,7 @@ public class UserConnectionBean implements Serializable {
             log.log(Level.INFO, "user is :"+ myUser.getFirstname());
 //            context.getExternalContext().getSessionMap().put("accountSession",myUser);
             context.getExternalContext().getSessionMap().put("userSession",myUser);
-            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myUser.getAccountsByIdAccount().getLogin() +" With id: "+ myUser.getAccountsByIdAccount().getLogin());
+            log.log(Level.INFO,"UserConnectionBean.connectionLogin() : success = "+myUser.getLogin() +" With id: "+ myUser.getId());
             return "success";
 
             }

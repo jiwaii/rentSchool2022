@@ -1,16 +1,23 @@
 package be.jyl.services;
 
+import be.jyl.entities.Borrowers;
 import be.jyl.entities.Cities;
 import be.jyl.entities.Roles;
+import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
-public class UserService {
-    private Logger log = Logger.getLogger(UserService.class);
+public class UsersService {
+    private Logger log = Logger.getLogger(UsersService.class);
     private EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
 
@@ -42,21 +49,21 @@ public class UserService {
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
-    public List<Users> listUserWithoutAccount(){
+    public List<Users> listBorrowers(){
         Query query = em.createNamedQuery("User.findAllNoAccount");
         return query.getResultList();
     }
-    public List<Users>listUserWithoutAccountByName(String name){
+    public List<Users> listBorrowersByName(String name){
         Query query = em.createNamedQuery("User.findWhereNoAccount")
                 .setParameter("pFirstname","%"+name+"%")
                 .setParameter("pLastname","%"+name+"%");
         return query.getResultList();
     }
-    public List<Users>listUserWithAccount(String name){
+    public List<Users> listUser(String name){
         Query query = em.createNamedQuery("User.findWithAccountWhereName").setParameter("pName","%"+name+"%");
         return query.getResultList();
     }
-    public List<Users>listUserWithAccount(){
+    public List<Users> listUser(){
         Query query = em.createNamedQuery("User.findWithAccount");
         return query.getResultList();
     }
@@ -70,55 +77,15 @@ public class UserService {
      * avec role d'emprunteur par défaut
      * @param user
      */
-    public void insert(Users user){
-        //obtention et affectation du Role emprunteur :
-        Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
-                .setParameter("pRoleName","emprunteur");
-        Roles roleEmprunteur = (Roles) query.getSingleResult();
-        user.setRolesByIdRole(roleEmprunteur);
+    public void createUser(Users user){
 
-        // Lancement de la Transaction Persist :
-        transaction.begin();
-        em.persist(user);
-        transaction.commit();
     }
     public void updateUser(Users user){
-        if (user.getRolesByIdRole() == null){
-            Query query = em.createNamedQuery("Roles.findWhereRoleNameIs")
-                    .setParameter("pRoleName","emprunteur");
-            Roles roleEmprunteur = (Roles) query.getSingleResult();
-            user.setRolesByIdRole(roleEmprunteur);
-        }
-        if (!transaction.isActive()){
-            transaction.begin();
-            em.merge(user);
-            transaction.commit();
-        }
-    }
-    public void updatePasswordService(Users user, String newPassword){
-        AccountService accountService = new AccountService();
-        String encodedPass = accountService.hashingPassword(newPassword);
-        user.getAccountsByIdAccount().setPassword(encodedPass);
-        if (!transaction.isActive()){
-            transaction.begin();
-            em.merge(user);
-            transaction.commit();
-        }
-    }
-    public void insertAccountToUser(Users user, Accounts accounts){
-        if (!transaction.isActive()){
-            transaction.begin();
-            em.persist(accounts);
-            user.setAccountsByIdAccount(accounts);
-            em.merge(user);
-            transaction.commit();
-        }
-    }
-    public List<Cities> listCities(){
-        Query query = em.createNamedQuery("Cities.findAll");
-        return query.getResultList();
-    }
 
+    }
+    public void deleteUser(Users users){
+
+    }
     /**
      * Renvois la liste d'utilisateurs dépendant du rôle
      * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
@@ -126,13 +93,22 @@ public class UserService {
      * @return
      */
     public List<Users> listUsers(Users userSession){
-        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
             return listUsersForAdmin() ;
         }
         else {
             return listUsers();
         }
     }
+    public void createUserFromBorrower(Borrowers borrower,Users user){
+
+        user = (Users)borrower;
+    }
+    public List<Cities> listCities(){
+        Query query = em.createNamedQuery("Cities.findAll");
+        return query.getResultList();
+    }
+
 
     /**
      * Idem que listUsers avec recherche par nom ou prenom
@@ -141,11 +117,56 @@ public class UserService {
      * @return
      */
     public List<Users> listUserByName(String name, Users userSession){
-        if (userSession.getRolesByIdRole().getRoleName().toString().equals("administrateur")){
+        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
             return listUserByNamForAdmin(name) ;
         }
         else {
             return listUserByName(name);
         }
+    }
+
+    public Users getConnectionLogin(String pLogin, String pPassword){
+        log.log(Level.INFO,"getConnectionLogin ( )");
+        log.log(Level.INFO,pLogin);
+        log.log(Level.INFO,pPassword);
+
+        Query query= em.createNamedQuery("User.login")
+                .setParameter("pLogin",pLogin)
+                .setParameter("pPassword",pPassword);
+        Users user = null ;
+        try{
+            user = (Users) query.getSingleResult();
+            log.log(Level.INFO,"User is OK :"+user.getFirstname());
+        }
+        catch (Exception e){
+            user = null;
+            log.log(Level.INFO,"user is NULL : "+e.getMessage());
+        }finally {
+            return user;
+        }
+    }
+    public boolean userExist(String login){
+        Query query = em.createNamedQuery("User.findWhereLogin",Users.class)
+                .setParameter("pLogin",login.trim().toLowerCase());
+
+        List<Users> accountsList = query.getResultList();
+        if (accountsList.size() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    public String hashingPassword(String rawPassword){
+        String encoded;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(rawPassword.getBytes(StandardCharsets.UTF_8));
+            encoded = DatatypeConverter.printHexBinary(hash);
+            log.log(Level.INFO,"Password encoded is : "+encoded);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return encoded;
     }
 }

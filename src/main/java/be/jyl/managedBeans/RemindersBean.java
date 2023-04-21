@@ -70,8 +70,8 @@ public class RemindersBean implements Serializable {
 
     public void saveReminder(){
         Reminders reminders = new Reminders();
-        reminders.setRentalsByIdRental(selectedRental);
-        reminders.setUsersByIdUser(userSession);
+        reminders.setRental(selectedRental);
+        reminders.setUser(userSession);
         reminders.setMessage(message);
         remindersService.addReminder(reminders);
     }

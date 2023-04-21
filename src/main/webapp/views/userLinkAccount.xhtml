@@ -22,7 +22,7 @@
 
                     <label for="inputLogin">Login</label>
                     <h:inputText type="text" class="form-control" id="inputLogin" required="true"
-                                 value="#{userBean.newAccount.login}" requiredMessage="le login est obligatoire">
+                                 value="#{userBean.newUser.login}" requiredMessage="le login est obligatoire">
                         <f:ajax event="keyup"
                                 render="loginMessage"
                                 listener="#{userBean.loginExist()}"/>
@@ -34,7 +34,7 @@
                 <div class="form-group">
                     <label for="inputPassword1">Password</label>
                     <h:inputText type="password" class="form-control" id="inputPassword1" required="true"
-                                 value="#{userBean.newAccount.password}" requiredMessage="le mot de passe est obligatoire"/>
+                                 value="#{userBean.newUser.password}" requiredMessage="le mot de passe est obligatoire"/>
                     <h:message for="inputPassword1" style="color: red"/>
                 </div>
                 <h:inputText id="inputSearchUser" value="#{userBean.userSearchText}" a:placeholder="#{bundle['form.search']}" >
@@ -44,7 +44,7 @@
                 </h:inputText>
                 <br/>
                 <p:dataTable id="userRadioTD" value="#{userBean.usersList}" var="user"
-                             selection="#{userBean.userSelected}"
+                             selection="#{userBean.borrowerSelected}"
                              rowKey="#{user.idUser}"
                              styleClass="table table-striped table-hover" >
                     <p:ajax event="rowSelect"

@@ -5,7 +5,8 @@ import be.jyl.enums.ResponsibleType;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Borrowers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
