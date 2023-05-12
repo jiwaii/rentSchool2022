@@ -3,7 +3,7 @@ package be.jyl.entities;
 import javax.persistence.*;
 import java.util.Objects;
 @NamedQueries( value = {
-        @NamedQuery(name = "Users.all",query = "SELECT u FROM Users u order by u.id desc "),
+        @NamedQuery(name = "Users.all",query = "SELECT u FROM Users u "),
         @NamedQuery(name = "Users.where",query = "select u from Users u " +
                 "WHERE (u.firstname like :pName or u.lastname like :pName)"),
         //Requetes pour le role secrétariat
@@ -14,26 +14,24 @@ import java.util.Objects;
                 "AND (c.role.roleName != 'administrateur' OR c.role.roleName = 'emprunteur') "),
         @NamedQuery(name = "User.login", query = "SELECT u FROM Users u " +
                 "WHERE u.login = :pLogin and u.password = :pPassword"),
-        @NamedQuery(name = "User.login",query = "select  a from Users a where a.login = :pLogin and a.password= :pPassword"),
         @NamedQuery(name = "User.findWhereLogin",query = "select a from Users a where lower(a.login) = :pLogin")
 
 })
 @Entity
+@DiscriminatorValue("USER")
 public class Users extends Borrowers{
 //    @Basic
 //    @Column(name = "id_borrower", nullable = false)
 //    private int idBorrower;
-    @Basic
     @Column(name = "login", nullable = false, length = 100)
     private String login;
-    @Basic
     @Column(name = "password", nullable = false, length = 100)
     private String password;
     @ManyToOne
-    @PrimaryKeyJoinColumn(name = "id_role",referencedColumnName = "id_role")
+    @JoinColumn(name = "id_role",nullable = false)
     private Roles role;
 //    @ManyToOne
-//    @PrimaryKeyJoinColumn(name = "id_borrower", referencedColumnName = "")
+//    @PrimaryKeyJoinColumn(name = "id_borrower", referencedColumnName = "id")
 //    private Borrowers borrowersByIdBorrower;
 
 //    public int getIdBorrower() {

@@ -27,8 +27,8 @@ public class Cities {
     @ManyToOne
     @PrimaryKeyJoinColumn(name = "id_country", referencedColumnName = "id_country")
     private Countries countriesByIdCountry;
-    @OneToMany(mappedBy = "citiesByIdCity")
-    private Collection<Users> usersByIdCity;
+//    @OneToMany(mappedBy = "id")
+//    private Collection<Users> usersByIdCity;
 
     public int getIdCity() {
         return idCity;
@@ -83,11 +83,11 @@ public class Cities {
         this.countriesByIdCountry = countriesByIdCountry;
     }
 
-    public Collection<Users> getUsersByIdCity() {
-        return usersByIdCity;
-    }
-
-    public void setUsersByIdCity(Collection<Users> usersByIdCity) {
-        this.usersByIdCity = usersByIdCity;
-    }
+//    public Collection<Users> getUsersByIdCity() {
+//        return usersByIdCity;
+//    }
+//
+//    public void setUsersByIdCity(Collection<Users> usersByIdCity) {
+//        this.usersByIdCity = usersByIdCity;
+//    }
 }

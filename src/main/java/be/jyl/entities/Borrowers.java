@@ -6,36 +6,31 @@ import javax.persistence.*;
 import java.util.Objects;
 @NamedQueries( value = {
 
-@NamedQuery(name = "Borrowers.all", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null"),
-@NamedQuery(name = "Borrowers.where", query = "SELECT u FROM Users u WHERE u.accountsByIdAccount = null " +
-        "AND (u.firstname like :pFirstname or u.lastname like :pLastname)"),
+@NamedQuery(name = "Borrowers.all", query = "SELECT b FROM Borrowers b "),
+@NamedQuery(name = "Borrowers.where", query = "SELECT b FROM Borrowers b WHERE b.firstname like :pFirstname or b.lastname like :pLastname"),
 })
-        @Entity
+
+@Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name="DTYPE")
+@DiscriminatorValue("BORROWER")
 public class Borrowers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
-    @Basic
     @Column(name = "address", nullable = false, length = 100)
     private String address;
-    @Basic
     @Column(name = "email", nullable = false, length = 100)
     private String email;
-    @Basic
     @Column(name = "responsibleType", nullable = false)
     private ResponsibleType responsibleType;
-    @Basic
     @Column(name = "firstname", nullable = false, length = 100)
     private String firstname;
-    @Basic
     @Column(name = "lastname", nullable = false, length = 100)
     private String lastname;
-    @Basic
     @Column(name = "barcode", nullable = true, length = 100)
     private String barcode;
-    @Basic
     @Column(name = "id_city", nullable = true)
     private Integer idCity;
 

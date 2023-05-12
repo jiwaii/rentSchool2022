@@ -19,8 +19,8 @@ public class Roles {
     private String roleName;
     @OneToMany(mappedBy = "rolesByIdRole")
     private Collection<RolesPermissions> rolesPermissionsByIdRole;
-    @OneToMany(mappedBy = "rolesByIdRole")
-    private Collection<Users> usersByIdRole;
+    @OneToMany(mappedBy = "role")
+    private Collection<Users> usersByRole;
 
     public int getIdRole() {
         return idRole;
@@ -59,11 +59,11 @@ public class Roles {
         this.rolesPermissionsByIdRole = rolesPermissionsByIdRole;
     }
 
-    public Collection<Users> getUsersByIdRole() {
-        return usersByIdRole;
+    public Collection<Users> getUsersByRole() {
+        return usersByRole;
     }
 
-    public void setUsersByIdRole(Collection<Users> usersByIdRole) {
-        this.usersByIdRole = usersByIdRole;
+    public void setUsersByRole(Collection<Users> usersByRole) {
+        this.usersByRole = usersByRole;
     }
 }

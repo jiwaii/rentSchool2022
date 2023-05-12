@@ -108,6 +108,12 @@ public class UsersService {
         log.log(Level.INFO,pLogin);
         log.log(Level.INFO,pPassword);
 
+        Query querytest = em.createNamedQuery("Users.all");
+        List<Object> viewusers = querytest.getResultList();
+        for (Object vu:viewusers
+             ) {
+            log.log(Level.INFO,vu.toString());
+        }
         Query query= em.createNamedQuery("User.login")
                 .setParameter("pLogin",pLogin)
                 .setParameter("pPassword",pPassword);
