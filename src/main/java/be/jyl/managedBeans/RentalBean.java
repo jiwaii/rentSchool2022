@@ -29,7 +29,7 @@ public class RentalBean implements Serializable {
     private String rentalSearchText;
     private Borrowers borrowerSelected;
     private Users userSession;
-    private List<Users> borrowersList;
+    private List<Borrowers> borrowersList;
     private List<Articles> articlesMultipleSelected;
     private Articles articleSelected;
     private Date endDateSelected;
@@ -50,7 +50,7 @@ public class RentalBean implements Serializable {
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         log.log(Level.INFO,userSession.getRole().getRoleName().toString());
         //List d'utilisateur dépendant du role
-        borrowersList = userService.listUsers();
+        borrowersList = userService.listBorrowers();
         articlesList = articlesService.articlesAvailableList();
         minDate = new Date();
 
@@ -76,7 +76,7 @@ public class RentalBean implements Serializable {
      * @param selectEvent
      */
     public void dtUserSelection(SelectEvent selectEvent){
-        borrowerSelected = (Users)selectEvent.getObject();
+        borrowerSelected = (Borrowers) selectEvent.getObject();
         log.log(Level.INFO, "dtUserSelection() = "+ borrowerSelected.getLastname()+" "+ borrowerSelected.getFirstname());
 
     }
@@ -218,15 +218,15 @@ public class RentalBean implements Serializable {
         return borrowerSelected;
     }
 
-    public void setBorrowerSelected(Users borrowerSelected) {
+    public void setBorrowerSelected(Borrowers borrowerSelected) {
         this.borrowerSelected = borrowerSelected;
     }
 
-    public List<Users> getBorrowersList() {
+    public List<Borrowers> getBorrowersList() {
         return borrowersList;
     }
 
-    public void setBorrowersList(List<Users> borrowersList) {
+    public void setBorrowersList(List<Borrowers> borrowersList) {
         this.borrowersList = borrowersList;
     }
 

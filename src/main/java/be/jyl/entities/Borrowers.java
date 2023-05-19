@@ -6,15 +6,17 @@ import javax.persistence.*;
 import java.util.Objects;
 @NamedQueries( value = {
 
-@NamedQuery(name = "Borrowers.all", query = "SELECT b FROM Borrowers b "),
-@NamedQuery(name = "Borrowers.where", query = "SELECT b FROM Borrowers b WHERE b.firstname like :pFirstname or b.lastname like :pLastname"),
+@NamedQuery(name = "Borrowers.all", query = "SELECT b FROM Borrowers b WHERE b.DTYPE = 'Borrowers' "),
+@NamedQuery(name = "Borrowers.where", query = "SELECT b FROM Borrowers b WHERE b.DTYPE = 'Borrowers' and (b.firstname like :pFirstname or b.lastname like :pLastname)"),
 })
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name="DTYPE")
-@DiscriminatorValue("BORROWER")
+//@DiscriminatorColumn(name="DTYPE")
+//@DiscriminatorValue("BORROWER")
 public class Borrowers {
+    @Column(name = "DTYPE", nullable = false)
+    private String DTYPE;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -29,10 +31,9 @@ public class Borrowers {
     private String firstname;
     @Column(name = "lastname", nullable = false, length = 100)
     private String lastname;
-    @Column(name = "barcode", nullable = true, length = 100)
-    private String barcode;
-    @Column(name = "id_city", nullable = true)
-    private Integer idCity;
+    @ManyToOne
+    @JoinColumn(name = "id_city", nullable = true)
+    private Cities city;
 
     public int getId() {
         return id;
@@ -82,20 +83,27 @@ public class Borrowers {
         this.lastname = lastname;
     }
 
-    public String getBarcode() {
-        return barcode;
+    public String getDTYPE() {
+        return DTYPE;
     }
 
-    public void setBarcode(String barcode) {
-        this.barcode = barcode;
+    public void setDTYPE(String DTYPE) {
+        this.DTYPE = DTYPE;
+    }
+    //    public String getBarcode() {
+//        return barcode;
+//    }
+//
+//    public void setBarcode(String barcode) {
+//        this.barcode = barcode;
+//    }
+
+    public Cities getCity() {
+        return city;
     }
 
-    public Integer getIdCity() {
-        return idCity;
-    }
-
-    public void setIdCity(Integer idCity) {
-        this.idCity = idCity;
+    public void setCity(Cities city) {
+        this.city = city;
     }
 
     @Override
@@ -103,11 +111,11 @@ public class Borrowers {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Borrowers borrowers = (Borrowers) o;
-        return id == borrowers.id && Objects.equals(address, borrowers.address) && Objects.equals(email, borrowers.email) && Objects.equals(responsibleType, borrowers.responsibleType) && Objects.equals(firstname, borrowers.firstname) && Objects.equals(lastname, borrowers.lastname) && Objects.equals(barcode, borrowers.barcode) && Objects.equals(idCity, borrowers.idCity);
+        return id == borrowers.id && Objects.equals(address, borrowers.address) && Objects.equals(email, borrowers.email) && Objects.equals(responsibleType, borrowers.responsibleType) && Objects.equals(firstname, borrowers.firstname) && Objects.equals(lastname, borrowers.lastname) && Objects.equals(city, borrowers.city);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, address, email, responsibleType, firstname, lastname, barcode, idCity);
+        return Objects.hash(id, address, email, responsibleType, firstname, lastname, city);
     }
 }

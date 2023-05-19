@@ -20,10 +20,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
 
-                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'}">
+                    <c:if test="#{userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'
+                    or userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'}">
                         <li class="nav-item active">
                             <h:form>
                                 <h:commandLink class="nav-link"
@@ -31,8 +31,8 @@
 
                             </h:form>
                         </li>
-                        <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                        <c:if test="#{userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'
+                    or userSession.getRole().roleName.trim() eq 'administrateur'}">
                             <li class="nav-item">
                                 <h:link class="nav-link" outcome="articles.xhtml"
                                         value="#{bundle['header.navbar.articles']}"/>
@@ -42,9 +42,9 @@
                                         value="#{bundle['header.navbar.categories']}"/>
                             </li>
                         </c:if>
-                        <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                        <c:if test="#{userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
                             <li class="nav-item active">
                                 <h:link class="nav-link" outcome="rentalCreation.xhtml"
                                         value="#{bundle['header.navbar.makeLocation']}"/>
@@ -66,10 +66,10 @@
                 </ul>
                 <!--#endregion -->
                 <!--#region COTE DROIT DU NAVBAR -->
-                <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                <c:if test="#{userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'
+                    or userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
                     <h:outputText styleClass="navbar-brand"
                                   value="#{bundle['header.welcome']}, #{userSession.firstname} "/>
                 </c:if>

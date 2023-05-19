@@ -10,10 +10,10 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
-        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'gestionnaire de stock'}">
+        <c:if test="#{ userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'
+                    or userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'}">
         <!--       <h:outputText value="#{user.firstname}"/>-->
         <div class="p-3">
             <div class="row justify-content-md-center">
@@ -58,11 +58,11 @@
                 <p:dataTable id="dt-rental" value="#{rentalBean.rentalsList}" var="itemRental" styleClass="table table-striped">
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.lastname']}</f:facet>
-                        #{itemRental.userRent.lastname}
+                        #{itemRental.borrower.lastname}
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.firstname']}</f:facet>
-                        #{itemRental.userRent.firstname }
+                        #{itemRental.borrower.firstname }
                     </p:column>
                     <p:column>
                         <f:facet name="header">#{bundle['tableHeader.rentalNumber']}</f:facet>
@@ -100,11 +100,11 @@
                             <table class="table-view table-striped" width="100%">
                                 <tr>
                                     <th>Nom &amp; Prénom</th>
-                                    <td>#{rentalBean.rentalSelected.userRent.lastname} #{rentalBean.rentalSelected.userRent.firstname}</td>
+                                    <td>#{rentalBean.rentalSelected.borrower.lastname} #{rentalBean.rentalSelected.borrower.firstname}</td>
                                 </tr>
                                 <tr>
                                     <th>Type de personne</th>
-                                    <td>#{rentalBean.rentalSelected.userRent.responsibleType}</td>
+                                    <td>#{rentalBean.rentalSelected.borrower.responsibleType}</td>
                                 </tr>
                                 <tr>
                                     <th>Article(s)</th>
@@ -132,10 +132,10 @@
             </h:form>
         </div>
         </c:if>
-        <c:if test="#{userSession.rolesByIdRole.roleName.trim() ne 'gestionnaire de stock'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'direction'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+        <c:if test="#{userSession.getRole().getRoleName().trim() ne 'gestionnaire de stock'
+                    and userSession.getRole().getRoleName().trim() ne 'direction'
+                    and userSession.getRole().getRoleName().trim() ne 'secretariat'
+                    and userSession.getRole().getRoleName().trim() ne 'administrateur'}">
             <div style="text-align: center">
                 <h1>#{bundle['title.AccessDenied']}</h1>
                 <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>

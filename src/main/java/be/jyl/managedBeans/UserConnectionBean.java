@@ -28,30 +28,51 @@ public class UserConnectionBean implements Serializable {
 
     public String connectionLogin(){
         //TODO TESTS pour lancer la créate table : CODEFIRST entity to DB
-        EntityManager em = EMF.getEM();
-        EntityTransaction trs  = em.getTransaction();
-        trs.begin();
-        Roles role = new Roles();
-        role.setRoleName("admin");
-        em.persist(role);
-        Users user = new Users();
-        user.setFirstname("joe");
-        user.setLastname("Lemon");
-        user.setAddress("rue du péin 14");
-        user.setEmail("joeLemon@jjejej.com");
-        user.setResponsibleType(ResponsibleType.teacher);
-        user.setLogin("lejo");
-        user.setPassword("1234");
-        user.setRole(role);
-        em.persist(user);
-        trs.commit();
+//        EntityManager em = EMF.getEM();
+//        EntityTransaction trs  = em.getTransaction();
+//        trs.begin();
+//        Roles role = new Roles();
+//        role.setRoleName("administrateur");
+//        em.persist(role);
+//
+//        //myBorrower
+//        Borrowers borrower = new Borrowers();
+//        borrower.setEmail("borrower@oeamil.com");
+//        borrower.setAddress("borowoer adress 123");
+//        borrower.setResponsibleType(ResponsibleType.staff);
+//        borrower.setFirstname("BOB");
+//        borrower.setLastname("Baudelaire");
+//        em.persist(borrower);
+//        //myUser
+//        Users user1 = new Users();
+//        user1.setFirstname("user");
+//        user1.setLastname("user1");
+//        user1.setAddress("rue des utilisateurs");
+//        user1.setEmail("user1@user.com");
+//        user1.setResponsibleType(ResponsibleType.teacher);
+//        user1.setLogin("user1");
+//        user1.setPassword("1234");
+//        user1.setRole(role);
+//        em.persist(user1);
+//        //Borow2
+//        Borrowers borrower2 = new Borrowers();
+//        borrower2.setFirstname("B2");
+//        borrower2.setLastname("BOROWER2");
+//        borrower2.setAddress("rue des emprunteurs");
+//        borrower2.setEmail("emprunteur2@jjejej.com");
+//        borrower2.setResponsibleType(ResponsibleType.teacher);
+////        user2.setLogin("jack");
+////        user2.setPassword("1234");
+////        user2.setRole(role);
+//        em.persist(borrower2);
+//        trs.commit();
 
 
 
 
         /** Test Login and password */
         UsersService userService = new UsersService();
-        password = userService.hashingPassword(password);
+        //password = userService.hashingPassword(password);
         Users myUser = userService.getConnectionLogin(login,password);
         if (myUser != null){
             if (myUser.getRole().getRoleName().equals("emprunteur")){

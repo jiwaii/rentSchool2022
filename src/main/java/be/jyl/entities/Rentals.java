@@ -80,7 +80,7 @@ public class Rentals {
         return borrower;
     }
 
-    public void setBorrower(Borrowers userRent) {
+    public void setBorrower(Borrowers borrower) {
         this.borrower = borrower;
     }
 

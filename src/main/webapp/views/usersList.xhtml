@@ -14,9 +14,9 @@
       <f:view>
          <p:messages closable="true" showDetail="true"/>
 
-         <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+         <c:if test="#{userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
 
             <div class="container py-3">
                <h1 class="h2">#{bundle['header.navbar.users']}</h1>
@@ -28,11 +28,11 @@
                                 render="dt-users"
                                 listener="#{userBean.inputSearchBorrower}"/>
                      </h:inputText>
-                     <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
+                     <p:dataTable id="dt-users" widgetVar="dtUsers" var="borrower"
                                   value="#{userBean.listBorrowers}"
                                   filteredValue="#{userBean.filteredUser}"
                                   reflow="true" paginator="true" paginatorPosition="bottom"
-                                  rowKey="#{user.idUser}" rows="5" rowSelectMode="add"
+                                  rowKey="#{borrower.idUser}" rows="5" rowSelectMode="add"
                                   styleClass="table table-striped table-hover">
                         <f:facet name="header">
                            <div class="table-header">
@@ -45,7 +45,7 @@
                                                      styleClass="ui-button-success" style="margin-right: .5rem">
                                        <p:resetInput target=":dialogs:manage-user-content"/>
                                     </p:commandButton>
-                                    <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+                                    <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
                                        <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
                                                         action="#{userBean.addAccountToUserPage()}"
                                                         styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
@@ -61,25 +61,25 @@
                         </f:facet>
 
                         //COLUMN
-                        <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{user.lastname}">
-                           <h:outputText value="#{user.lastname}"/>
+                        <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{borrower.lastname}">
+                           <h:outputText value="#{borrower.lastname}"/>
                         </p:column>
-                        <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{user.firstname}"
-                                  filterBy="#{user.firstname}">
-                           <h:outputText value="#{user.firstname}"/>
+                        <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{borrower.firstname}"
+                                  filterBy="#{borrower.firstname}">
+                           <h:outputText value="#{borrower.firstname}"/>
                         </p:column>
-                        <p:column headerText="E-mail" sortBy="#{user.email}"
-                                  filterBy="#{user.email}">
-                           <h:outputText value="#{user.email}"/>
+                        <p:column headerText="E-mail" sortBy="#{borrower.email}"
+                                  filterBy="#{borrower.email}">
+                           <h:outputText value="#{borrower.email}"/>
                         </p:column>
-                        <p:column headerText="Type" sortBy="#{user.responsibleType}"
-                                  filterBy="#{user.responsibleType}">
-                           <h:outputText value="#{user.responsibleType}"/>
+                        <p:column headerText="Type" sortBy="#{borrower.responsibleType}"
+                                  filterBy="#{borrower.responsibleType}">
+                           <h:outputText value="#{borrower.responsibleType}"/>
                         </p:column>
-                        <p:column headerText="Role" sortBy="#{user.rolesByIdRole.roleName}"
-                                  filterBy="#{user.rolesByIdRole.roleName}">
-                           <h:outputText value="#{user.rolesByIdRole.roleName}"/>
-                        </p:column>
+<!--                        <p:column headerText="Role" sortBy="#{borrower.getRole.roleName}"-->
+<!--                                  filterBy="#{borrower.getRole.roleName}">-->
+<!--                           <h:outputText value="#{borrower.getRole.roleName}"/>-->
+<!--                        </p:column>-->
                         <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
                         <!--                               filterBy="#{user.rolesByIdRole.roleName}">-->
                         <!--                        <h:outputText value="#{user.rolesByIdRole.roleName}"/>-->
@@ -89,7 +89,7 @@
                                             oncomplete="PF('manageUserDialog').show()"
                                             styleClass="edit-button rounded-button ui-button-primary"
                                             process="@this">
-                              <f:setPropertyActionListener value="#{user}"
+                              <f:setPropertyActionListener value="#{borrower}"
                                                            target="#{userBean.borrowerSelected}"/>
                               <p:resetInput target=":dialogs:manage-user-content"/>
                            </p:commandButton>
@@ -145,7 +145,7 @@
                               <div class="field">
                                  <p:outputLabel for="city">Ville :</p:outputLabel>
                                  <p:selectOneMenu id="city" styleClass="form-select form-control"
-                                                  value="#{userBean.borrowerSelected.citiesByIdCity}"
+                                                  value="#{userBean.borrowerSelected.city.idCity}"
                                                   converter="selectOneMenuConverter">
                                     <p:ajax update="@this" process="@this"/>
                                     <f:selectItems value="#{userBean.citiesList}"
@@ -163,21 +163,21 @@
                                                    itemLabel="#{rt}" itemValue="#{rt}" var="rt"/>
                                  </p:selectOneMenu>
                               </div>
-                              <c:if test="#{userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
-                                 <div class="field">
-                                    <p:outputLabel for="responsibleTypeDropdown" value="Role :"/><br/>
-                                    <p:selectOneMenu id="idRole" styleClass="form-select form-control"
-                                                     value="#{userBean.borrowerSelected.rolesByIdRole}"
-                                                     converter="selectOneMenuConverter">
-                                       <p:ajax update="@this" process="@this"/>
-                                       <f:selectItems value="#{userBean.rolesList}"
-                                                      var="role"
-                                                      itemLabel="#{role.roleName}"
-                                                      itemValue="#{role}">
-                                       </f:selectItems>
-                                    </p:selectOneMenu>
-                                 </div>
-                              </c:if>
+<!--                              <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">-->
+<!--                                 <div class="field">-->
+<!--                                    <p:outputLabel for="responsibleTypeDropdown" value="Role :"/><br/>-->
+<!--                                    <p:selectOneMenu id="idRole" styleClass="form-select form-control"-->
+<!--                                                     value="#{userBean.borrowerSelected.rolesByIdRole}"-->
+<!--                                                     converter="selectOneMenuConverter">-->
+<!--                                       <p:ajax update="@this" process="@this"/>-->
+<!--                                       <f:selectItems value="#{userBean.rolesList}"-->
+<!--                                                      var="role"-->
+<!--                                                      itemLabel="#{role.roleName}"-->
+<!--                                                      itemValue="#{role}">-->
+<!--                                       </f:selectItems>-->
+<!--                                    </p:selectOneMenu>-->
+<!--                                 </div>-->
+<!--                              </c:if>-->
                            </p:outputPanel>
                         </p:outputPanel>
 
@@ -194,9 +194,9 @@
                </div>
             </div>
          </c:if>
-         <c:if test="#{userSession.rolesByIdRole.roleName.trim() ne 'direction'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+         <c:if test="#{userSession.getRole().getRoleName().trim() ne 'direction'
+                    and userSession.getRole().getRoleName().trim() ne 'secretariat'
+                    and userSession.getRole().getRoleName().trim() ne 'administrateur'}">
             <div style="text-align: center">
                <h1>#{bundle['title.AccessDenied']}</h1>
                <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>

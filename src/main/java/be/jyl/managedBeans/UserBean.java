@@ -31,10 +31,11 @@ public class UserBean implements Serializable {
     private UsersService usersService = new UsersService();
     private BorrowersService borrowerService = new BorrowersService();
     private List<Cities> citiesList;
-    private List<Users> listBorrowers;
+    private List<Borrowers> listBorrowers;
     private List<Users> filteredUser;
     private Users userSession;
     private Borrowers borrowerSelected;
+    private Borrowers newBorrower;
     private Users newUser;
     private List<Users> usersList;
     private String userSearch;
@@ -54,14 +55,29 @@ public class UserBean implements Serializable {
     --------------------------*/
     public String addBorrower(){
         //<editor-fold desc="logs Info New User">
-        log.log(Level.INFO,"UserBean.addNewUser()");
-        log.log(Level.INFO,"___NEW Borrower___ ");
+        log.log(Level.INFO,"UserBean.addBorrower()");
+        //{
+        // controle des champs email,adress etc ...
+        //}
+
+        try {
+            usersService.em.getTransaction().begin();
+            usersService.em.persist(newBorrower);
+            usersService.em.getTransaction().commit();
+        }
+        finally {
+            if (usersService.em.getTransaction().isActive()) {
+                usersService.em.getTransaction().rollback();
+            }
+            usersService.em.close();
+        }
+
 
         //</editor-fold>
 //        user.setCitiesByIdCity(userCity);
-        usersService.createUser(user);
-        user = new Users();
-        listBorrowers = usersService.listUsers();
+//        usersService.createUser(user);
+//        user = new Users();
+        listBorrowers = usersService.listBorrowers();
         Collections.reverse(listBorrowers);
 
         return "usersList";
@@ -79,15 +95,20 @@ public class UserBean implements Serializable {
      * @return list Users
      */
     public String update(){
+        //TRANSACTION ici
+
+
+
         log.log(Level.INFO,"update()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         Matcher matcher = pattern.matcher(borrowerSelected.getEmail());
         log.log(Level.INFO,matcher.matches());
         if (matcher.matches()){
+
             usersService.updateUser(userSelected);
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            listBorrowers = usersService.listUsers();
+            listBorrowers = usersService.listBorrowers();
             NotificationManager.addInfoMessage("notification.users.useradded");
         }
         else {
@@ -95,7 +116,7 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
             NotificationManager.addErrorMessage("notification.users.error");
         }
-        listBorrowers = usersService.listUsers();
+        listBorrowers = usersService.listBorrowers();
 
         return "usersList";
 
@@ -119,7 +140,7 @@ public class UserBean implements Serializable {
             newUser.setPassword(encordedPassword);
             usersService.createUserFromBorrower(borrowerSelected, newUser);
             log.log(Level.INFO, newUser.getFirstname()+" with login :"+ newUser.getLogin());
-            listBorrowers = usersService.listUsers();
+            listBorrowers = usersService.listBorrowers();
             NotificationManager.addInfoMessage("notification.users.accountLinked");
             return "usersList";
         }else {
@@ -184,7 +205,7 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String listUserPage(){
-        listBorrowers = usersService.listUsers();
+        listBorrowers = usersService.listBorrowers();
         return "usersList";
     }
 
@@ -223,11 +244,11 @@ public class UserBean implements Serializable {
         this.citiesList = citiesList;
     }
 
-    public List<Users> getListBorrowers() {
+    public List<Borrowers> getListBorrowers() {
         return listBorrowers;
     }
 
-    public void setListBorrowers(List<Users> listBorrowers) {
+    public void setListBorrowers(List<Borrowers> listBorrowers) {
         this.listBorrowers = listBorrowers;
     }
 
@@ -303,6 +324,14 @@ public class UserBean implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public Borrowers getNewBorrower() {
+        return newBorrower;
+    }
+
+    public void setNewBorrower(Borrowers newBorrower) {
+        this.newBorrower = newBorrower;
     }
     //</editor-fold>
 }

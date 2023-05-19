@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 public class UsersService {
     private Logger log = Logger.getLogger(UsersService.class);
-    private EntityManager em = EMF.getEM();
+    public EntityManager em = EMF.getEM();
     private EntityTransaction transaction = em.getTransaction();
 
     /**
@@ -27,11 +27,11 @@ public class UsersService {
      * ----------------------------------
      */
 
-    public List<Users> listBorrowers(){
+    public List<Borrowers> listBorrowers(){
         Query query = em.createNamedQuery("Borrowers.all");
         return query.getResultList();
     }
-    public List<Users> listBorrowers(String name){
+    public List<Borrowers> listBorrowers(String name){
         Query query = em.createNamedQuery("Borrowers.where")
                 .setParameter("pFirstname","%"+name+"%")
                 .setParameter("pLastname","%"+name+"%");

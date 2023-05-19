@@ -10,9 +10,9 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
     <ui:define name="content">
-        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() eq 'direction'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'secretariat'
-                    or userSession.rolesByIdRole.roleName.trim() eq 'administrateur'}">
+        <c:if test="#{ userSession.getRole().getRoleName().trim() eq 'direction'
+                    or userSession.getRole().getRoleName().trim() eq 'secretariat'
+                    or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
 
             <div class="container py-3">
                 <h:form id="formDataTable">
@@ -24,18 +24,18 @@
                                         listener="#{rentalBean.usersListByName}"/>
                             </h:inputText>
                             <br/>
-                            <p:dataTable id="userRadioTD" value="#{rentalBean.borrowersList}" var="user"
+                            <p:dataTable id="userRadioTD" value="#{rentalBean.borrowersList}" var="borrower"
                                          selection="#{rentalBean.borrowerSelected}"
-                                         rowKey="#{user.idUser}"
+                                         rowKey="#{borrower.id}"
                                          styleClass="table table-striped table-hover" >
                                 <p:ajax event="rowSelect"
                                         listener="#{rentalBean.dtUserSelection}"/>
                                 <p:column selectionMode="single" style="width:16px;text-align:center"/>
                                 <p:column headerText="#{bundle['tableHeader.lastname']}">
-                                    <h:outputText value="#{user.lastname}" />
+                                    <h:outputText value="#{borrower.lastname}" />
                                 </p:column>
                                 <p:column headerText="#{bundle['tableHeader.firstname']}">
-                                    <h:outputText value="#{user.firstname}" />
+                                    <h:outputText value="#{borrower.firstname}" />
                                 </p:column>
                             </p:dataTable>
                         </div>
@@ -81,9 +81,9 @@
                 </h:form>
             </div>
         </c:if>
-        <c:if test="#{ userSession.rolesByIdRole.roleName.trim() ne 'direction'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'secretariat'
-                    and userSession.rolesByIdRole.roleName.trim() ne 'administrateur'}">
+        <c:if test="#{ userSession.getRole().getRoleName().trim() ne 'direction'
+                    and userSession.getRole().getRoleName().trim() ne 'secretariat'
+                    and userSession.getRole().getRoleName().trim() ne 'administrateur'}">
             <div style="text-align: center">
                 <h1>#{bundle['title.AccessDenied']}</h1>
                 <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px" />

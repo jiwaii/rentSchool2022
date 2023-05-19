@@ -18,7 +18,7 @@ import java.util.Objects;
 
 })
 @Entity
-@DiscriminatorValue("USER")
+//@DiscriminatorValue("USER")
 public class Users extends Borrowers{
 //    @Basic
 //    @Column(name = "id_borrower", nullable = false)
