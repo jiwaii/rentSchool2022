@@ -41,6 +41,7 @@ public class UserBean implements Serializable {
     private String userSearch;
     private Users userSelected;
     private String newPassword;
+    private boolean isAnUpdate = true;
 
     @PostConstruct
     public void init(){
@@ -97,25 +98,41 @@ public class UserBean implements Serializable {
     public String update(){
         //TRANSACTION ici
 
-
-
         log.log(Level.INFO,"update()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         Matcher matcher = pattern.matcher(borrowerSelected.getEmail());
-        log.log(Level.INFO,matcher.matches());
-        if (matcher.matches()){
 
-            usersService.updateUser(userSelected);
-            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            listBorrowers = usersService.listBorrowers();
-            NotificationManager.addInfoMessage("notification.users.useradded");
+        try{
+            if (!borrowerService.em.isOpen())borrowerService = new BorrowersService();
+            borrowerService.transaction.begin();
+            if(isAnUpdate == false){
+                borrowerService.em.persist(borrowerSelected);
+                log.log(Level.INFO,"PERSIST");
+            }
+            borrowerService.transaction.commit();
         }
-        else {
-            PrimeFaces.current().ajax().update("form:messages", "");
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
-            NotificationManager.addErrorMessage("notification.users.error");
+        finally {
+            if (borrowerService.transaction.isActive()){
+                borrowerService.transaction.rollback();
+            }
+            isAnUpdate = true;
+            borrowerService.em.close();
         }
+
+//        log.log(Level.INFO,matcher.matches());
+//        if (matcher.matches()){
+//
+//            usersService.updateUser(userSelected);
+//            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+//            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+//            listBorrowers = usersService.listBorrowers();
+//            NotificationManager.addInfoMessage("notification.users.useradded");
+//        }
+//        else {
+//            PrimeFaces.current().ajax().update("form:messages", "");
+//            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
+//            NotificationManager.addErrorMessage("notification.users.error");
+//        }
         listBorrowers = usersService.listBorrowers();
 
         return "usersList";
@@ -152,16 +169,18 @@ public class UserBean implements Serializable {
 
     }
     //Ouvrir la modal et initialiser les champs:
-    public void openNewUser() {
-        this.rolesList = usersService.listRoles();
-        log.log(Level.INFO,"Role list size : "+rolesList.size());
-        this.borrowerSelected = new Users();
+    public void openDialogForNewBorrower() {
+        //this.rolesList = usersService.listRoles();
+        //log.log(Level.INFO,"Role list size : "+rolesList.size());
+        this.isAnUpdate = false;
+        this.borrowerSelected = new Borrowers();
         this.citiesList = usersService.listCities();
         //setting the user to don't return null to the view wich cause a problem
-        listBorrowers = usersService.listBorrowers();
+        //listBorrowers = usersService.listBorrowers();
 
-        log.log(Level.INFO, "userLis: " + listBorrowers);
+        //log.log(Level.INFO, "userLis: " + listBorrowers);
     }
+
     // Si loging existe déjà
     public boolean loginExist(){
         log.log(Level.INFO,"call : loginExist()");
@@ -204,7 +223,7 @@ public class UserBean implements Serializable {
      *
      * @return String nom de la jsf
      */
-    public String listUserPage(){
+    public String listBorrowersPage(){
         listBorrowers = usersService.listBorrowers();
         return "usersList";
     }

@@ -14,7 +14,6 @@ import java.util.Objects;
                 + "WHERE ar.articlesByIdArticle = :article ")
 })
 @Entity
-@Table(name = "articles_rentals", schema = "rentschool2022")
 public class ArticlesRentals {
 
     @Basic

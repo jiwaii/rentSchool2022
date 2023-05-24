@@ -19,7 +19,7 @@
                     or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
 
             <div class="container py-3">
-               <h1 class="h2">#{bundle['header.navbar.users']}</h1>
+               <h1 class="h2">#{bundle['header.navbar.borrowers']}</h1>
                <div class="card crud">
                   <h:form id="form">
                      <p:growl id="messages" showDetail="false"/>
@@ -38,19 +38,19 @@
                            <div class="table-header">
                               <p:toolbar>
                                  <p:toolbarGroup align="right">
-                                    <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
-                                                     actionListener="#{userBean.openNewUser()}"
+                                    <p:commandButton value="#{bundle['header.navbar.addBorrower']}" icon="pi pi-plus"
+                                                     actionListener="#{userBean.openDialogForNewBorrower()}"
                                                      update=":dialogs:manage-user-content"
                                                      oncomplete="PF('manageUserDialog').show()"
                                                      styleClass="ui-button-success" style="margin-right: .5rem">
                                        <p:resetInput target=":dialogs:manage-user-content"/>
                                     </p:commandButton>
                                     <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
-                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"
-                                                        action="#{userBean.addAccountToUserPage()}"
-                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
-                                       </p:commandButton>
-                                       <p:commandButton value="Comptes" icon="pi pi-plus"
+<!--                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"-->
+<!--                                                        action="#{userBean.addAccountToUserPage()}"-->
+<!--                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">-->
+<!--                                       </p:commandButton>-->
+                                       <p:commandButton value="#{bundle['header.navbar.users']}" icon="pi pi-plus"
                                                         action="#{userBean.listUserAccountsPage()}"
                                                         styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
                                        </p:commandButton>
@@ -145,7 +145,7 @@
                               <div class="field">
                                  <p:outputLabel for="city">Ville :</p:outputLabel>
                                  <p:selectOneMenu id="city" styleClass="form-select form-control"
-                                                  value="#{userBean.borrowerSelected.city.idCity}"
+                                                  value="#{userBean.borrowerSelected.city}"
                                                   converter="selectOneMenuConverter">
                                     <p:ajax update="@this" process="@this"/>
                                     <f:selectItems value="#{userBean.citiesList}"

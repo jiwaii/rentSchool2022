@@ -23,7 +23,7 @@ public class Users extends Borrowers{
 //    @Basic
 //    @Column(name = "id_borrower", nullable = false)
 //    private int idBorrower;
-    @Column(name = "login", nullable = false, length = 100)
+    @Column(name = "login", nullable = false, length = 100, unique = true)
     private String login;
     @Column(name = "password", nullable = false, length = 100)
     private String password;

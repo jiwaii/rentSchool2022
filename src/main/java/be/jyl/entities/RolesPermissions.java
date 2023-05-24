@@ -4,12 +4,9 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "roles_permissions", schema = "rentschool2022")
 public class RolesPermissions {
-    @Basic
     @Column(name = "id_permission", nullable = false)
     private int idPermission;
-    @Basic
     @Column(name = "id_role", nullable = false)
     private int idRole;
     @GeneratedValue(strategy = GenerationType.IDENTITY)

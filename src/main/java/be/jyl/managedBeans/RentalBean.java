@@ -45,7 +45,7 @@ public class RentalBean implements Serializable {
      **/
     @PostConstruct
     public void init(){
-        rentalsList = gRentalsList();
+        //rentalsList = gRentalsList();
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         log.log(Level.INFO,userSession.getRole().getRoleName().toString());

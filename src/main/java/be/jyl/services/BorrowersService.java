@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BorrowersService {
     private Logger log = Logger.getLogger(BorrowersService.class);
-    private EntityManager em = EMF.getEM();
-    private EntityTransaction transaction = em.getTransaction();
+    public EntityManager em = EMF.getEM();
+    public EntityTransaction transaction = em.getTransaction();
 
 }

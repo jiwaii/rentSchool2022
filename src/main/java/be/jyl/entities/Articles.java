@@ -33,7 +33,7 @@ public class Articles {
     @Column(name = "ref_sn", nullable = false, length = 100)
     private String refSn;
     @Basic
-    @Column(name = "barcode", nullable = true, length = 100)
+    @Column(name = "barcode", nullable = true, length = 100, unique = true)
     private String barcode;
     @Basic
     @Column(name = "state", nullable = false)
