@@ -41,7 +41,7 @@ public class UserBean implements Serializable {
     private String userSearch;
     private Users userSelected;
     private String newPassword;
-    private boolean isAnUpdate = true;
+    private boolean isAnUpdate;
 
     @PostConstruct
     public void init(){
@@ -95,48 +95,45 @@ public class UserBean implements Serializable {
      * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
      * @return list Users
      */
-    public String update(){
-        //TRANSACTION ici
-
-        log.log(Level.INFO,"update()");
+    public String updateOrInsertBorrower(){
+        log.log(Level.INFO,"updateOrInsertBorrower()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
         Matcher matcher = pattern.matcher(borrowerSelected.getEmail());
-
-        try{
-            if (!borrowerService.em.isOpen())borrowerService = new BorrowersService();
-            borrowerService.transaction.begin();
-            if(isAnUpdate == false){
-                borrowerService.em.persist(borrowerSelected);
-                log.log(Level.INFO,"PERSIST");
+        if (matcher.matches()){
+            /** TRANSACTION **/
+            try{
+                if (!borrowerService.em.isOpen())borrowerService = new BorrowersService();
+                borrowerService.transaction.begin();
+                if(isAnUpdate == false){
+                    borrowerService.em.persist(borrowerSelected);
+                    log.log(Level.INFO,"PERSIST");
+                }
+                borrowerService.transaction.commit();
+                //listBorrowers = usersService.listBorrowers();
+                //NOTIFICATION SUCCES
+                PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+                PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+                NotificationManager.addInfoMessage("notification.users.useradded");
             }
-            borrowerService.transaction.commit();
-        }
-        finally {
-            if (borrowerService.transaction.isActive()){
-                borrowerService.transaction.rollback();
+            finally {
+                if (borrowerService.transaction.isActive()){
+                    borrowerService.transaction.rollback();
+                    //NOTIFICATION FAIL
+                    PrimeFaces.current().ajax().update("form:messages", "");
+                    FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
+                    NotificationManager.addErrorMessage("notification.users.error");
+                }
+                borrowerService.em.close();
             }
-            isAnUpdate = true;
-            borrowerService.em.close();
         }
-
-//        log.log(Level.INFO,matcher.matches());
-//        if (matcher.matches()){
-//
-//            usersService.updateUser(userSelected);
-//            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-//            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-//            listBorrowers = usersService.listBorrowers();
-//            NotificationManager.addInfoMessage("notification.users.useradded");
-//        }
-//        else {
-//            PrimeFaces.current().ajax().update("form:messages", "");
-//            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
-//            NotificationManager.addErrorMessage("notification.users.error");
-//        }
+        else {
+            //NOTIFICATION FAIL E-MAIL
+            PrimeFaces.current().ajax().update("form:messages", "");
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
+            NotificationManager.addErrorMessage("notification.users.error");
+        }
         listBorrowers = usersService.listBorrowers();
-
-        return "usersList";
-
+        return "borrowersList";
     }
     public void updatePassword(){
         // TODO réinitialisation password
@@ -144,32 +141,19 @@ public class UserBean implements Serializable {
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
         newPassword = "";
     }
-    public String updateAccountToUser(){
-        log.log(Level.INFO, "updateAccountToUser");
+    public String updateOrInsertUser(){
+        log.log(Level.INFO, "updateOrInsertUser");
 
-        if (!newUser.getLogin().trim().isEmpty()
-                && !newUser.getPassword().trim().isEmpty()
-                && borrowerSelected != null){
 
-            borrowerSelected.setResponsibleType(ResponsibleType.staff);
-            String encordedPassword = newUser.getPassword();
-            encordedPassword = usersService.hashingPassword(encordedPassword);
-            newUser.setPassword(encordedPassword);
-            usersService.createUserFromBorrower(borrowerSelected, newUser);
-            log.log(Level.INFO, newUser.getFirstname()+" with login :"+ newUser.getLogin());
-            listBorrowers = usersService.listBorrowers();
-            NotificationManager.addInfoMessage("notification.users.accountLinked");
-            return "usersList";
-        }else {
-            FacesContext.getCurrentInstance()
-                    .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal", " No Selection or login/password forgot "));
+        FacesContext.getCurrentInstance()
+                .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal", " No Selection or login/password forgot "));
 
-            return "userLinkAccount";
-        }
+        return "userList";
 
     }
     //Ouvrir la modal et initialiser les champs:
     public void openDialogForNewBorrower() {
+        log.log(Level.INFO,"openDialogForNewBorrower");
         //this.rolesList = usersService.listRoles();
         //log.log(Level.INFO,"Role list size : "+rolesList.size());
         this.isAnUpdate = false;
@@ -180,10 +164,14 @@ public class UserBean implements Serializable {
 
         //log.log(Level.INFO, "userLis: " + listBorrowers);
     }
+    public void openDialogForUpdateBorrower(){
+        log.log(Level.INFO,"openDialogForUpdateBorrower");
+        this.isAnUpdate = true;
+    }
 
     // Si loging existe déjà
     public boolean loginExist(){
-        log.log(Level.INFO,"call : loginExist()");
+        log.log(Level.INFO,"loginExist()");
         return usersService.userExist("%"+ newUser.getLogin()+"%");
     }
     public boolean loginExistInUpdate(){
@@ -225,7 +213,7 @@ public class UserBean implements Serializable {
      */
     public String listBorrowersPage(){
         listBorrowers = usersService.listBorrowers();
-        return "usersList";
+        return "borrowersList";
     }
 
     public void dtUserSelection(SelectEvent selectEvent){

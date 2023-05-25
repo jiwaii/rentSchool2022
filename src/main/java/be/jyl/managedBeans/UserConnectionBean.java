@@ -72,7 +72,8 @@ public class UserConnectionBean implements Serializable {
 
         /** Test Login and password */
         UsersService userService = new UsersService();
-        //password = userService.hashingPassword(password);
+        password = userService.hashingPassword(password);
+        log.log(Level.INFO,password);
         Users myUser = userService.getConnectionLogin(login,password);
         if (myUser != null){
             if (myUser.getRole().getRoleName().equals("emprunteur")){
