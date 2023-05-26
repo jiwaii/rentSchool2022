@@ -170,7 +170,10 @@ public class UserBean implements Serializable {
         listBorrowers = borrowersService.listBorrowers();
         return "borrowersList";
     }
-
+    public String listUsersPage(){
+        usersList = usersService.listUsers();
+        return "usersList";
+    }
     public void dtUserSelection(SelectEvent selectEvent){
         borrowerSelected = (Users) selectEvent.getObject();
         log.log(Level.INFO, borrowerSelected.getFirstname()+" Selected");

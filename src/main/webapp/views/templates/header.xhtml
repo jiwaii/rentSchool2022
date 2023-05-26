@@ -66,8 +66,11 @@
                         </c:if>
                     <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
                         <li class="nav-item active">
-                            <h:link class="nav-link" outcome="usersList.xhtml"
-                                    value="#{bundle['header.navbar.users']}"/>
+                            <h:form>
+                            <h:commandLink class="nav-link"
+                                           action="#{userBean.listUsersPage()}"
+                                           value="#{bundle['header.navbar.users']}"/>
+                            </h:form>
                         </li>
                     </c:if>
 

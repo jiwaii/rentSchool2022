@@ -52,17 +52,17 @@
                                   filterBy="#{user.firstname}">
                            <h:outputText value="#{user.firstname}"/>
                         </p:column>
-                        <p:column headerText="Login" sortBy="#{user.accountsByIdAccount.login}"
-                                  filterBy="#{user.accountsByIdAccount.login}">
-                           <h:outputText value="#{user.accountsByIdAccount.login}"/>
+                        <p:column headerText="Login" sortBy="#{user.login}"
+                                  filterBy="#{user.login}">
+                           <h:outputText value="#{user.login}"/>
                         </p:column>
-                        <p:column headerText="#{bundle['tableHeader.role']}" sortBy="#{user.rolesByIdRole.roleName}"
-                                  filterBy="#{user.rolesByIdRole.roleName}">
-                           <h:outputText value="#{user.rolesByIdRole.roleName}"/>
+                        <p:column headerText="#{bundle['tableHeader.role']}" sortBy="#{user.role.roleName}"
+                                  filterBy="#{user.role.roleName}">
+                           <h:outputText value="#{user.role.roleName}"/>
                         </p:column>
                         <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
-                        <!--                               filterBy="#{user.rolesByIdRole.roleName}">-->
-                        <!--                        <h:outputText value="#{user.rolesByIdRole.roleName}"/>-->
+                        <!--                               filterBy="#{user.roleName}">-->
+                        <!--                        <h:outputText value="#{user.roleName}"/>-->
                         <!--                     </p:column>-->
                         <p:column headerText="#{bundle['tableHeader.resetPassword']}" exportable="false">
                            <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
@@ -86,7 +86,7 @@
 <!--                              <div class="field">-->
 <!--                                 <p:outputLabel for="login">Login</p:outputLabel>-->
 <!--                                 <p:inputText type="text" id="login"-->
-<!--                                              value="#{userBean.userAccountSelected.accountsByIdAccount.login}" requiredMessage="Login obligatoire"-->
+<!--                                              value="#{userBean.userAccountSelected.login}" requiredMessage="Login obligatoire"-->
 <!--                                              required="true" disabled="true">-->
 <!--                                    <f:ajax event="keyup"-->
 <!--                                            render="loginMessage"-->
