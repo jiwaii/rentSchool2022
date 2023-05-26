@@ -30,20 +30,16 @@
                                                action="#{rentalBean.goIndex()}"
                                                value="#{bundle['header.navbar.currentLocationList']}">
                                 </h:commandLink>
-
                             </h:form>
                         </li>
-                        <c:if test="#{userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'
-                    or userSession.getRole().roleName.trim() eq 'administrateur'}">
-                            <li class="nav-item active">
-                                <h:link class="nav-link" outcome="articles.xhtml"
-                                        value="#{bundle['header.navbar.articles']}"/>
-                            </li>
-                            <li class="nav-item active">
-                                <h:link class="nav-link" outcome="categories.xhtml"
-                                        value="#{bundle['header.navbar.categories']}"/>
-                            </li>
-                        </c:if>
+                        <li class="nav-item active">
+                            <h:form>
+                                <h:commandLink class="nav-link"
+                                               action="#{userBean.listBorrowersPage()}"
+                                               value="#{bundle['header.navbar.borrowers']}">
+                                </h:commandLink>
+                            </h:form>
+                        </li>
                         <c:if test="#{userSession.getRole().getRoleName().trim() eq 'direction'
                     or userSession.getRole().getRoleName().trim() eq 'secretariat'
                     or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
@@ -55,15 +51,24 @@
                                 <h:link class="nav-link" outcome="reminders.xhtml"
                                         value="#{bundle['header.navbar.reminders']}"/>
                             </li>
+                        </c:if>
+                    </c:if>
+                        <c:if test="#{userSession.getRole().getRoleName().trim() eq 'gestionnaire de stock'
+                    or userSession.getRole().roleName.trim() eq 'administrateur'}">
                             <li class="nav-item active">
-                                <h:form>
-                                    <h:commandLink class="nav-link"
-                                                   action="#{userBean.listBorrowersPage()}"
-                                                   value="#{bundle['header.navbar.borrowers']}">
-                                    </h:commandLink>
-                                </h:form>
+                                <h:link class="nav-link" outcome="articles.xhtml"
+                                        value="#{bundle['header.navbar.articles']}"/>
+                            </li>
+                            <li class="nav-item active">
+                                <h:link class="nav-link" outcome="categories.xhtml"
+                                        value="#{bundle['header.navbar.categories']}"/>
                             </li>
                         </c:if>
+                    <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
+                        <li class="nav-item active">
+                            <h:link class="nav-link" outcome="usersList.xhtml"
+                                    value="#{bundle['header.navbar.users']}"/>
+                        </li>
                     </c:if>
 
                 </ul>

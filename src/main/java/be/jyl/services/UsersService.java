@@ -1,42 +1,27 @@
 package be.jyl.services;
 
-import be.jyl.entities.Borrowers;
-import be.jyl.entities.Cities;
 import be.jyl.entities.Roles;
 import be.jyl.entities.Users;
 import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
 public class UsersService {
     private Logger log = Logger.getLogger(UsersService.class);
     public EntityManager em = EMF.getEM();
-    private EntityTransaction transaction = em.getTransaction();
+    public EntityTransaction transaction = em.getTransaction();
 
-    /**
-     * ----------------------------------
-     * Methode et Fonctions :
-     * ----------------------------------
-     */
-
-    public List<Borrowers> listBorrowers(){
-        Query query = em.createNamedQuery("Borrowers.all");
-        return query.getResultList();
-    }
-    public List<Borrowers> listBorrowers(String name){
-        Query query = em.createNamedQuery("Borrowers.where")
-                .setParameter("pFirstname","%"+name+"%")
-                .setParameter("pLastname","%"+name+"%");
-        return query.getResultList();
-    }
     public List<Users> listUsers(){
         Query query = em.createNamedQuery("Users.all");
         return query.getResultList();
@@ -49,60 +34,6 @@ public class UsersService {
         Query query = em.createNamedQuery("Roles.findAll");
         return query.getResultList();
     }
-
-    /**
-     * Insertion d'un nouvelle utilisateur
-     * avec role d'emprunteur par défaut
-     * @param user
-     */
-    public void createUser(Users user){
-
-    }
-    public void updateUser(Users user){
-
-    }
-    public void deleteUser(Users users){
-
-    }
-//    /**
-//     * Renvois la liste d'utilisateurs dépendant du rôle
-//     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
-//     * @param userSession : pour connaitre quel roles il s'agit
-//     * @return
-//     */
-//    public List<Users> listUsers(Users userSession){
-//        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
-//            return listUsersForAdmin() ;
-//        }
-//        else {
-//            return listUsers();
-//        }
-//    }
-    public void createUserFromBorrower(Borrowers borrower,Users user){
-
-        user = (Users)borrower;
-    }
-    public List<Cities> listCities(){
-        Query query = em.createNamedQuery("Cities.findAll");
-        return query.getResultList();
-    }
-
-
-//    /**
-//     * Idem que listUsers avec recherche par nom ou prenom
-//     * @param name
-//     * @param userSession
-//     * @return
-//     */
-//    public List<Users> listUserByName(String name, Users userSession){
-//        if (userSession.getRole().getRoleName().toString().equals("administrateur")){
-//            return listUsersForAdmin(name) ;
-//        }
-//        else {
-//            return listUserByName(name);
-//        }
-//    }
-
     public Users getConnectionLogin(String pLogin, String pPassword){
         log.log(Level.INFO,"getConnectionLogin ( )");
         log.log(Level.INFO,pLogin);
@@ -111,7 +42,7 @@ public class UsersService {
         Query querytest = em.createNamedQuery("Users.all");
         List<Object> viewusers = querytest.getResultList();
         for (Object vu:viewusers
-             ) {
+        ) {
             log.log(Level.INFO,vu.toString());
         }
         Query query= em.createNamedQuery("User.login")
@@ -129,18 +60,6 @@ public class UsersService {
             return user;
         }
     }
-    public boolean userExist(String login){
-        Query query = em.createNamedQuery("User.findWhereLogin",Users.class)
-                .setParameter("pLogin",login.trim().toLowerCase());
-
-        List<Users> accountsList = query.getResultList();
-        if (accountsList.size() == 0){
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
     public String hashingPassword(String rawPassword){
         String encoded;
         try {
@@ -152,5 +71,17 @@ public class UsersService {
             throw new RuntimeException(e);
         }
         return encoded;
+    }
+    public boolean userExist(String login){
+        Query query = em.createNamedQuery("User.findWhereLogin",Users.class)
+                .setParameter("pLogin",login.trim().toLowerCase());
+
+        List<Users> accountsList = query.getResultList();
+        if (accountsList.size() == 0){
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 }

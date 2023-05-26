@@ -1,12 +1,8 @@
 package be.jyl.managedBeans;
 
-import be.jyl.entities.Borrowers;
-import be.jyl.entities.Roles;
 import be.jyl.entities.Users;
-import be.jyl.enums.ResponsibleType;
 import be.jyl.services.BorrowersService;
 import be.jyl.services.UsersService;
-import be.jyl.tools.EMF;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -14,8 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 

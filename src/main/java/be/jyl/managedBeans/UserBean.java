@@ -1,9 +1,8 @@
 package be.jyl.managedBeans;
 
 import be.jyl.entities.*;
-import be.jyl.enums.ResponsibleType;
-import be.jyl.services.BorrowersService;
 import be.jyl.services.UsersService;
+import be.jyl.services.BorrowersService;
 import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -28,8 +27,8 @@ public class UserBean implements Serializable {
     private Users user;
     private List<Roles> rolesList;
     private String borrowerSearchText;
+    private BorrowersService borrowersService = new BorrowersService();
     private UsersService usersService = new UsersService();
-    private BorrowersService borrowerService = new BorrowersService();
     private List<Cities> citiesList;
     private List<Borrowers> listBorrowers;
     private List<Users> filteredUser;
@@ -47,42 +46,14 @@ public class UserBean implements Serializable {
     public void init(){
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
-        this.citiesList = usersService.listCities();
+        this.citiesList = borrowersService.listCities();
 
         user = new Users();
     }
     /**-------------------------
      * @jiwaii CRUDs
     --------------------------*/
-    public String addBorrower(){
-        //<editor-fold desc="logs Info New User">
-        log.log(Level.INFO,"UserBean.addBorrower()");
-        //{
-        // controle des champs email,adress etc ...
-        //}
 
-        try {
-            usersService.em.getTransaction().begin();
-            usersService.em.persist(newBorrower);
-            usersService.em.getTransaction().commit();
-        }
-        finally {
-            if (usersService.em.getTransaction().isActive()) {
-                usersService.em.getTransaction().rollback();
-            }
-            usersService.em.close();
-        }
-
-
-        //</editor-fold>
-//        user.setCitiesByIdCity(userCity);
-//        usersService.createUser(user);
-//        user = new Users();
-        listBorrowers = usersService.listBorrowers();
-        Collections.reverse(listBorrowers);
-
-        return "usersList";
-    }
 
 //    private List<Users> listUsersForUserRoleSession(){
 //        return usersService.listUsers(userSession);
@@ -90,11 +61,8 @@ public class UserBean implements Serializable {
 //    private List<Users> listUsersForUserRoleSessionByName(String searchText){
 //        return usersService.lis(searchText);
 //    }
-    /**
-     * Renvois la liste d'utilisateurs dépendant du rôle
-     * Exemple : si connecté avec Secrétariat, elle n'auras pas les admins dans la liste
-     * @return list Users
-     */
+
+    /** BORROWERS **/
     public String updateOrInsertBorrower(){
         log.log(Level.INFO,"updateOrInsertBorrower()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -102,13 +70,13 @@ public class UserBean implements Serializable {
         if (matcher.matches()){
             /** TRANSACTION **/
             try{
-                if (!borrowerService.em.isOpen())borrowerService = new BorrowersService();
-                borrowerService.transaction.begin();
+                if (!borrowersService.em.isOpen()) borrowersService = new BorrowersService();
+                borrowersService.transaction.begin();
                 if(isAnUpdate == false){
-                    borrowerService.em.persist(borrowerSelected);
+                    borrowersService.em.persist(borrowerSelected);
                     log.log(Level.INFO,"PERSIST");
                 }
-                borrowerService.transaction.commit();
+                borrowersService.transaction.commit();
                 //listBorrowers = usersService.listBorrowers();
                 //NOTIFICATION SUCCES
                 PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
@@ -116,14 +84,14 @@ public class UserBean implements Serializable {
                 NotificationManager.addInfoMessage("notification.users.useradded");
             }
             finally {
-                if (borrowerService.transaction.isActive()){
-                    borrowerService.transaction.rollback();
+                if (borrowersService.transaction.isActive()){
+                    borrowersService.transaction.rollback();
                     //NOTIFICATION FAIL
                     PrimeFaces.current().ajax().update("form:messages", "");
                     FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
                     NotificationManager.addErrorMessage("notification.users.error");
                 }
-                borrowerService.em.close();
+                //borrowersService.em.close();
             }
         }
         else {
@@ -132,9 +100,22 @@ public class UserBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
             NotificationManager.addErrorMessage("notification.users.error");
         }
-        listBorrowers = usersService.listBorrowers();
+        listBorrowers = borrowersService.listBorrowers();
         return "borrowersList";
     }
+    //Ouvrir la modal et initialiser les champs:
+    public void openDialogForNewBorrower() {
+        log.log(Level.INFO,"openDialogForNewBorrower");
+        this.isAnUpdate = false;
+        this.borrowerSelected = new Borrowers();
+        this.citiesList = borrowersService.listCities();
+    }
+    public void openDialogForUpdateBorrower(){
+        log.log(Level.INFO,"openDialogForUpdateBorrower");
+        this.isAnUpdate = true;
+    }
+
+    /** USERS **/
     public void updatePassword(){
         // TODO réinitialisation password
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
@@ -143,31 +124,12 @@ public class UserBean implements Serializable {
     }
     public String updateOrInsertUser(){
         log.log(Level.INFO, "updateOrInsertUser");
-
-
         FacesContext.getCurrentInstance()
                 .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal", " No Selection or login/password forgot "));
 
         return "userList";
+    }
 
-    }
-    //Ouvrir la modal et initialiser les champs:
-    public void openDialogForNewBorrower() {
-        log.log(Level.INFO,"openDialogForNewBorrower");
-        //this.rolesList = usersService.listRoles();
-        //log.log(Level.INFO,"Role list size : "+rolesList.size());
-        this.isAnUpdate = false;
-        this.borrowerSelected = new Borrowers();
-        this.citiesList = usersService.listCities();
-        //setting the user to don't return null to the view wich cause a problem
-        //listBorrowers = usersService.listBorrowers();
-
-        //log.log(Level.INFO, "userLis: " + listBorrowers);
-    }
-    public void openDialogForUpdateBorrower(){
-        log.log(Level.INFO,"openDialogForUpdateBorrower");
-        this.isAnUpdate = true;
-    }
 
     // Si loging existe déjà
     public boolean loginExist(){
@@ -190,19 +152,12 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String addUserPage(){
-        citiesList = usersService.listCities();
+        citiesList = borrowersService.listCities();
         return "userAdd";
     }
-    public String addAccountToUserPage(){
-        newUser = new Users();
-        this.rolesList = usersService.listRoles();
-        log.log(Level.INFO,"Role list size : "+rolesList.size());
-        listBorrowers = usersService.listBorrowers();
-        return "userLinkAccount";
-    }
+
     public String listUserAccountsPage(){
         usersList = usersService.listUsers();
-
         return "accountUserList";
     }
 
@@ -212,7 +167,7 @@ public class UserBean implements Serializable {
      * @return String nom de la jsf
      */
     public String listBorrowersPage(){
-        listBorrowers = usersService.listBorrowers();
+        listBorrowers = borrowersService.listBorrowers();
         return "borrowersList";
     }
 
@@ -222,10 +177,10 @@ public class UserBean implements Serializable {
     }
     public void inputSearchBorrower(){
         log.log(Level.INFO,"inputSearchBorrower() : UserBean.userSeachText is = "+ borrowerSearchText);
-        listBorrowers = usersService.listBorrowers(borrowerSearchText);
+        listBorrowers = borrowersService.listBorrowers(borrowerSearchText);
     }
     public void inputSearchBorrowerToUser(){
-        listBorrowers = usersService.listBorrowers(borrowerSearchText);
+        listBorrowers = borrowersService.listBorrowers(borrowerSearchText);
     }
     public void usersLoad(){
         usersList = usersService.listUsers(userSearch);
@@ -268,8 +223,6 @@ public class UserBean implements Serializable {
     }
 
     public Borrowers getBorrowerSelected() {
-        //pour tester :
-        rolesList = usersService.listRoles();
         return borrowerSelected;
     }
 

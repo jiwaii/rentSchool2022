@@ -3,7 +3,7 @@ package be.jyl.managedBeans;
 import be.jyl.entities.*;
 import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
-import be.jyl.services.UsersService;
+import be.jyl.services.BorrowersService;
 import be.jyl.tools.DateConverter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -22,7 +22,7 @@ import java.util.*;
 public class RentalBean implements Serializable {
     private Logger log = Logger.getLogger(RentalBean.class);
     private RentalsService rentalsService = new RentalsService();
-    private UsersService userService = new UsersService();
+    private BorrowersService userService = new BorrowersService();
     private ArticlesService articlesService = new ArticlesService();
     private List<Rentals> rentalsList;
     private Rentals rentalSelected;
@@ -45,7 +45,7 @@ public class RentalBean implements Serializable {
      **/
     @PostConstruct
     public void init(){
-        //rentalsList = gRentalsList();
+        rentalsList = callRentalsList();
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         log.log(Level.INFO,userSession.getRole().getRoleName().toString());
@@ -55,7 +55,7 @@ public class RentalBean implements Serializable {
         minDate = new Date();
 
     }
-    public List<Rentals> gRentalsList(){
+    public List<Rentals> callRentalsList(){
         return rentalsService.currentRentalsList();
     }
 

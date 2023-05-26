@@ -17,10 +17,10 @@ public class LoginValidator implements Validator {
     private Logger log = Logger.getLogger(LoginValidator.class);
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object o) throws ValidatorException {
-        UsersService usersService = new UsersService();
-        if (usersService.userExist(o.toString())){
+        UsersService borrowersService = new UsersService();
+        if (borrowersService.userExist(o.toString())){
             log.log(Level.INFO, o.toString());
-            log.log(Level.INFO, usersService.userExist(o.toString()));
+            log.log(Level.INFO, borrowersService.userExist(o.toString()));
 
             throw new ValidatorException((new FacesMessage(FacesMessage.SEVERITY_WARN,
                     "Login déjà pris",null)));

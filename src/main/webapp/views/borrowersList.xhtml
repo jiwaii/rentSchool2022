@@ -45,16 +45,16 @@
                                                      styleClass="ui-button-success" style="margin-right: .5rem">
                                        <p:resetInput target=":dialogs:manage-user-content"/>
                                     </p:commandButton>
-                                    <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
-<!--                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"-->
-<!--                                                        action="#{userBean.addAccountToUserPage()}"-->
+<!--                                    <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">-->
+<!--&lt;!&ndash;                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        action="#{userBean.addAccountToUserPage()}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">&ndash;&gt;-->
+<!--&lt;!&ndash;                                       </p:commandButton>&ndash;&gt;-->
+<!--                                       <p:commandButton value="#{bundle['header.navbar.users']}" icon="pi pi-plus"-->
+<!--                                                        action="#{userBean.listUserAccountsPage()}"-->
 <!--                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">-->
 <!--                                       </p:commandButton>-->
-                                       <p:commandButton value="#{bundle['header.navbar.users']}" icon="pi pi-plus"
-                                                        action="#{userBean.listUserAccountsPage()}"
-                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">
-                                       </p:commandButton>
-                                    </c:if>
+<!--                                    </c:if>-->
                                  </p:toolbarGroup>
                               </p:toolbar>
                            </div>
