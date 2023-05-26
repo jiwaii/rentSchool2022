@@ -40,6 +40,7 @@ public class UserBean implements Serializable {
     private String userSearch;
     private Users userSelected;
     private String newPassword;
+    private String newPasswordRepeat;
     private boolean isAnUpdate;
 
     @PostConstruct
@@ -119,26 +120,33 @@ public class UserBean implements Serializable {
     public String updatePassword(){
         // TODO réinitialisation password
         log.log(Level.INFO,userSelected.getLastname());
-        userSelected.setPassword(usersService.hashingPassword(newPassword));
-        if(!usersService.em.isOpen())usersService = new UsersService();
-        try{
+        if (!newPassword.equals(newPasswordRepeat)){
+            //PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+            NotificationManager.addErrorMessage("notification.passwordNoMatch");
+            return "";
+        }else {
+            userSelected.setPassword(usersService.hashingPassword(newPassword));
+            if(!usersService.em.isOpen())usersService = new UsersService();
+            try{
+                usersService.transaction.begin();
+                usersService.transaction.commit();
 
-            usersService.transaction.begin();
-            usersService.transaction.commit();
-
+                PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+                PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+                NotificationManager.addInfoMessage("notification.userUpdated");
+            }
+            finally {
+                if(usersService.transaction.isActive()){
+                    usersService.transaction.rollback();
+                }
+            }
+            newPassword = "";
+            newPasswordRepeat = "";
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            NotificationManager.addInfoMessage("notification.userUpdated");
+            return "userList";
         }
-        finally {
-            if(usersService.transaction.isActive()){
-                usersService.transaction.rollback();
-            }
-        }
-        newPassword = "";
-        PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-        return "userList";
     }
     public String updateOrInsertUser(){
         log.log(Level.INFO, "updateOrInsertUser");
@@ -147,7 +155,13 @@ public class UserBean implements Serializable {
 
         return "userList";
     }
-    public void openDialogForNewUser(){}
+    public void openDialogForUpdateUser(){
+        log.log(Level.INFO,"newpassword : "+newPassword);
+        log.log(Level.INFO,"newpasswordRepeat : "+newPasswordRepeat);
+    }
+    public void openDialogForNewUser(){
+
+    }
 
     // Si loging existe déjà
     public boolean loginExist(){
@@ -305,6 +319,14 @@ public class UserBean implements Serializable {
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getNewPasswordRepeat() {
+        return newPasswordRepeat;
+    }
+
+    public void setNewPasswordRepeat(String newPasswordRepeat) {
+        this.newPasswordRepeat = newPasswordRepeat;
     }
 
     public Borrowers getNewBorrower() {
