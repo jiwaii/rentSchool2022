@@ -10,174 +10,201 @@
       xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="templates/mainPage.xhtml">
-   <ui:define name="content">
-      <f:view>
-         <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
+    <ui:define name="content">
+        <f:view>
+            <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
 
-            <div class="container py-3">
-               <h1 class="h2">#{bundle['title.AccountsUser']}</h1>
-               <div class="card crud">
-                  <h:form id="form">
-                     <p:growl id="messages" showDetail="true"/>
-                     <h:inputText id="inputSearch" value="#{userBean.userSearch}"
-                                  styleClass="form-control" a:placeholder="#{bundle['form.search']}" >
-                        <f:ajax event="keyup"
-                                render="dt-users"
-                                listener="#{userBean.usersLoad()}"/>
-                     </h:inputText>
-                     <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
-                                  value="#{userBean.usersList}"
-                                  filteredValue="#{userBean.filteredUser}"
-                                  reflow="true" paginator="true" paginatorPosition="bottom"
-                                  rowKey="#{user.id}" rows="5" rowSelectMode="add"
-                                  styleClass="table table-striped table-hover">
-                        <f:facet name="header">
-                           <div class="table-header">
-                              <p:toolbar>
-                                 <p:toolbarGroup align="right">
-                                     <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
-                                                      actionListener="#{userBean.openDialogForNewUser()}"
-                                                      update=":dialogs:manage-user-content"
-                                                      oncomplete="PF('manageUserDialog').show()"
-                                                      styleClass="ui-button-success" style="margin-right: .5rem">
-                                     <p:resetInput target=":dialogs:manage-user-content"/>
-                                     </p:commandButton>
-                                 </p:toolbarGroup>
-                              </p:toolbar>
-                           </div>
-                        </f:facet>
+                <div class="container py-3">
+                    <h1 class="h2">#{bundle['title.AccountsUser']}</h1>
+                    <div class="card crud">
+                        <h:form id="form">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:inputText id="inputSearch" value="#{userBean.userSearch}"
+                                         styleClass="form-control" a:placeholder="#{bundle['form.search']}" >
+                                <f:ajax event="keyup"
+                                        render="dt-users"
+                                        listener="#{userBean.usersLoad()}"/>
+                            </h:inputText>
+                            <p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
+                                         value="#{userBean.usersList}"
+                                         filteredValue="#{userBean.filteredUser}"
+                                         reflow="true" paginator="true" paginatorPosition="bottom"
+                                         rowKey="#{user.id}" rows="5" rowSelectMode="add"
+                                         styleClass="table table-striped table-hover">
+                                <f:facet name="header">
+                                    <div class="table-header">
+                                        <p:toolbar>
+                                            <p:toolbarGroup align="right">
+                                                <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
+                                                                 actionListener="#{userBean.openDialogForNewUser()}"
+                                                                 update=":dialogs:manage-user-content"
+                                                                 oncomplete="PF('manageUserDialog').show()"
+                                                                 styleClass="ui-button-success" style="margin-right: .5rem">
+                                                    <p:resetInput target=":dialogs:manage-user-content"/>
+                                                </p:commandButton>
+                                            </p:toolbarGroup>
+                                        </p:toolbar>
+                                    </div>
+                                </f:facet>
 
-                        //COLUMN
-                        <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{user.lastname}">
-                           <h:outputText value="#{user.lastname}"/>
-                        </p:column>
-                        <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{user.firstname}"
-                                  filterBy="#{user.firstname}">
-                           <h:outputText value="#{user.firstname}"/>
-                        </p:column>
-                        <p:column headerText="Login" sortBy="#{user.login}"
-                                  filterBy="#{user.login}">
-                           <h:outputText value="#{user.login}"/>
-                        </p:column>
-                        <p:column headerText="#{bundle['tableHeader.role']}" sortBy="#{user.role.roleName}"
-                                  filterBy="#{user.role.roleName}">
-                           <h:outputText value="#{user.role.roleName}"/>
-                        </p:column>
-                        <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
-                        <!--                               filterBy="#{user.roleName}">-->
-                        <!--                        <h:outputText value="#{user.roleName}"/>-->
-                        <!--                     </p:column>-->
-                        <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
-                           <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
-                                            actionListener="#{userBean.openDialogForUpdateUser}"
-                                            oncomplete="PF('manageUserDialog').show()"
-                                            styleClass="edit-button rounded-button ui-button-primary"
-                                            process="@this">
-                              <f:setPropertyActionListener value="#{user}"
-                                                           target="#{userBean.userSelected}"/>
-                              <p:resetInput target=":dialogs:manage-user-content"/>
-                           </p:commandButton>
-                        </p:column>
-                     </p:dataTable>
-                  </h:form>
+                                //COLUMN
+                                <p:column headerText="#{bundle['tableHeader.lastname']}" sortBy="#{user.lastname}">
+                                    <h:outputText value="#{user.lastname}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle['tableHeader.firstname']}" sortBy="#{user.firstname}"
+                                          filterBy="#{user.firstname}">
+                                    <h:outputText value="#{user.firstname}"/>
+                                </p:column>
+                                <p:column headerText="Login" sortBy="#{user.login}"
+                                          filterBy="#{user.login}">
+                                    <h:outputText value="#{user.login}"/>
+                                </p:column>
+                                <p:column headerText="#{bundle['tableHeader.role']}" sortBy="#{user.role.roleName}"
+                                          filterBy="#{user.role.roleName}">
+                                    <h:outputText value="#{user.role.roleName}"/>
+                                </p:column>
+                                <!--                     <p:column headerText="Role" sortBy="#{user.}"-->
+                                <!--                               filterBy="#{user.roleName}">-->
+                                <!--                        <h:outputText value="#{user.roleName}"/>-->
+                                <!--                     </p:column>-->
+                                <p:column headerText="#{bundle['tableHeader.action']}" exportable="false">
+                                    <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
+                                                     actionListener="#{userBean.openDialogForUpdateUser}"
+                                                     oncomplete="PF('manageUserDialog').show()"
+                                                     styleClass="edit-button rounded-button ui-button-primary"
+                                                     process="@this">
+                                        <f:setPropertyActionListener value="#{user}"
+                                                                     target="#{userBean.userSelected}"/>
+                                        <p:resetInput target=":dialogs:manage-user-content"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
 
-                  <h:form id="dialogs">
-                     <p:dialog header="#{bundle['title.sheet']}"
-                               showEffect="fade" modal="true"
-                               widgetVar="manageUserDialog"
-                               responsive="true">
-                        <p:outputPanel id="manage-user-content" class="ui-fluid">
-                           <p:outputPanel rendered="#{not empty userBean.userSelected}">
-                               <div class="field">
-                                   <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
-                                   <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
-                                                required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères">
-                                       <f:validateLength for="lastname" minimum="3"/>
-                                   </p:inputText>
-                                   <h:message id="firstnameMessage" for="firstname" style="color: red"/>
+                        <h:form id="dialogs">
+                            <p:dialog header="#{bundle['title.sheet']}"
+                                      showEffect="fade" modal="true"
+                                      widgetVar="manageUserDialog"
+                                      responsive="true">
+                                <p:outputPanel id="manage-user-content" class="ui-fluid">
+                                    <p:outputPanel rendered="#{not empty userBean.userSelected}">
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
+                                            <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
+                                                         required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères">
+                                                <f:validateLength for="lastname" minimum="3"/>
+                                            </p:inputText>
+                                            <h:message id="firstnameMessage" for="firstname" style="color: red"/>
 
-                               </div>
+                                        </div>
 
-                               <div class="field">
-                                   <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
-                                   <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
-                                                required="true" requiredMessage="Le nom doit avoir minimum 3 caractères">
-                                       <f:validateLength for="lastname" minimum="3"/>
-                                   </p:inputText>
-                                   <h:message id="lastnameMessage" for="lastname" style="color: red"/>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
+                                            <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
+                                                         required="true" requiredMessage="Le nom doit avoir minimum 3 caractères">
+                                                <f:validateLength for="lastname" minimum="3"/>
+                                            </p:inputText>
+                                            <h:message id="lastnameMessage" for="lastname" style="color: red"/>
 
-                               </div>
-                               <div class="field">
-                                   <p:outputLabel for="email">E-mail</p:outputLabel>
-                                   <p:inputText id="email" value="#{userBean.userSelected.email}"
-                                                required="false"
-                                                validatorMessage="email incorecte" requiredMessage="L'email est incorecte ">
-                                       <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
-                                   </p:inputText>
-                                   <h:message id="emailMessage" for="email" style="color: red"/>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="email">E-mail</p:outputLabel>
+                                            <p:inputText id="email" value="#{userBean.userSelected.email}"
+                                                         required="false"
+                                                         validatorMessage="email incorecte" requiredMessage="L'email est incorecte ">
+                                                <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
+                                            </p:inputText>
+                                            <h:message id="emailMessage" for="email" style="color: red"/>
 
-                               </div>
-                               <div class="field">
-                                   <p:outputLabel for="adress">Addresse</p:outputLabel>
-                                   <p:inputText id="adress" value="#{userBean.userSelected.address}"
-                                                required="true" requiredMessage="L'adresse ne doit pas être en dessous de 3 caractères">
-                                       <f:validateLength for="lastname" minimum="4"/>
-                                   </p:inputText>
-                                   <h:message id="adressMessage" for="adress" style="color: red"/>
-                               </div>
-                               <div class="field">
-                                   <p:outputLabel for="city">Ville :</p:outputLabel>
-                                   <p:selectOneMenu id="city" styleClass="form-select form-control"
-                                                    value="#{userBean.userSelected.city}"
-                                                    converter="selectOneMenuConverter">
-                                       <p:ajax update="@this" process="@this"/>
-                                       <f:selectItems value="#{userBean.citiesList}"
-                                                      var="c"
-                                                      itemLabel="#{c.cityName} - #{c.postalCode}"
-                                                      itemValue="#{c}">
-                                       </f:selectItems>
-                                   </p:selectOneMenu>
-                               </div>
-                              <div class="field">
-                                 <p:outputLabel for="newPassword">Password___</p:outputLabel>
-                                 <p:password type="" id="newPassword" 
-                                             value="#{userBean.newPassword}"
-                                             required="true">
-                                    <f:validateLength for="newPassword" minimum="4"/>
-                                 </p:password>
-                              </div>
-                               <div class="field">
-                                   <p:outputLabel for="repeatPassword">repeat password___</p:outputLabel>
-                                   <p:password type="" id="repeatPassword" 
-                                               value="#{userBean.newPasswordRepeat}"
-                                               required="true">
-                                   </p:password>
-                               </div>
-                           </p:outputPanel>
-                        </p:outputPanel>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="adress">Addresse</p:outputLabel>
+                                            <p:inputText id="adress" value="#{userBean.userSelected.address}"
+                                                         required="true" requiredMessage="L'adresse ne doit pas être en dessous de 3 caractères">
+                                                <f:validateLength for="lastname" minimum="4"/>
+                                            </p:inputText>
+                                            <h:message id="adressMessage" for="adress" style="color: red"/>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="city">Ville :</p:outputLabel>
+                                            <p:selectOneMenu id="city" styleClass="form-select form-control"
+                                                             value="#{userBean.userSelected.city}"
+                                                             converter="selectOneMenuConverter">
+                                                <p:ajax update="@this" process="@this"/>
+                                                <f:selectItems value="#{userBean.citiesList}"
+                                                               var="c"
+                                                               itemLabel="#{c.cityName} - #{c.postalCode}"
+                                                               itemValue="#{c}">
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </p:outputPanel>
+                                    <p:outputPanel>
+                                        <div class="field col-12 md:col-4 col-12 md:col-4">
+                                            <p:outputLabel for="login">Login</p:outputLabel>
+                                            <p:inputText id="login" readonly="#{userBean.isAnUpdate}" value="#{userBean.userSelected.login}">
+                                                <f:ajax event="keyup"
+                                                        render="loginMessage"
+                                                        listener="#{userBean.loginExist()}"/>
+                                                <f:validator validatorId="loginValidator"/>
+                                            </p:inputText>
+                                            <h:message id="loginMessage" for="login" style="color: red"/>
+                                        </div>
+                                        <c:if test="#{userSession.getRole().getRoleName().trim() eq 'administrateur'}">
+                                            <div class="field col-12 md:col-4">
+                                                <p:outputLabel for="roles" value="Role :"/><br/>
+                                                <p:selectOneMenu id="roles" styleClass="form-select form-control"
+                                                                 value="#{userBean.userSelected.role}"
+                                                                 converter="selectOneMenuConverter">
+                                                    <p:ajax update="@this" process="@this"/>
+                                                    <f:selectItems value="#{userBean.rolesList}"
+                                                                   var="role"
+                                                                   itemLabel="#{role.roleName}"
+                                                                   itemValue="#{role}">
+                                                    </f:selectItems>
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </c:if>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="newPassword">Password___</p:outputLabel>
+                                            <p:password type="" id="newPassword"
+                                                        value="#{userBean.newPassword}"
+                                                        required="true">
+                                                <f:validateLength for="newPassword" minimum="4"/>
+                                            </p:password>
+                                        </div>
+                                        <div class="field col-12 md:col-4">
+                                            <p:outputLabel for="repeatPassword">repeat password___</p:outputLabel>
+                                            <p:password type="" id="repeatPassword"
+                                                        value="#{userBean.newPasswordRepeat}"
+                                                        required="true">
+                                            </p:password>
+                                        </div>
+                                    </p:outputPanel>
+                                </p:outputPanel>
 
-                        <f:facet name="footer">
-                           <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check"
-                                            action="#{userBean.updatePassword}"
-                                            update="manage-user-content"
-                                            process="manage-user-content @this"/>
-                           <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
-                                            onclick="PF('manageUserDialog').hide()"
-                                            class="ui-button-secondary" type="button"/>
-                        </f:facet>
-                     </p:dialog>
-                  </h:form>
-               </div>
-            </div>
-         </c:if>
-         <c:if test="#{userSession.getRole().getRoleName().trim() ne 'administrateur'}">
-            <div style="text-align: center">
-               <h1>#{bundle['title.AccessDenied']}</h1>
-               <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
-            </div>
-         </c:if>
+                                <f:facet name="footer">
+                                    <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check"
+                                                     action="#{userBean.updatePassword}"
+                                                     update="manage-user-content"
+                                                     process="manage-user-content @this"/>
+                                    <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
+                                                     onclick="PF('manageUserDialog').hide()"
+                                                     class="ui-button-secondary" type="button"/>
+                                </f:facet>
+                            </p:dialog>
+                        </h:form>
+                    </div>
+                </div>
+            </c:if>
+            <c:if test="#{userSession.getRole().getRoleName().trim() ne 'administrateur'}">
+                <div style="text-align: center">
+                    <h1>#{bundle['title.AccessDenied']}</h1>
+                    <h:graphicImage value="/pics/Logo_RentSchool.png" width="100px" height="100px"/>
+                </div>
+            </c:if>
 
-      </f:view>
-   </ui:define>
+        </f:view>
+    </ui:define>
 </ui:composition>
 </html>

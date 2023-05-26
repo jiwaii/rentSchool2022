@@ -1,6 +1,7 @@
 package be.jyl.managedBeans;
 
 import be.jyl.entities.*;
+import be.jyl.enums.ResponsibleType;
 import be.jyl.services.UsersService;
 import be.jyl.services.BorrowersService;
 import be.jyl.tools.NotificationManager;
@@ -48,6 +49,7 @@ public class UserBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         this.userSession = (Users) context.getExternalContext().getSessionMap().get("userSession") ;
         this.citiesList = borrowersService.listCities();
+        this.rolesList = usersService.listRoles();
 
         user = new Users();
     }
@@ -120,16 +122,23 @@ public class UserBean implements Serializable {
     public String updatePassword(){
         // TODO réinitialisation password
         log.log(Level.INFO,userSelected.getLastname());
+
         if (!newPassword.equals(newPasswordRepeat)){
             //PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
             NotificationManager.addErrorMessage("notification.passwordNoMatch");
             return "";
-        }else {
+        }
+        else {
             userSelected.setPassword(usersService.hashingPassword(newPassword));
             if(!usersService.em.isOpen())usersService = new UsersService();
             try{
                 usersService.transaction.begin();
+                if (isAnUpdate == false){
+                    log.log(Level.INFO,"PERSIST User");
+                    userSelected.setResponsibleType(ResponsibleType.staff);
+                    usersService.em.persist(userSelected);
+                }
                 usersService.transaction.commit();
 
                 PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
@@ -145,7 +154,7 @@ public class UserBean implements Serializable {
             newPasswordRepeat = "";
             PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
             PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            return "userList";
+            return "usersList";
         }
     }
     public String updateOrInsertUser(){
@@ -156,21 +165,17 @@ public class UserBean implements Serializable {
         return "userList";
     }
     public void openDialogForUpdateUser(){
-        log.log(Level.INFO,"newpassword : "+newPassword);
-        log.log(Level.INFO,"newpasswordRepeat : "+newPasswordRepeat);
+        isAnUpdate = true;
     }
     public void openDialogForNewUser(){
-
+        userSelected = new Users();
+        isAnUpdate = false;
+        citiesList = borrowersService.listCities();
     }
 
     // Si loging existe déjà
     public boolean loginExist(){
         log.log(Level.INFO,"loginExist()");
-        return usersService.userExist("%"+ newUser.getLogin()+"%");
-    }
-    public boolean loginExistInUpdate(){
-        log.log(Level.INFO,"call : loginExistInUpdate()");
-
         return usersService.userExist("%"+ userSelected.getLogin()+"%");
     }
 
@@ -335,6 +340,14 @@ public class UserBean implements Serializable {
 
     public void setNewBorrower(Borrowers newBorrower) {
         this.newBorrower = newBorrower;
+    }
+
+    public boolean getIsAnUpdate() {
+        return this.isAnUpdate;
+    }
+
+    public void setIsAnUpdate(boolean isAnUpdate) {
+        this.isAnUpdate = isAnUpdate;
     }
     //</editor-fold>
 }
