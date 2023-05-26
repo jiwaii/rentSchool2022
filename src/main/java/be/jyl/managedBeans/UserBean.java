@@ -16,7 +16,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -119,26 +118,39 @@ public class UserBean implements Serializable {
     }
 
     /** USERS **/
-    public String updatePassword(){
+    public String updateOrInsertUser(){
         // TODO réinitialisation password
         log.log(Level.INFO,userSelected.getLastname());
-
-        if (!newPassword.equals(newPasswordRepeat)){
-            //PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-            NotificationManager.addErrorMessage("notification.passwordNoMatch");
-            return "";
-        }
-        else {
-            userSelected.setPassword(usersService.hashingPassword(newPassword));
-            if(!usersService.em.isOpen())usersService = new UsersService();
-            try{
-                usersService.transaction.begin();
-                if (isAnUpdate == false){
+        if(!usersService.em.isOpen())usersService = new UsersService();
+        if (isAnUpdate == false){
+            if (!newPassword.equals(newPasswordRepeat)) {
+                //PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+                PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+                NotificationManager.addErrorMessage("notification.passwordNoMatch");
+                return "";
+            }else{
+                try{
+                    usersService.transaction.begin();
                     log.log(Level.INFO,"PERSIST User");
+                    userSelected.setPassword(usersService.hashingPassword(newPassword));
                     userSelected.setResponsibleType(ResponsibleType.staff);
                     usersService.em.persist(userSelected);
+                    usersService.transaction.commit();
+
+                    PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+                    PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+                    NotificationManager.addInfoMessage("notification.userUpdated");
                 }
+                finally {
+                    if(usersService.transaction.isActive()){
+                        usersService.transaction.rollback();
+                    }
+                }
+                return "usersList";
+            }
+        }else{
+            try{
+                usersService.transaction.begin();
                 usersService.transaction.commit();
 
                 PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
@@ -150,20 +162,13 @@ public class UserBean implements Serializable {
                     usersService.transaction.rollback();
                 }
             }
-            newPassword = "";
-            newPasswordRepeat = "";
-            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
-            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
             return "usersList";
         }
     }
-    public String updateOrInsertUser(){
-        log.log(Level.INFO, "updateOrInsertUser");
-        FacesContext.getCurrentInstance()
-                .addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Fatal", " No Selection or login/password forgot "));
+    public void resetPassword(){
 
-        return "userList";
     }
+
     public void openDialogForUpdateUser(){
         isAnUpdate = true;
     }

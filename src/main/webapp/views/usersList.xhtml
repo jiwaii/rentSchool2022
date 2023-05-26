@@ -165,27 +165,29 @@
                                                 </p:selectOneMenu>
                                             </div>
                                         </c:if>
-                                        <div class="field col-12 md:col-4">
-                                            <p:outputLabel for="newPassword">Password___</p:outputLabel>
-                                            <p:password type="" id="newPassword"
-                                                        value="#{userBean.newPassword}"
-                                                        required="true">
-                                                <f:validateLength for="newPassword" minimum="4"/>
-                                            </p:password>
-                                        </div>
-                                        <div class="field col-12 md:col-4">
-                                            <p:outputLabel for="repeatPassword">repeat password___</p:outputLabel>
-                                            <p:password type="" id="repeatPassword"
-                                                        value="#{userBean.newPasswordRepeat}"
-                                                        required="true">
-                                            </p:password>
-                                        </div>
+                                        <c:if test="#{!userBean.isAnUpdate}">
+                                            <div class="field col-12 md:col-4">
+                                                <p:outputLabel for="newPassword">Password___</p:outputLabel>
+                                                <p:password type="" id="newPassword"
+                                                            value="#{userBean.newPassword}"
+                                                            required="true">
+                                                    <f:validateLength for="newPassword" minimum="4"/>
+                                                </p:password>
+                                            </div>
+                                            <div class="field col-12 md:col-4">
+                                                <p:outputLabel for="repeatPassword">repeat password___</p:outputLabel>
+                                                <p:password type="" id="repeatPassword"
+                                                            value="#{userBean.newPasswordRepeat}"
+                                                            required="true">
+                                                </p:password>
+                                            </div>
+                                        </c:if>
                                     </p:outputPanel>
                                 </p:outputPanel>
 
                                 <f:facet name="footer">
                                     <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check"
-                                                     action="#{userBean.updatePassword}"
+                                                     action="#{userBean.updateOrInsertUser}"
                                                      update="manage-user-content"
                                                      process="manage-user-content @this"/>
                                     <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
@@ -197,6 +199,7 @@
                     </div>
                 </div>
             </c:if>
+
             <c:if test="#{userSession.getRole().getRoleName().trim() ne 'administrateur'}">
                 <div style="text-align: center">
                     <h1>#{bundle['title.AccessDenied']}</h1>
