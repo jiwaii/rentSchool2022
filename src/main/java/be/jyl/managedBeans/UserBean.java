@@ -116,11 +116,29 @@ public class UserBean implements Serializable {
     }
 
     /** USERS **/
-    public void updatePassword(){
+    public String updatePassword(){
         // TODO réinitialisation password
+        log.log(Level.INFO,userSelected.getLastname());
+        userSelected.setPassword(usersService.hashingPassword(newPassword));
+        if(!usersService.em.isOpen())usersService = new UsersService();
+        try{
+
+            usersService.transaction.begin();
+            usersService.transaction.commit();
+
+            PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+            PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+            NotificationManager.addInfoMessage("notification.userUpdated");
+        }
+        finally {
+            if(usersService.transaction.isActive()){
+                usersService.transaction.rollback();
+            }
+        }
+        newPassword = "";
         PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
-        newPassword = "";
+        return "userList";
     }
     public String updateOrInsertUser(){
         log.log(Level.INFO, "updateOrInsertUser");
@@ -129,7 +147,7 @@ public class UserBean implements Serializable {
 
         return "userList";
     }
-
+    public void openDialogForNewUser(){}
 
     // Si loging existe déjà
     public boolean loginExist(){

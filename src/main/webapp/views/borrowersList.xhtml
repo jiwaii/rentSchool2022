@@ -32,7 +32,7 @@
                                   value="#{userBean.listBorrowers}"
                                   filteredValue="#{userBean.filteredUser}"
                                   reflow="true" paginator="true" paginatorPosition="bottom"
-                                  rowKey="#{borrower.idUser}" rows="5" rowSelectMode="add"
+                                  rowKey="#{borrower.id}" rows="5" rowSelectMode="add"
                                   styleClass="table table-striped table-hover">
                         <f:facet name="header">
                            <div class="table-header">
@@ -183,7 +183,8 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                           <p:commandButton value="Save" icon="pi pi-check" action="#{userBean.updateOrInsertBorrower}"
+                           <p:commandButton value="Save" icon="pi pi-check"
+                                            action="#{userBean.updateOrInsertBorrower}"
                                             update="manage-user-content"
                                             process="manage-user-content @this"/>
                            <p:commandButton value="Cancel" icon="pi pi-times"

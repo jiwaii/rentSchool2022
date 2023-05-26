@@ -29,16 +29,19 @@
                                   value="#{userBean.usersList}"
                                   filteredValue="#{userBean.filteredUser}"
                                   reflow="true" paginator="true" paginatorPosition="bottom"
-                                  rowKey="#{user.idUser}" rows="5" rowSelectMode="add"
+                                  rowKey="#{user.id}" rows="5" rowSelectMode="add"
                                   styleClass="table table-striped table-hover">
                         <f:facet name="header">
                            <div class="table-header">
                               <p:toolbar>
                                  <p:toolbarGroup align="right">
-<!--                                       <p:commandButton value="#{bundle['header.navbar.linkUserToAccount']}" icon="pi pi-plus"-->
-<!--                                                        action="#{userBean.addAccountToUserPage()}"-->
-<!--                                                        styleClass="ui-button-text-icon-primary" style="margin-right: .5rem">-->
-<!--                                       </p:commandButton>-->
+                                     <p:commandButton value="#{bundle['header.navbar.addUser']}" icon="pi pi-plus"
+                                                      actionListener="#{userBean.openDialogForNewUser()}"
+                                                      update=":dialogs:manage-user-content"
+                                                      oncomplete="PF('manageUserDialog').show()"
+                                                      styleClass="ui-button-success" style="margin-right: .5rem">
+                                     <p:resetInput target=":dialogs:manage-user-content"/>
+                                     </p:commandButton>
                                  </p:toolbarGroup>
                               </p:toolbar>
                            </div>
@@ -97,6 +100,12 @@
 <!--                                 <h:message id="loginMessage" for="login" style="color: red"/>-->
 
 <!--                              </div>-->
+                               <div class="field">
+                                   <p:outputLabel for="login">login___</p:outputLabel>
+                                   <p:inputText type="" id="login" value="#{userBean.userSelected.login}"
+                                                required="true">
+                                   </p:inputText>
+                               </div>
                               <div class="field">
                                  <p:outputLabel for="password">Password</p:outputLabel>
                                  <p:inputText type="" id="password" value="#{userBean.newPassword}"
@@ -108,7 +117,8 @@
                         </p:outputPanel>
 
                         <f:facet name="footer">
-                           <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check" actionListener="#{userBean.updatePassword()}"
+                           <p:commandButton value="#{bundle['button.save']}" icon="pi pi-check"
+                                            action="#{userBean.updatePassword}"
                                             update="manage-user-content"
                                             process="manage-user-content @this"/>
                            <p:commandButton value="#{bundle['button.cancel']}" icon="pi pi-times"
