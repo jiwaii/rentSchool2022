@@ -14,7 +14,9 @@ import java.util.Objects;
                 "AND (c.role.roleName != 'administrateur' OR c.role.roleName = 'emprunteur') "),
         @NamedQuery(name = "User.login", query = "SELECT u FROM Users u " +
                 "WHERE u.login = :pLogin and u.password = :pPassword"),
-        @NamedQuery(name = "User.findWhereLogin",query = "select a from Users a where lower(a.login) = :pLogin")
+        @NamedQuery(name = "User.findWhereLogin",query = "select a from Users a where lower(a.login) = :pLogin"),
+
+        @NamedQuery(name="Users.isUsedUser", query = "select COUNT(r) from Rentals r WHERE r.user = :pUser")
 
 })
 @Entity

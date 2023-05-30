@@ -77,6 +77,14 @@
                                                                      target="#{userBean.userSelected}"/>
                                         <p:resetInput target=":dialogs:manage-user-content"/>
                                     </p:commandButton>
+                                    <p:commandButton icon="pi pi-trash"
+                                                     rendered="#{!userBean.isAnUserUsed(user)}"
+                                                     oncomplete="PF('deleteUserDialog').show()"
+                                                     styleClass="ui-button-danger rounded-button"
+                                                     process="@this">
+                                        <f:setPropertyActionListener value="#{user}"
+                                                                     target="#{userBean.userSelected}"/>
+                                    </p:commandButton>
                                 </p:column>
                             </p:dataTable>
                         </h:form>
@@ -195,6 +203,19 @@
                                                      class="ui-button-secondary" type="button"/>
                                 </f:facet>
                             </p:dialog>
+                        </h:form>
+                        <h:form>
+                            <p:confirmDialog widgetVar="deleteUserDialog" showEffect="fade" width="300"
+                                             message="DELETE___?"
+                                             header="#{bundle['text.confirmation']}" severity="warn">
+                                <p:commandButton value="#{bundle['button.yes']}" icon="pi pi-check"
+                                                 actionListener="#{userBean.deleteUser()}"
+                                                 process="manage-category-content @this"
+                                                 oncomplete="PF('deleteUserDialog').hide()" ajax="false"/>
+                                <p:commandButton value="#{bundle['button.no']}" type="button"
+                                                 styleClass="ui-button-secondary" icon="pi pi-times"
+                                                 onclick="PF('deleteUserDialog').hide()"/>
+                            </p:confirmDialog>
                         </h:form>
                     </div>
                 </div>

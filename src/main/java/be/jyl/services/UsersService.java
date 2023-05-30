@@ -84,4 +84,10 @@ public class UsersService {
             return true;
         }
     }
+    public boolean isAnUsedUser(Users user){
+        Query query = em.createNamedQuery("Users.isUsedUser", Users.class)
+                .setParameter("pUser",user);
+        Long result = (Long) query.getSingleResult();
+        return result > 0;
+    }
 }

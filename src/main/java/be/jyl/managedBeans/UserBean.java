@@ -119,7 +119,6 @@ public class UserBean implements Serializable {
 
     /** USERS **/
     public String updateOrInsertUser(){
-        // TODO réinitialisation password
         log.log(Level.INFO,userSelected.getLastname());
         if(!usersService.em.isOpen())usersService = new UsersService();
         if (isAnUpdate == false){
@@ -166,6 +165,25 @@ public class UserBean implements Serializable {
         }
     }
     public void resetPassword(){
+
+    }
+    /** L'utilisateur se trouve dans une location * */
+    public boolean isAnUserUsed(Users user){
+        return usersService.isAnUsedUser(user);
+    }
+    public String deleteUser(){
+        try{
+            usersService.transaction.begin();
+            usersService.em.remove(userSelected);
+            usersService.transaction.commit();
+            NotificationManager.addInfoMessage("notification.userDeleted");
+        }
+        finally {
+            if (usersService.transaction.isActive()){
+                usersService.transaction.rollback();
+            }
+        }
+        return "usersList";
 
     }
 
