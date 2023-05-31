@@ -145,9 +145,9 @@ public class UserBean implements Serializable {
                         usersService.transaction.rollback();
                     }
                 }
-                return "usersList";
             }
-        }else{
+        }else
+        {
             try{
                 usersService.transaction.begin();
                 usersService.transaction.commit();
@@ -161,8 +161,9 @@ public class UserBean implements Serializable {
                     usersService.transaction.rollback();
                 }
             }
-            return "usersList";
         }
+        usersList = usersService.listUsers();
+        return "usersList";
     }
     public void resetPassword(){
 
@@ -172,19 +173,23 @@ public class UserBean implements Serializable {
         return usersService.isAnUsedUser(user);
     }
     public String deleteUser(){
-        try{
-            usersService.transaction.begin();
-            usersService.em.remove(userSelected);
-            usersService.transaction.commit();
-            NotificationManager.addInfoMessage("notification.userDeleted");
-        }
-        finally {
-            if (usersService.transaction.isActive()){
-                usersService.transaction.rollback();
+        if(userSelected.getLogin().toLowerCase().equals("admin")){
+            NotificationManager.addErrorMessage("notification.users.cannotdeletethisuser");
+        }else
+        {
+            try {
+                usersService.transaction.begin();
+                usersService.em.remove(userSelected);
+                usersService.transaction.commit();
+                NotificationManager.addInfoMessage("notification.userDeleted");
+            } finally {
+                if (usersService.transaction.isActive()) {
+                    usersService.transaction.rollback();
+                }
             }
+            usersList = usersService.listUsers();
         }
         return "usersList";
-
     }
 
     public void openDialogForUpdateUser(){

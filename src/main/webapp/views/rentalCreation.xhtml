@@ -14,17 +14,21 @@
                     or userSession.getRole().getRoleName().trim() eq 'secretariat'
                     or userSession.getRole().getRoleName().trim() eq 'administrateur'}">
 
-            <div class="container py-3">
+            <div class="container text-center">
                 <h:form id="formDataTable">
-                    <div class="row">
-                        <div class="col col-md-4" id="SelectionUserCol" >
+                    <div class="row justify-content-md-center">
+                        <div class="col" id="SelectionUserCol" >
+                            <p:outputLabel for="inputSearchUser" value="#{bundle['rentalPage.selectBorrower']}"/>
                             <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
                                 <f:ajax event="keyup"
                                         render="userRadioTD"
                                         listener="#{rentalBean.usersListByName}"/>
                             </h:inputText>
                             <br/>
-                            <p:dataTable id="userRadioTD" value="#{rentalBean.borrowersList}" var="borrower"
+                            <p:dataTable id="userRadioTD"
+                                         value="#{rentalBean.borrowersList}" var="borrower"
+                                         filteredValue="#{rentalBean.borrowersFilteredList}"
+                                         reflow="true" paginator="true" paginatorPosition="bottom"
                                          selection="#{rentalBean.borrowerSelected}"
                                          rowKey="#{borrower.id}"
                                          styleClass="table table-striped table-hover" >
@@ -39,7 +43,10 @@
                                 </p:column>
                             </p:dataTable>
                         </div>
-                        <div class="col col-md-4" id="SelectionArticleCol" >
+                        <div class="col-md-auto"></div>
+                        <div class="col" id="SelectionArticleCol" >
+                            <p:outputLabel for="inputSearchArticle" value="#{bundle['rentalPage.selectArticle']}"/>
+
                             <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control"
                                          a:placeholder="#{bundle['form.search']}"
                                          onkeypress="if (events.which == '13'){return false; }">
@@ -47,7 +54,10 @@
                                         render="articleRadioTD"
                                         listener="#{rentalBean.articleListByNameRefBarcode}"/>
                             </h:inputText>
-                            <p:dataTable id="articleRadioTD" value="#{rentalBean.articlesList}" var="article"
+                            <p:dataTable id="articleRadioTD"
+                                         value="#{rentalBean.articlesList}" var="article"
+                                         filteredValue="#{rentalBean.articlesFilteredList}"
+                                         reflow="true" paginator="true" paginatorPosition="bottom"
                                          selection="#{rentalBean.articleSelected}"
                                          rowKey="#{article.idArticle}"
                                          styleClass="table table-striped table-hover">
@@ -62,7 +72,9 @@
                                 </p:column>
                             </p:dataTable>
                         </div>
-                        <div class="col col-md-4">
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col col-lg-4">
                             <p:outputLabel style="font-weight: bold" for="datePikerRental" value="#{bundle['tableHeader.dueDate']}"/>
                             <br/>
                             <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}" mindate="#{rentalBean.minDate}" >

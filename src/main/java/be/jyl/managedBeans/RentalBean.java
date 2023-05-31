@@ -30,10 +30,12 @@ public class RentalBean implements Serializable {
     private Borrowers borrowerSelected;
     private Users userSession;
     private List<Borrowers> borrowersList;
-    private List<Articles> articlesMultipleSelected;
+    private List<Borrowers> borrowersFilteredList;
     private Articles articleSelected;
     private Date endDateSelected;
     private List<Articles> articlesList;
+    private List<Articles> articlesFilteredList;
+
     private String userSearchText;
     private String articlesSearchText;
     private Date minDate;
@@ -230,12 +232,12 @@ public class RentalBean implements Serializable {
         this.borrowersList = borrowersList;
     }
 
-    public List<Articles> getArticlesMultipleSelected() {
-        return articlesMultipleSelected;
+    public List<Articles> getArticlesFilteredList() {
+        return articlesFilteredList;
     }
 
-    public void setArticlesMultipleSelected(List<Articles> articlesMultipleSelected) {
-        articlesMultipleSelected = articlesMultipleSelected;
+    public void setArticlesFilteredList(List<Articles> articlesFilteredList) {
+        this.articlesFilteredList = articlesFilteredList;
     }
 
     public List<Articles> getArticlesList() {
@@ -300,5 +302,13 @@ public class RentalBean implements Serializable {
 
     public void setRentalSearchText(String rentalSearchText) {
         this.rentalSearchText = rentalSearchText;
+    }
+
+    public List<Borrowers> getBorrowersFilteredList() {
+        return borrowersFilteredList;
+    }
+
+    public void setBorrowersFilteredList(List<Borrowers> borrowersFilteredList) {
+        this.borrowersFilteredList = borrowersFilteredList;
     }
 }
