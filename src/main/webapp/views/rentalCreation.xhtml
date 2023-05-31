@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="templates/mainPage.xhtml">
@@ -19,7 +19,7 @@
                     <div class="row justify-content-md-center">
                         <div class="col" id="SelectionUserCol" >
                             <p:outputLabel for="inputSearchUser" value="#{bundle['rentalPage.selectBorrower']}"/>
-                            <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" a:placeholder="#{bundle['form.search']}">
+                            <h:inputText id="inputSearchUser" value="#{rentalBean.userSearchText}" styleClass="form-control" pt:placeholder="#{bundle['form.search']}">
                                 <f:ajax event="keyup"
                                         render="userRadioTD"
                                         listener="#{rentalBean.usersListByName}"/>
@@ -48,7 +48,7 @@
                             <p:outputLabel for="inputSearchArticle" value="#{bundle['rentalPage.selectArticle']}"/>
 
                             <h:inputText id="inputSearchArticle" value="#{rentalBean.articlesSearchText}" styleClass="form-control"
-                                         a:placeholder="#{bundle['form.search']}"
+                                         pt:placeholder="#{bundle['form.search']}"
                                          onkeypress="if (events.which == '13'){return false; }">
                                 <f:ajax event="keyup"
                                         render="articleRadioTD"
@@ -77,7 +77,7 @@
                         <div class="col col-lg-4">
                             <p:outputLabel style="font-weight: bold" for="datePikerRental" value="#{bundle['tableHeader.dueDate']}"/>
                             <br/>
-                            <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}" mindate="#{rentalBean.minDate}" >
+                            <p:datePicker id="datePikerRental" value="#{rentalBean.endDateSelected}" mindate="#{rentalBean.minDate}" pt:required="true" pt:placeholder="ex: 01/01/2023">
                                 <p:ajax event="dateSelect" listener="#{rentalBean.dateSelection}"/>
                                 <p:ajax event="keyup" listener="#{rentalBean.dateSelectionKeyUpEvent}"/>
                             </p:datePicker>

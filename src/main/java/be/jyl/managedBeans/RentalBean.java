@@ -5,6 +5,7 @@ import be.jyl.services.ArticlesService;
 import be.jyl.services.RentalsService;
 import be.jyl.services.BorrowersService;
 import be.jyl.tools.DateConverter;
+import be.jyl.tools.NotificationManager;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.primefaces.event.SelectEvent;
@@ -113,9 +114,7 @@ public class RentalBean implements Serializable {
     }
 
     /**
-     * @// TODO: 11-03-23 message d'erreur à afficher (message primefaces) 
-     * @return
-     * @throws ParseException
+     * @TODO Faire appel de la transaction + Revoir la validation et affectation des entitées
      */
     public String submitNewRental() throws ParseException {
         log.log(Level.INFO,"createRental()");
@@ -165,6 +164,7 @@ public class RentalBean implements Serializable {
                 endDateSelected = null;
                 return "index.xhtml";
             } else {
+                NotificationManager.addErrorMessage("notification.users.error");
                 //FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN,"ATTENTION", "PrimeFaces rock"));
                 return "rentalCreation.xhtml";
             }
