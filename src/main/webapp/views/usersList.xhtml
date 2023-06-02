@@ -5,7 +5,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 
@@ -20,7 +20,7 @@
                         <h:form id="form">
                             <p:growl id="messages" showDetail="true"/>
                             <h:inputText id="inputSearch" value="#{userBean.userSearch}"
-                                         styleClass="form-control" a:placeholder="#{bundle['form.search']}" >
+                                         styleClass="form-control" pt:placeholder="#{bundle['form.search']}" >
                                 <f:ajax event="keyup"
                                         render="dt-users"
                                         listener="#{userBean.usersLoad()}"/>
@@ -99,7 +99,8 @@
                                         <div class="field col-12 md:col-4">
                                             <p:outputLabel for="firstname">#{bundle['tableHeader.firstname']}</p:outputLabel>
                                             <p:inputText id="firstname" value="#{userBean.userSelected.firstname}"
-                                                         required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères">
+                                                         required="true" requiredMessage="Le prénom doit avoir minimum 4 caractères"
+                                                         pt:placeholder="ex: John" >
                                                 <f:validateLength for="lastname" minimum="3"/>
                                             </p:inputText>
                                             <h:message id="firstnameMessage" for="firstname" style="color: red"/>
@@ -109,7 +110,8 @@
                                         <div class="field col-12 md:col-4">
                                             <p:outputLabel for="lastname">#{bundle['tableHeader.lastname']}</p:outputLabel>
                                             <p:inputText id="lastname" value="#{userBean.userSelected.lastname}"
-                                                         required="true" requiredMessage="Le nom doit avoir minimum 3 caractères">
+                                                         required="true" requiredMessage="Le nom doit avoir minimum 3 caractères"
+                                                         pt:placeholder="ex: Due">
                                                 <f:validateLength for="lastname" minimum="3"/>
                                             </p:inputText>
                                             <h:message id="lastnameMessage" for="lastname" style="color: red"/>
@@ -119,7 +121,8 @@
                                             <p:outputLabel for="email">E-mail</p:outputLabel>
                                             <p:inputText id="email" value="#{userBean.userSelected.email}"
                                                          required="false"
-                                                         validatorMessage="email incorecte" requiredMessage="L'email est incorecte ">
+                                                         validatorMessage="email incorecte" requiredMessage="L'email est incorecte "
+                                                         pt:placeholder="ex: john.due@email.be">
                                                 <f:validateRegex pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"/>
                                             </p:inputText>
                                             <h:message id="emailMessage" for="email" style="color: red"/>
@@ -128,7 +131,8 @@
                                         <div class="field col-12 md:col-4">
                                             <p:outputLabel for="adress">Addresse</p:outputLabel>
                                             <p:inputText id="adress" value="#{userBean.userSelected.address}"
-                                                         required="true" requiredMessage="L'adresse ne doit pas être en dessous de 3 caractères">
+                                                         required="true" requiredMessage="L'adresse ne doit pas être en dessous de 3 caractères"
+                                                         pt:placeholder="ex: Avenue Rosevelt, 5 ">
                                                 <f:validateLength for="lastname" minimum="4"/>
                                             </p:inputText>
                                             <h:message id="adressMessage" for="adress" style="color: red"/>
@@ -150,7 +154,8 @@
                                     <p:outputPanel>
                                         <div class="field col-12 md:col-4 col-12 md:col-4">
                                             <p:outputLabel for="login">Login</p:outputLabel>
-                                            <p:inputText id="login" readonly="#{userBean.isAnUpdate}" value="#{userBean.userSelected.login}">
+                                            <p:inputText id="login" readonly="#{userBean.isAnUpdate}" value="#{userBean.userSelected.login}"
+                                                         pt:placeholder="login">
                                                 <f:ajax event="keyup"
                                                         render="loginMessage"
                                                         listener="#{userBean.loginExist()}"/>
@@ -175,18 +180,20 @@
                                         </c:if>
                                         <c:if test="#{!userBean.isAnUpdate}">
                                             <div class="field col-12 md:col-4">
-                                                <p:outputLabel for="newPassword">Password___</p:outputLabel>
+                                                <p:outputLabel for="newPassword">#{bundle['text.form.password']}</p:outputLabel>
                                                 <p:password type="" id="newPassword"
                                                             value="#{userBean.newPassword}"
-                                                            required="true">
+                                                            required="true"
+                                                            pt:placeholder="ex: myPassword">
                                                     <f:validateLength for="newPassword" minimum="4"/>
                                                 </p:password>
                                             </div>
                                             <div class="field col-12 md:col-4">
-                                                <p:outputLabel for="repeatPassword">repeat password___</p:outputLabel>
+                                                <p:outputLabel for="repeatPassword">#{bundle['text.form.repeatPassword']}</p:outputLabel>
                                                 <p:password type="" id="repeatPassword"
                                                             value="#{userBean.newPasswordRepeat}"
-                                                            required="true">
+                                                            required="true"
+                                                            pt:placeholder="ex: myPassword">
                                                 </p:password>
                                             </div>
                                         </c:if>
@@ -206,7 +213,7 @@
                         </h:form>
                         <h:form>
                             <p:confirmDialog widgetVar="deleteUserDialog" showEffect="fade" width="300"
-                                             message="DELETE___?"
+                                             message="#{bundle['text.validateUserDelete']}"
                                              header="#{bundle['text.confirmation']}" severity="warn">
                                 <p:commandButton value="#{bundle['button.yes']}" icon="pi pi-check"
                                                  actionListener="#{userBean.deleteUser()}"

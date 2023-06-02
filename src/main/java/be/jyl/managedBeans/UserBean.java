@@ -52,19 +52,20 @@ public class UserBean implements Serializable {
 
         user = new Users();
     }
-    /**-------------------------
+    /**----------------------------------------------------
+     * La UserBean gère les Emprunteurs et les Utilisateurs
      * @jiwaii CRUDs
-    --------------------------*/
-
-
-//    private List<Users> listUsersForUserRoleSession(){
-//        return usersService.listUsers(userSession);
-//    }
-//    private List<Users> listUsersForUserRoleSessionByName(String searchText){
-//        return usersService.lis(searchText);
-//    }
+    -------------------------------------------------------*/
 
     /** BORROWERS **/
+
+    /**
+     * updateOrInsertBorrower est une fonction inteligente qui déférencie s'il s'agit
+     * d'une mise à jour ou d'un nouvel emprunteur (meme principe pour les Users plus bas).
+     * Elle se sert de la variable isAnUpdate qui est affecté en :
+     * TRUE : si l'utilisateur clique sur le bouton modifier
+     * FALSE : si on clique sur le bouton ajouter un emprunteur
+     * */
     public String updateOrInsertBorrower(){
         log.log(Level.INFO,"updateOrInsertBorrower()");
         Pattern pattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -75,11 +76,11 @@ public class UserBean implements Serializable {
                 if (!borrowersService.em.isOpen()) borrowersService = new BorrowersService();
                 borrowersService.transaction.begin();
                 if(isAnUpdate == false){
+                    /** c'est un nouvelle emprunteur , on le persist : */
                     borrowersService.em.persist(borrowerSelected);
                     log.log(Level.INFO,"PERSIST");
                 }
                 borrowersService.transaction.commit();
-                //listBorrowers = usersService.listBorrowers();
                 //NOTIFICATION SUCCES
                 PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
                 PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
@@ -93,7 +94,6 @@ public class UserBean implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_ERROR,null,"Email invalide !"));
                     NotificationManager.addErrorMessage("notification.users.error");
                 }
-                //borrowersService.em.close();
             }
         }
         else {
@@ -122,8 +122,9 @@ public class UserBean implements Serializable {
         log.log(Level.INFO,userSelected.getLastname());
         if(!usersService.em.isOpen())usersService = new UsersService();
         if (isAnUpdate == false){
+            /** Nouvelle utilisateur */
+
             if (!newPassword.equals(newPasswordRepeat)) {
-                //PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
                 PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
                 NotificationManager.addErrorMessage("notification.passwordNoMatch");
                 return "";
@@ -148,6 +149,7 @@ public class UserBean implements Serializable {
             }
         }else
         {
+            /** mise à jour utilisateur */
             try{
                 usersService.transaction.begin();
                 usersService.transaction.commit();
