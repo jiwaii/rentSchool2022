@@ -121,44 +121,52 @@ public class RentalBean implements Serializable {
         if (userSession != null){
             if (borrowerSelected != null && articleSelected != null && endDateSelected != null){
 
-                // Variable imperatives pour créer la location :
-                java.sql.Date dateNow ;
-                java.sql.Date dateEnd ;
+                /** Variable imperatives pour créer la location : */
+                java.sql.Date dateNow,dateEnd ;
 
-                //affectation des variables date :
+                /** affectation des variables date : */
                 dateNow = new java.sql.Date(new java.util.Date().getTime());
                 DateConverter dateConverter = new DateConverter(); //classe créé par moi pour la conversion des dates
                 dateEnd = dateConverter.getSqlDateFromUtilDate(endDateSelected);
                 log.log(Level.INFO,"dateEnd SQL : "+dateEnd);
-                //affectation Recuperation de l'utilisateur de la session :
 
 
                 /** -------------------------------------------------------------
                  * @autor jiwaii
                  *  Configuration des mes entités pour la creation de ma location :
                 ---------------------------------------------------------------*/
-                log.log(Level.INFO,"Start config entities");
-                Rentals newRental = new Rentals();
-                newRental.setUser(userSession);
-                newRental.setBorrower(borrowerSelected);
-                newRental.setDateBegin(dateNow);
-                newRental.setDateEnd(dateEnd);
 
-                //pas besoin de changer l'état de l'article
-                //articleSelected.setState(State.rental); // mettre à jour l'article en status loué
+                log.log(Level.INFO,"Lancement de la transaction D'une nouvelle location :");
+                try{
+                    rentalsService.transaction.begin();
 
-                ArticlesRentals articlesRentals = new ArticlesRentals();
-                articlesRentals.setQty(1);
-                articlesRentals.setArticlesByIdArticle(articleSelected);
-                articlesRentals.setRentalsByIdRental(newRental);
-                articlesRentals.setDateReturned(null);
-                Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
-                articlesRentalsCollection.add(articlesRentals);
+                    /**Nouvelle location et parametrage*/
+                    Rentals newRental = new Rentals();
+                    newRental.setUser(userSession);
+                    newRental.setBorrower(borrowerSelected);
+                    newRental.setDateBegin(dateNow);
+                    newRental.setDateEnd(dateEnd);
+                    /**Nouvelle article-location et parametrage*/
+                    ArticlesRentals articlesRentals = new ArticlesRentals();
+                    articlesRentals.setQty(1);
+                    articlesRentals.setArticlesByIdArticle(articleSelected);
+                    articlesRentals.setRentalsByIdRental(newRental);
+                    articlesRentals.setDateReturned(null);
+                    Collection<ArticlesRentals> articlesRentalsCollection = new ArrayList<ArticlesRentals>();
+                    articlesRentalsCollection.add(articlesRentals);
 
-                newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
+                    newRental.setRentalsArticlesByIdRental(articlesRentalsCollection);
 
-                rentalsService.persistNewRental(newRental);
-                //mise à jour de la liste location et article disponible pour l'utilisateur :
+                    rentalsService.em.persist(newRental);
+                    rentalsService.transaction.commit();
+                }finally {
+                    if(rentalsService.transaction.isActive()){
+                        rentalsService.transaction.rollback();
+                        NotificationManager.addErrorMessage("notification.users.error");
+                    }
+                }
+
+                /** mise à jour de la liste location et article disponible pour l'utilisateur : */
                 rentalsList = rentalsService.currentRentalsList();
                 articlesList = articlesService.articlesAvailableList();
                 endDateSelected = null;

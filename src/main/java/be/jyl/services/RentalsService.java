@@ -18,8 +18,8 @@ import java.util.List;
 
 public class RentalsService {
     private Logger log = Logger.getLogger(RentalsService.class);
-    private EntityManager em = EMF.getEM();
-    private EntityTransaction transaction = em.getTransaction();
+    public EntityManager em = EMF.getEM();
+    public EntityTransaction transaction = em.getTransaction();
 
     public List<Rentals> rentalsList() {
         Query query = em.createNamedQuery("Rentals.findAll");

@@ -54,7 +54,7 @@ public class RemindersBean implements Serializable {
         // On appelle la méthode sendMailReminder
         log.log(Level.INFO, "Sending reminder Mail for rental: " +selectedRental.getIdRental());
         mailer.sendMailReminder(selectedRental, null);
-        message = null;
+        message = "null";
         saveReminder();
         NotificationManager.addInfoMessage("notification.reminderSent");
     }

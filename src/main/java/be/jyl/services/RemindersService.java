@@ -35,7 +35,10 @@ public class RemindersService {
             em.persist(reminder);
             transaction.commit();
         }catch (Exception e){
-            transaction.rollback();
+            if (transaction.isActive()){
+                transaction.rollback();
+                log.log(Level.ERROR, "transaction addReminder a fait un Rollback");
+            }
             log.error("Error while adding reminder", e);
         }
     }

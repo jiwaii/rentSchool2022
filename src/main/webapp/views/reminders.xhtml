@@ -47,18 +47,18 @@
                             </f:facet>
 
                             <p:column headerText="#{bundle['tableHeader.firstname']}"
-                                      sortBy="#{lateRentals.userRent.firstname}"
-                                      filterBy="#{lateRentals.userRent.firstname}">
-                                <h:outputText value="#{lateRentals.userRent.firstname}"/>
+                                      sortBy="#{lateRentals.borrower.firstname}"
+                                      filterBy="#{lateRentals.borrower.firstname}">
+                                <h:outputText value="#{lateRentals.borrower.firstname}"/>
                             </p:column>
                             <p:column headerText="#{bundle['tableHeader.lastname']}"
-                                      sortBy="#{lateRentals.userRent.lastname}"
-                                      filterBy="#{lateRentals.userRent.lastname}">
-                                <h:outputText value="#{lateRentals.userRent.lastname}"/>
+                                      sortBy="#{lateRentals.borrower.lastname}"
+                                      filterBy="#{lateRentals.borrower.lastname}">
+                                <h:outputText value="#{lateRentals.borrower.lastname}"/>
                             </p:column>
-                            <p:column headerText="#{bundle['tableHeader.email']}" sortBy="#{lateRentals.userRent.email}"
-                                      filterBy="#{lateRentals.userRent.email}">
-                                <h:outputText value="#{lateRentals.userRent.email}"/>
+                            <p:column headerText="#{bundle['tableHeader.email']}" sortBy="#{lateRentals.borrower.email}"
+                                      filterBy="#{lateRentals.borrower.email}">
+                                <h:outputText value="#{lateRentals.borrower.email}"/>
                             </p:column>
                             <p:column headerText="#{bundle['tableHeader.articles']}">
                                 <ui:repeat value="#{lateRentals.rentalsArticlesByIdRental}" var="_article">
@@ -145,10 +145,10 @@
 
                                             </f:facet>
                                             <p:column headerText="#{bundle['tableHeader.borrower']}"
-                                                      sortBy="#{reminder.rental.userRent.lastname}"
-                                                      filterBy="#{reminder.rental.userRent.firstname} #{reminder.rental.userRent.lastname}">
+                                                      sortBy="#{reminder.rental.borrower.lastname}"
+                                                      filterBy="#{reminder.rental.borrower.firstname} #{reminder.rental.borrower.lastname}">
                                                 <h:outputText
-                                                        value="#{reminder.rental.userRent.lastname} #{reminder.rental.userRent.firstname} "/>
+                                                        value="#{reminder.rental.borrower.lastname} #{reminder.rental.borrower.firstname} "/>
                                             </p:column>
                                             <p:column headerText="#{bundle['tableHeader.rentalNumber']}"
                                                       sortBy="#{reminder.rental.idRental}"
